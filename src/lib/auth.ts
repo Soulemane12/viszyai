@@ -186,7 +186,7 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
       throw new Error('Too many profile updates. Please wait a moment before trying again.');
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('profiles')
       .update(updates)
       .eq('id', profileId)
