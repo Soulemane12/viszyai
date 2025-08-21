@@ -28,7 +28,4 @@ export const supabase = createClient<Database>(
   }
 );
 
-// Add global error handler for Supabase
-supabase.on('error', (error) => {
-  console.error('Supabase global error:', error);
-});
+// Global error handling is managed by individual queries
