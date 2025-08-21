@@ -25,8 +25,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const getInitialSession = async () => {
       try {
         console.log('Starting initial session retrieval');
+        console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+        console.log('Supabase Key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
         const { data, error } = await supabase.auth.getSession();
-        
+
+        console.log('Session retrieval response:', { data, error });
+
         if (error) {
           console.error('Error getting session:', error);
           setLoading(false);
@@ -35,11 +40,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const { session } = data;
         console.log('Retrieved session:', session);
+        console.log('Session user:', session?.user);
+        console.log('Session access token:', session?.access_token ? 'Present' : 'Missing');
 
         if (session?.user) {
           console.log('User found in session:', session.user.id);
+          console.log('User email:', session.user.email);
+          console.log('User email confirmed:', session.user.email_confirmed_at);
           setUser(session.user);
-          
+
           try {
             await fetchProfile(session.user.id);
           } catch (profileError) {
@@ -58,8 +67,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    // Initial session retrieval
-    getInitialSession();
+    // Initial session retrieval with timeout
+    const timeoutId = setTimeout(() => {
+      console.log('Session retrieval timeout - forcing loading to false');
+      setLoading(false);
+    }, 10000); // 10 second timeout
+
+    getInitialSession().finally(() => {
+      clearTimeout(timeoutId);
+    });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(

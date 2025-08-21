@@ -22,6 +22,20 @@ export default function DashboardPage() {
     console.log('Dashboard current state:', { user, profile, loading });
   }, [user, profile, loading]);
 
+  // Additional debugging effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Dashboard status check:', {
+        user: user ? 'Present' : 'Null',
+        profile: profile ? 'Present' : 'Null',
+        loading,
+        timestamp: new Date().toISOString()
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [user, profile, loading]);
+
   if (loading) {
     console.log('Rendering loading state');
     return (
