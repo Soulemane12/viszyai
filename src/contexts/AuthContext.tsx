@@ -158,7 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Unexpected error in fetchProfile:', error);
-      console.error('Error stack:', error.stack);
+      console.error('Error stack:', error instanceof Error ? error.stack : String(error));
       setProfile(null);
     }
   };
