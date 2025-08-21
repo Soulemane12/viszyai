@@ -176,7 +176,10 @@ export async function getProfileWithSocialLinks(handle: string): Promise<{
 }
 
 // Update profile
-export async function updateProfile(profileId: string, updates: Partial<Profile>) {
+export async function updateProfile(profileId: string, updates: Partial<Profile>): Promise<{
+  profile: Profile | null;
+  error: unknown;
+}> {
   try {
     // Check rate limit
     if (!profileUpdateLimiter.canMakeRequest(profileId)) {
@@ -185,7 +188,7 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
 
     const { data, error } = await supabase
       .from('profiles')
-      .update(updates)
+      .update(updates as any)
       .eq('id', profileId)
       .select()
       .single();
