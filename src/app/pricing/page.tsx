@@ -3,9 +3,19 @@
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle, Star, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function PricingPage() {
   const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect non-authenticated users to login
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">

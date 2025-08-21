@@ -1,11 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, QrCode, Smartphone, Users, Zap } from 'lucide-react';
 import QRCode from 'react-qr-code';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function DemoPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
   const [showQR, setShowQR] = useState(false);
 
   const demoProfileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/jane-doe` : '/profile/jane-doe';

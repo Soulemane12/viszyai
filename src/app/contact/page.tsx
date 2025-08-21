@@ -4,9 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Phone, MessageSquare, Building, Users, Globe } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function ContactPage() {
   const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect non-authenticated users to login
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
