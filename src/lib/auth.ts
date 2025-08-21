@@ -127,7 +127,11 @@ export async function getProfileByHandle(handle: string) {
 }
 
 // Get profile with social links
-export async function getProfileWithSocialLinks(handle: string) {
+export async function getProfileWithSocialLinks(handle: string): Promise<{
+  profile: Profile | null;
+  socialLinks: SocialLink[];
+  error: unknown;
+}> {
   try {
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
