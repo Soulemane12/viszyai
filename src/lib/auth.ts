@@ -186,6 +186,7 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
       throw new Error('Too many profile updates. Please wait a moment before trying again.');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (supabase as any)
       .from('profiles')
       .update(updates)
