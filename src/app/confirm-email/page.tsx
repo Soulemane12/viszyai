@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Mail, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -84,5 +84,17 @@ export default function ConfirmEmailPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <Mail className="w-16 h-16 text-indigo-600 animate-pulse" />
+      </div>
+    }>
+      <ConfirmEmailContent />
+    </Suspense>
   );
 }
