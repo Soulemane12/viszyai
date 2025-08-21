@@ -149,24 +149,25 @@ export async function getProfileWithSocialLinks(handle: string): Promise<{
       return { profile: null, socialLinks: [], error: null };
     }
 
+    const typedProfileData = profileData as Profile;
     const { data: socialLinksData, error: socialError } = await supabase
       .from('social_links')
       .select('*')
-      .eq('profile_id', profileData.id);
+      .eq('profile_id', typedProfileData.id);
 
     if (socialError) {
       console.error('Social links fetch error:', socialError);
-      return { 
-        profile: profileData, 
-        socialLinks: [], 
-        error: socialError 
+      return {
+        profile: typedProfileData,
+        socialLinks: [],
+        error: socialError
       };
     }
 
-    return { 
-      profile: profileData, 
-      socialLinks: socialLinksData || [], 
-      error: null 
+    return {
+      profile: typedProfileData,
+      socialLinks: socialLinksData || [],
+      error: null
     };
   } catch (error) {
     console.error('Unexpected error in getProfileWithSocialLinks:', error);
