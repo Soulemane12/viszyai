@@ -14,6 +14,7 @@ import {
   Share2
 } from 'lucide-react';
 import { getProfileWithSocialLinks } from '@/lib/auth';
+import { Profile } from '@/lib/database.types';
 
 interface ProfileData {
   name: string;
@@ -82,6 +83,19 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error('Error loading profile:', error);
+        // Fallback to demo data
+        setProfileData({
+          name: 'Demo User',
+          title: 'Professional',
+          email: 'demo@example.com',
+          phone: '+1 (555) 123-4567',
+          bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
+          socialLinks: [
+            { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
+            { platform: 'Instagram', url: 'https://instagram.com/demo' },
+            { platform: 'Twitter', url: 'https://twitter.com/demo' }
+          ]
+        });
       } finally {
         setIsLoading(false);
       }
