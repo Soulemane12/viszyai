@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { Profile } from './supabase';
+import { Profile, SocialLink } from './database.types';
 import { signupLimiter, profileUpdateLimiter, handleCheckLimiter } from './rateLimit';
 
 export interface SignUpData {
@@ -129,27 +129,43 @@ export async function getProfileByHandle(handle: string) {
 // Get profile with social links
 export async function getProfileWithSocialLinks(handle: string) {
   try {
-    const { data: profile, error: profileError } = await supabase
+    const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('*')
       .eq('handle', handle)
       .single();
 
-    if (profileError) throw profileError;
+    if (profileError) {
+      console.error('Profile fetch error:', profileError);
+      return { profile: null, socialLinks: [], error: profileError };
+    }
 
-    const { data: socialLinks, error: socialError } = await supabase
+    if (!profileData) {
+      console.error('No profile found for handle:', handle);
+      return { profile: null, socialLinks: [], error: null };
+    }
+
+    const { data: socialLinksData, error: socialError } = await supabase
       .from('social_links')
       .select('*')
-      .eq('profile_id', profile.id);
+      .eq('profile_id', profileData.id);
 
-    if (socialError) throw socialError;
+    if (socialError) {
+      console.error('Social links fetch error:', socialError);
+      return { 
+        profile: profileData, 
+        socialLinks: [], 
+        error: socialError 
+      };
+    }
 
     return { 
-      profile, 
-      socialLinks: socialLinks || [], 
+      profile: profileData, 
+      socialLinks: socialLinksData || [], 
       error: null 
     };
   } catch (error) {
+    console.error('Unexpected error in getProfileWithSocialLinks:', error);
     return { profile: null, socialLinks: [], error };
   }
 }
