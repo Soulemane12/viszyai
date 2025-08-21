@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { Profile } from '@/lib/supabase';
+import { Profile } from '@/lib/database.types';
 
 interface AuthContextType {
   user: User | null;
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Get initial session
     const getInitialSession = async () => {
       try {
-        console.error('Starting initial session retrieval');
+        console.log('Starting initial session retrieval');
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
