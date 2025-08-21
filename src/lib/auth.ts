@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { Profile } from './supabase';
+import { signupLimiter, profileUpdateLimiter, handleCheckLimiter } from './rateLimit';
 
 export interface SignUpData {
   email: string;
@@ -20,13 +21,21 @@ export interface SignInData {
 // Sign up with profile creation
 export async function signUp(data: SignUpData) {
   try {
+    // Check rate limit
+    if (!signupLimiter.canMakeRequest(data.email)) {
+      throw new Error('Too many signup attempts. Please wait a few minutes before trying again.');
+    }
+
     // Create user account
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
     });
 
-    if (authError) throw authError;
+    if (authError) {
+      console.error('Signup auth error:', authError);
+      throw authError;
+    }
 
     if (authData.user) {
       // Create profile
@@ -42,7 +51,10 @@ export async function signUp(data: SignUpData) {
           bio: data.bio,
         });
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+        throw profileError;
+      }
 
       // Create social links if provided
       if (data.socialLinks && data.socialLinks.length > 0) {
@@ -58,7 +70,10 @@ export async function signUp(data: SignUpData) {
             .from('social_links')
             .insert(socialLinksData);
 
-          if (socialError) throw socialError;
+          if (socialError) {
+            console.error('Social links creation error:', socialError);
+            throw socialError;
+          }
         }
       }
 
@@ -67,6 +82,7 @@ export async function signUp(data: SignUpData) {
 
     return { user: null, error: new Error('User creation failed') };
   } catch (error) {
+    console.error('Signup error:', error);
     return { user: null, error };
   }
 }
@@ -171,6 +187,11 @@ export async function getProfileWithSocialLinks(handle: string) {
 // Update profile
 export async function updateProfile(profileId: string, updates: Partial<Profile>) {
   try {
+    // Check rate limit
+    if (!profileUpdateLimiter.canMakeRequest(profileId)) {
+      throw new Error('Too many profile updates. Please wait a moment before trying again.');
+    }
+
     const { data, error } = await supabase
       .from('profiles')
       .update(updates)
@@ -188,22 +209,31 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
 // Check if handle is available
 export async function isHandleAvailable(handle: string) {
   try {
-      const { error } = await supabase
-    .from('profiles')
-    .select('handle')
-    .eq('handle', handle)
-    .single();
+    // Check rate limit
+    if (!handleCheckLimiter.canMakeRequest(handle)) {
+      throw new Error('Too many handle checks. Please wait a moment before trying again.');
+    }
+
+    const { error } = await supabase
+      .from('profiles')
+      .select('handle')
+      .eq('handle', handle)
+      .single();
 
     if (error && error.code === 'PGRST116') {
       // No rows returned, handle is available
       return { available: true, error: null };
     }
 
-    if (error) throw error;
+    if (error) {
+      console.error('Handle availability check error:', error);
+      throw error;
+    }
 
     // Handle exists
     return { available: false, error: null };
   } catch (error) {
+    console.error('Handle availability check failed:', error);
     return { available: false, error };
   }
 }

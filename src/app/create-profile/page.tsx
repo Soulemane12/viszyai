@@ -73,19 +73,27 @@ export default function CreateProfilePage() {
     }
   };
 
-  // Check handle availability
+  // Check handle availability with debouncing
   const checkHandleAvailability = async (handleValue: string) => {
     if (handleValue.length < 3) {
       setHandleAvailable(null);
       return;
     }
     
-    const { available, error } = await isHandleAvailable(handleValue);
-    if (error) {
-      console.error('Error checking handle:', error);
-      return;
+    // Add a small delay to prevent too many requests
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    try {
+      const { available, error } = await isHandleAvailable(handleValue);
+      if (error) {
+        console.error('Error checking handle:', error);
+        return;
+      }
+      setHandleAvailable(available);
+    } catch (error) {
+      console.error('Handle availability check failed:', error);
+      // Don't show error to user for availability checks
     }
-    setHandleAvailable(available);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -120,9 +128,23 @@ export default function CreateProfilePage() {
 
         // Redirect to QR page
         router.push(`/qr/${handle}`);
+      } else {
+        throw new Error('Profile not found. Please try logging in again.');
       }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
+      console.error('Profile creation error:', error);
+      if (error instanceof Error) {
+        if (error.message.includes('429')) {
+          setError('Too many requests. Please wait a moment and try again.');
+        } else if (error.message.includes('401')) {
+          setError('Authentication error. Please log in again.');
+          router.push('/login');
+        } else {
+          setError(error.message);
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

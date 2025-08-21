@@ -72,7 +72,20 @@ export default function SignupPage() {
         router.push('/create-profile');
       }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
+      console.error('Signup error:', error);
+      if (error instanceof Error) {
+        if (error.message.includes('429')) {
+          setError('Too many requests. Please wait a moment and try again.');
+        } else if (error.message.includes('401')) {
+          setError('Authentication error. Please try again.');
+        } else if (error.message.includes('already registered')) {
+          setError('An account with this email already exists. Please log in instead.');
+        } else {
+          setError(error.message);
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
