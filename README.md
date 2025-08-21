@@ -216,3 +216,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Viszy** - Making professional networking accessible to everyone. ✨
+
+## 🚀 User Authentication Flow
+
+### Email Confirmation
+- Users must confirm their email address after signing up
+- A confirmation email is sent with a link to `/confirm-email`
+- Users are redirected to `/create-profile` after successful email confirmation
+
+### Signup Process
+1. User fills out signup form with email, password, and name
+2. Supabase sends a confirmation email
+3. User clicks confirmation link
+4. User is redirected to `/confirm-email` page
+5. After confirmation, user proceeds to `/create-profile`
+
+### 404 Handling
+- Custom 404 page automatically redirects to home page
+- Provides a user-friendly error message
+- Includes a manual "Go to Home Page" button

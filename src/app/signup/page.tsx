@@ -61,10 +61,16 @@ export default function SignupPage() {
         socialLinks: []
       };
 
-      const { user, error } = await signUp(signUpData);
+      const { user, error, needsEmailConfirmation } = await signUp(signUpData);
 
       if (error) {
         throw error;
+      }
+
+      if (needsEmailConfirmation) {
+        // Show email confirmation message
+        setError('Please check your email to confirm your account. Check your spam folder if you don\'t see it in your inbox.');
+        return;
       }
 
       if (user) {

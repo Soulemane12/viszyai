@@ -26,10 +26,13 @@ export async function signUp(data: SignUpData) {
       throw new Error('Too many signup attempts. Please wait a few minutes before trying again.');
     }
 
-    // Create user account
+    // Create user account with email confirmation
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/confirm-email`,
+      }
     });
 
     if (authError) {
@@ -37,53 +40,20 @@ export async function signUp(data: SignUpData) {
       throw authError;
     }
 
+    // If user is not null and email confirmation is required
     if (authData.user) {
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: authData.user.id,
-          handle: data.handle,
-          name: data.name,
-          title: data.title,
-          email: data.email,
-          phone: data.phone,
-          bio: data.bio,
-        });
-
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
-        throw profileError;
-      }
-
-      // Create social links if provided
-      if (data.socialLinks && data.socialLinks.length > 0) {
-        const { profile } = await getProfileByHandle(data.handle);
-        if (profile) {
-          const socialLinksData = data.socialLinks.map(link => ({
-            profile_id: profile.id,
-            platform: link.platform,
-            url: link.url,
-          }));
-
-          const { error: socialError } = await supabase
-            .from('social_links')
-            .insert(socialLinksData);
-
-          if (socialError) {
-            console.error('Social links creation error:', socialError);
-            throw socialError;
-          }
-        }
-      }
-
-      return { user: authData.user, error: null };
+      // Return a flag indicating email confirmation is needed
+      return { 
+        user: authData.user, 
+        error: null, 
+        needsEmailConfirmation: true 
+      };
     }
 
-    return { user: null, error: new Error('User creation failed') };
+    return { user: null, error: new Error('User creation failed'), needsEmailConfirmation: false };
   } catch (error) {
     console.error('Signup error:', error);
-    return { user: null, error };
+    return { user: null, error, needsEmailConfirmation: false };
   }
 }
 
