@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { QrCode, Edit, Settings, LogOut, User, Mail, Phone } from 'lucide-react';
+import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3, Star } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, profile, loading, signOut } = useAuth();
@@ -191,6 +191,28 @@ export default function DashboardPage() {
             </Link>
             
             <Link
+              href="/analytics"
+              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+            >
+              <BarChart3 className="text-indigo-600" size={20} />
+              <div>
+                <p className="font-semibold text-slate-800">Analytics</p>
+                <p className="text-slate-600 text-sm">Track your performance</p>
+              </div>
+            </Link>
+            
+            <Link
+              href="/pricing"
+              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+            >
+              <Star className="text-indigo-600" size={20} />
+              <div>
+                <p className="font-semibold text-slate-800">Upgrade</p>
+                <p className="text-slate-600 text-sm">Get premium features</p>
+              </div>
+            </Link>
+            
+            <Link
               href="/settings"
               className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
             >
@@ -198,17 +220,6 @@ export default function DashboardPage() {
               <div>
                 <p className="font-semibold text-slate-800">Settings</p>
                 <p className="text-slate-600 text-sm">Manage your account</p>
-              </div>
-            </Link>
-            
-            <Link
-              href="/help"
-              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
-            >
-              <User className="text-indigo-600" size={20} />
-              <div>
-                <p className="font-semibold text-slate-800">Help</p>
-                <p className="text-slate-600 text-sm">Get support</p>
               </div>
             </Link>
           </div>
