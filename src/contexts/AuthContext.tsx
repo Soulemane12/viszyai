@@ -23,45 +23,87 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      console.log('Getting initial session...');
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log('Initial session:', session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        console.log('Fetching profile for user:', session.user.id);
-        await fetchProfile(session.user.id);
+      try {
+        console.error('Starting initial session retrieval');
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          setLoading(false);
+          return;
+        }
+
+        const { session } = data;
+        console.log('Retrieved session:', session);
+
+        if (session?.user) {
+          console.log('User found in session:', session.user.id);
+          setUser(session.user);
+          
+          try {
+            await fetchProfile(session.user.id);
+          } catch (profileError) {
+            console.error('Error fetching profile:', profileError);
+          }
+        } else {
+          console.log('No user in session');
+          setUser(null);
+          setProfile(null);
+        }
+      } catch (catchError) {
+        console.error('Unexpected error in getInitialSession:', catchError);
+      } finally {
+        setLoading(false);
+        console.log('Initial session retrieval complete');
       }
-      
-      setLoading(false);
-      console.log('Initial loading complete');
     };
 
+    // Initial session retrieval
     getInitialSession();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session);
-        setUser(session?.user ?? null);
         
-        if (session?.user) {
-          console.log('Fetching profile after auth state change for user:', session.user.id);
-          await fetchProfile(session.user.id);
-        } else {
-          console.log('No user in session, clearing profile');
-          setProfile(null);
+        try {
+          if (session?.user) {
+            console.log('User found in auth state change:', session.user.id);
+            setUser(session.user);
+            
+            try {
+              await fetchProfile(session.user.id);
+            } catch (profileError) {
+              console.error('Error fetching profile during auth state change:', profileError);
+            }
+          } else {
+            console.log('No user in auth state change');
+            setUser(null);
+            setProfile(null);
+          }
+        } catch (stateChangeError) {
+          console.error('Error in auth state change handler:', stateChangeError);
+        } finally {
+          setLoading(false);
         }
-        
-        setLoading(false);
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchProfile = async (userId: string) => {
+    if (!userId) {
+      console.error('No user ID provided for profile fetch');
+      setProfile(null);
+      return;
+    }
+
     try {
+      console.log(`Fetching profile for user ID: ${userId}`);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -70,12 +112,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error fetching profile:', error);
-        setProfile(null);
-      } else {
+        
+        // If the error suggests no profile exists, it might be a new user
+        if (error.code === 'PGRST116') {
+          console.log('No profile found for user, setting profile to null');
+          setProfile(null);
+          return;
+        }
+
+        throw error;
+      }
+
+      if (data) {
+        console.log('Profile fetched successfully:', data);
         setProfile(data);
+      } else {
+        console.log('No profile data found');
+        setProfile(null);
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Unexpected error in fetchProfile:', error);
       setProfile(null);
     }
   };
