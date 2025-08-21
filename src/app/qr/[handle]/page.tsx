@@ -1,0 +1,207 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ArrowLeft, Download, Share2, Smartphone } from 'lucide-react';
+import QRCode from 'react-qr-code';
+
+interface ProfileData {
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  bio: string;
+  socialLinks: Array<{
+    platform: string;
+    url: string;
+  }>;
+}
+
+export default function QRPage({ params }: { params: { handle: string } }) {
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load profile data from localStorage for demo
+  useEffect(() => {
+    const storedProfile = localStorage.getItem('viszy_profile');
+    if (storedProfile) {
+      const profile = JSON.parse(storedProfile);
+      setProfileData({
+        name: profile.name || 'Demo User',
+        title: profile.title || 'Professional',
+        email: profile.email || 'demo@example.com',
+        phone: profile.phone || '+1 (555) 123-4567',
+        bio: profile.bio || 'This is a demo profile created with Viszy.',
+        socialLinks: profile.socialLinks || []
+      });
+    } else {
+      // Fallback demo data
+      setProfileData({
+        name: 'Demo User',
+        title: 'Professional',
+        email: 'demo@example.com',
+        phone: '+1 (555) 123-4567',
+        bio: 'This is a demo profile created with Viszy.',
+        socialLinks: [
+          { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
+          { platform: 'Instagram', url: 'https://instagram.com/demo' },
+          { platform: 'Twitter', url: 'https://twitter.com/demo' }
+        ]
+      });
+    }
+    setIsLoading(false);
+  }, []);
+
+  const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${params.handle}` : `/profile/${params.handle}`;
+
+  const downloadQR = () => {
+    if (typeof window === 'undefined') return;
+    const svg = document.querySelector('svg');
+    if (svg) {
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        const pngFile = canvas.toDataURL('image/png');
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.download = `qr-${params.handle}.png`;
+        downloadLink.href = pngFile;
+        downloadLink.click();
+      };
+      
+      img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+    }
+  };
+
+  const shareQR = async () => {
+    if (typeof window !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: `${profileData?.name}'s Digital Business Card`,
+          text: `Connect with ${profileData?.name} by scanning this QR code`,
+          url: profileUrl
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else if (typeof window !== 'undefined') {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(profileUrl);
+      alert('Profile URL copied to clipboard!');
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your QR code...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="container mx-auto px-4 py-6">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="inline-flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
+          </Link>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={downloadQR}
+              className="flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </button>
+            <button
+              onClick={shareQR}
+              className="flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+            >
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-md mx-auto text-center">
+          {/* Profile Info */}
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-indigo-600">
+                {profileData?.name?.charAt(0)}
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800 mb-2">
+              {profileData?.name}
+            </h1>
+            {profileData?.title && (
+              <p className="text-slate-600 mb-2">{profileData.title}</p>
+            )}
+            <p className="text-sm text-slate-500">
+              Scan the QR code below to connect
+            </p>
+          </div>
+
+          {/* QR Code */}
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 mb-8">
+            <div className="flex justify-center mb-4">
+              <QRCode
+                value={profileUrl}
+                size={256}
+                level="H"
+                className="mx-auto"
+              />
+            </div>
+            <p className="text-sm text-slate-500">
+              Point your camera at this QR code
+            </p>
+          </div>
+
+          {/* Instructions */}
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100">
+            <div className="flex items-center justify-center mb-3">
+              <Smartphone className="h-6 w-6 text-indigo-600 mr-2" />
+              <h3 className="font-semibold text-indigo-900">How to use</h3>
+            </div>
+            <div className="text-sm text-indigo-800 space-y-2">
+              <p>1. Show this QR code to someone you meet</p>
+              <p>2. They scan it with their phone camera</p>
+              <p>3. They instantly get all your contact info</p>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="mt-8 space-y-3">
+            <Link
+              href={`/profile/${params.handle}`}
+              className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              View My Profile
+            </Link>
+            <Link
+              href="/edit"
+              className="block w-full border-2 border-indigo-200 text-indigo-700 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200"
+            >
+              Edit Profile
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
