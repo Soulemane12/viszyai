@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, User, Instagram, Linkedin, Twitter, Globe, Plus, X } from 'lucide-react';
+import { isHandleAvailable, updateProfile } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { isHandleAvailable } from '@/lib/auth';
 
 interface SocialLink {
   id: string;
@@ -14,17 +14,15 @@ interface SocialLink {
   url: string;
 }
 
-export default function CreateCardPage() {
-  const { user } = useAuth();
+export default function CreateProfilePage() {
+  const { user, profile } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [handleAvailable, setHandleAvailable] = useState<boolean | null>(null);
   
   const [formData, setFormData] = useState({
-    name: '',
     title: '',
-    email: '',
     phone: '',
     photo: null as File | null,
     bio: ''
@@ -33,7 +31,7 @@ export default function CreateCardPage() {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [handle, setHandle] = useState('');
 
-  // Redirect if user is not logged in
+  // Redirect if not authenticated
   useEffect(() => {
     if (!user) {
       router.push('/login');
@@ -97,8 +95,8 @@ export default function CreateCardPage() {
 
     try {
       // Validate required fields
-      if (!formData.name || !formData.email || !handle) {
-        throw new Error('Please fill in all required fields');
+      if (!handle) {
+        throw new Error('Please choose a profile handle');
       }
 
       // Check handle availability
@@ -107,9 +105,22 @@ export default function CreateCardPage() {
         throw new Error('This handle is already taken. Please choose another one.');
       }
 
-      // TODO: Save business card data to database
-      // For now, just redirect to QR page
-      router.push(`/qr/${handle}`);
+      // Update profile with handle and additional info
+      if (profile) {
+        const { error: updateError } = await updateProfile(profile.id, {
+          handle,
+          title: formData.title,
+          phone: formData.phone,
+          bio: formData.bio
+        });
+
+        if (updateError) {
+          throw updateError;
+        }
+
+        // Redirect to QR page
+        router.push(`/qr/${handle}`);
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred');
     } finally {
@@ -123,25 +134,17 @@ export default function CreateCardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 transition-colors">
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-slate-800">Create Your Digital Business Card</h1>
-                <p className="text-slate-600">Fill in your information to generate your unique QR code</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <Link href="/dashboard" className="inline-flex items-center text-slate-600 hover:text-indigo-600 mb-4 font-medium transition-colors">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Link>
+          <h1 className="text-3xl font-bold text-slate-800">Create Your Digital Business Card</h1>
+          <p className="text-slate-600 mt-2">Fill in your information to generate your unique QR code</p>
+        </div>
+
         <div className="max-w-2xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Information */}
@@ -151,7 +154,7 @@ export default function CreateCardPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Profile Handle
+                    Profile Handle *
                   </label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-indigo-300 bg-indigo-50 text-indigo-600 text-sm font-medium">
@@ -179,20 +182,6 @@ export default function CreateCardPage() {
                       {handleAvailable ? '✓ Handle is available' : '✗ Handle is already taken'}
                     </p>
                   )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
-                    placeholder="John Doe"
-                    required
-                  />
                 </div>
 
                 <div>
@@ -228,20 +217,6 @@ export default function CreateCardPage() {
               <h2 className="text-xl font-semibold mb-6 text-slate-800">Contact Information</h2>
               
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
-                    placeholder="john@example.com"
-                    required
-                  />
-                </div>
-
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Phone Number

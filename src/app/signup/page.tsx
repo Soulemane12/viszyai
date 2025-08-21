@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
-import { registerUser } from '@/lib/auth';
+import { signUp } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -53,18 +53,23 @@ export default function SignupPage() {
       const signUpData = {
         email: formData.email,
         password: formData.password,
-        name: formData.name
+        name: formData.name,
+        handle: '', // Will be set during profile creation
+        title: '',
+        phone: '',
+        bio: '',
+        socialLinks: []
       };
 
-      const { user, error } = await registerUser(signUpData);
+      const { user, error } = await signUp(signUpData);
 
       if (error) {
         throw error;
       }
 
       if (user) {
-        // Redirect to dashboard after successful signup
-        router.push('/dashboard');
+        // Redirect to profile creation after successful signup
+        router.push('/create-profile');
       }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred');

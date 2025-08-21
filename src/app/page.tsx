@@ -76,7 +76,7 @@ export default function Home() {
                   href="/signup" 
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
-                  Get Started
+                  Create Your Card
                 </Link>
                 <Link 
                   href="/demo" 
@@ -234,11 +234,11 @@ export default function Home() {
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-slate-700">Photo Upload</span>
-                </li>
+          </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-slate-700">Custom Domain</span>
-                </li>
+          </li>
               </ul>
               
               <Link 

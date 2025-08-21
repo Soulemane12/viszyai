@@ -79,8 +79,8 @@ A modern web application that allows anyone to create professional digital busin
    ```
 
 5. **Run the development server**
-   ```bash
-   npm run dev
+```bash
+npm run dev
    ```
 
 6. **Open your browser**

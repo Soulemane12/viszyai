@@ -111,24 +111,15 @@ export default function DashboardPage() {
                     {profile.handle}
                   </p>
                 </div>
-
-                <div className="mt-6">
-                  <Link
-                    href="/create-card"
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    Create Another Card
-                  </Link>
-                </div>
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-slate-600 mb-4">No business card found</p>
+                <p className="text-slate-600 mb-4">No profile found</p>
                 <Link
-                  href="/create-card"
+                  href="/create-profile"
                   className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
-                  Create Your First Card
+                  Create Profile
                 </Link>
               </div>
             )}
@@ -174,7 +165,7 @@ export default function DashboardPage() {
               <div className="text-center py-8">
                 <p className="text-slate-600 mb-4">Create a profile to generate your QR code</p>
                 <Link
-                  href="/signup"
+                  href="/create-profile"
                   className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   Get Started
