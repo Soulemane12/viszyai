@@ -11,12 +11,19 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log('Dashboard useEffect triggered:', { user, loading });
     if (!loading && !user) {
+      console.log('No user, redirecting to login');
       router.push('/login');
     }
   }, [user, loading, router]);
 
+  useEffect(() => {
+    console.log('Dashboard current state:', { user, profile, loading });
+  }, [user, profile, loading]);
+
   if (loading) {
+    console.log('Rendering loading state');
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
@@ -28,6 +35,7 @@ export default function DashboardPage() {
   }
 
   if (!user) {
+    console.log('No user, returning null');
     return null;
   }
 
