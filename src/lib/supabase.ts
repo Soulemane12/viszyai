@@ -14,7 +14,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
 
 // Create Supabase client with explicit configuration
 export const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL, 
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   {
     auth: {
@@ -23,7 +23,11 @@ export const supabase = createClient<Database>(
       detectSessionInUrl: true,
     },
     global: {
-      headers: { 'x-application-name': 'Viszy' },
+      headers: {
+        'x-application-name': 'Viszy',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     },
   }
 );

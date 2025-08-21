@@ -119,16 +119,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       console.log(`Fetching profile for user ID: ${userId}`);
-      
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('Current user session exists:', !!supabase.auth.getUser());
+
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .single();
 
+      console.log('Profile fetch response:', { data, error });
+      console.log('Error details:', error ? {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      } : 'No error');
+
       if (error) {
         console.error('Error fetching profile:', error);
-        
+
         // If the error suggests no profile exists, it might be a new user
         if (error.code === 'PGRST116') {
           console.log('No profile found for user, setting profile to null');
@@ -148,6 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Unexpected error in fetchProfile:', error);
+      console.error('Error stack:', error.stack);
       setProfile(null);
     }
   };
