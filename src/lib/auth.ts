@@ -188,7 +188,7 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
 
     const { data, error } = await supabase
       .from('profiles')
-      .update(updates as any)
+      .update(updates as Record<string, unknown>)
       .eq('id', profileId)
       .select()
       .single();
