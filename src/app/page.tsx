@@ -76,7 +76,7 @@ export default function Home() {
                   href="/signup" 
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
-                  Create Your Card
+                  Get Started
                 </Link>
                 <Link 
                   href="/demo" 

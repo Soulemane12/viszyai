@@ -12,9 +12,32 @@ export interface SignUpData {
   socialLinks?: Array<{ platform: string; url: string }>;
 }
 
+export interface UserRegistrationData {
+  email: string;
+  password: string;
+  name: string;
+}
+
 export interface SignInData {
   email: string;
   password: string;
+}
+
+// User registration (without profile)
+export async function registerUser(data: UserRegistrationData) {
+  try {
+    // Create user account
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (authError) throw authError;
+
+    return { user: authData.user, error: null };
+  } catch (error) {
+    return { user: null, error };
+  }
 }
 
 // Sign up with profile creation
