@@ -105,7 +105,7 @@ export default function SignupPage() {
                       type="text"
                       value={handle}
                       onChange={(e) => setHandle(e.target.value)}
-                      className="flex-1 rounded-r-md border border-indigo-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="flex-1 rounded-r-md border border-indigo-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                       placeholder="your-name"
                       required
                     />
@@ -120,7 +120,7 @@ export default function SignupPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                     placeholder="John Doe"
                     required
                   />
@@ -134,7 +134,7 @@ export default function SignupPage() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                     placeholder="Software Engineer, Student, etc."
                   />
                 </div>
@@ -146,7 +146,7 @@ export default function SignupPage() {
                   <textarea
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                     rows={3}
                     placeholder="Tell people about yourself..."
                   />
@@ -167,7 +167,7 @@ export default function SignupPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                     placeholder="john@example.com"
                     required
                   />
@@ -181,7 +181,7 @@ export default function SignupPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
@@ -245,11 +245,11 @@ export default function SignupPage() {
                     <select
                       value={link.platform}
                       onChange={(e) => updateSocialLink(link.id, 'platform', e.target.value)}
-                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 bg-white"
                     >
-                      <option value="">Select platform</option>
+                      <option value="" className="text-slate-500">Select platform</option>
                       {socialPlatforms.map((platform) => (
-                        <option key={platform.name} value={platform.name}>
+                        <option key={platform.name} value={platform.name} className="text-slate-700">
                           {platform.name}
                         </option>
                       ))}
@@ -258,7 +258,7 @@ export default function SignupPage() {
                       type="url"
                       value={link.url}
                       onChange={(e) => updateSocialLink(link.id, 'url', e.target.value)}
-                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500"
                       placeholder="https://..."
                     />
                     <button
