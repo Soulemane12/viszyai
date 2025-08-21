@@ -98,13 +98,22 @@ npm run dev
 - Navigate to SQL Editor
 - Copy and paste the contents of `supabase-schema.sql`
 - Run the script
+- **Important**: This script will create proper RLS policies to fix the 42501 error
 
-### 3. Configure Authentication
+### 3. Troubleshooting RLS Issues
+If you encounter `42501` errors (Row Level Security policy violations):
+1. Make sure you've run the complete `supabase-schema.sql` script
+2. Check that RLS is enabled on both `profiles` and `social_links` tables
+3. Verify that the RLS policies are properly created
+4. Ensure your Supabase API keys are correct
+5. Check that users are properly authenticated before making requests
+
+### 4. Configure Authentication
 - In Supabase dashboard, go to Authentication > Settings
 - Configure your site URL and redirect URLs
 - Enable email confirmations if desired
 
-### 4. Get API Keys
+### 5. Get API Keys
 - Go to Settings > API
 - Copy your project URL and anon key
 - Add them to your `.env.local` file
