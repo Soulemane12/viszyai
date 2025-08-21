@@ -14,7 +14,7 @@ import {
   Share2
 } from 'lucide-react';
 import { getProfileWithSocialLinks } from '@/lib/auth';
-import { Profile } from '@/lib/database.types';
+import { Profile, SocialLink } from '@/lib/database.types';
 
 interface ProfileData {
   name: string;
