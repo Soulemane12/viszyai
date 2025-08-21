@@ -69,12 +69,13 @@ export default function ProfilePage() {
             ]
           });
         } else if (profile) {
+          const typedProfile = profile as Profile;
           setProfileData({
-            name: profile.name,
-            title: profile.title || '',
-            email: profile.email,
-            phone: profile.phone || '',
-            bio: profile.bio || '',
+            name: typedProfile.name,
+            title: typedProfile.title || '',
+            email: typedProfile.email,
+            phone: typedProfile.phone || '',
+            bio: typedProfile.bio || '',
             socialLinks: socialLinks.map(link => ({
               platform: link.platform,
               url: link.url
