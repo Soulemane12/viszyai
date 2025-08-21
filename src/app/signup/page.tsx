@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, User, Instagram, Linkedin, Twitter, Globe, Plus, X } from 'lucide-react';
+import { signUp, isHandleAvailable } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
 interface SocialLink {
   id: string;
@@ -12,6 +14,11 @@ interface SocialLink {
 }
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [handleAvailable, setHandleAvailable] = useState<boolean | null>(null);
+  
   const [formData, setFormData] = useState({
     name: '',
     title: '',
@@ -59,18 +66,67 @@ export default function SignupPage() {
     }
   };
 
+  // Check handle availability
+  const checkHandleAvailability = async (handleValue: string) => {
+    if (handleValue.length < 3) {
+      setHandleAvailable(null);
+      return;
+    }
+    
+    const { available, error } = await isHandleAvailable(handleValue);
+    if (error) {
+      console.error('Error checking handle:', error);
+      return;
+    }
+    setHandleAvailable(available);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo: Store data in localStorage for demo purposes
-    const profileData = {
-      ...formData,
-      socialLinks,
-      handle,
-      createdAt: new Date().toISOString()
-    };
-    localStorage.setItem('viszy_profile', JSON.stringify(profileData));
-    // Redirect to the QR code page
-    window.location.href = `/qr/${handle}`;
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Validate required fields
+      if (!formData.name || !formData.email || !handle) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      // Check handle availability
+      const { available } = await isHandleAvailable(handle);
+      if (!available) {
+        throw new Error('This handle is already taken. Please choose another one.');
+      }
+
+      // Generate a random password for the user
+      const password = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+
+      const signUpData = {
+        email: formData.email,
+        password,
+        name: formData.name,
+        handle,
+        title: formData.title,
+        phone: formData.phone,
+        bio: formData.bio,
+        socialLinks: socialLinks.filter(link => link.platform && link.url)
+      };
+
+      const { user, error } = await signUp(signUpData);
+
+      if (error) {
+        throw error;
+      }
+
+      if (user) {
+        // Redirect to QR page
+        router.push(`/qr/${handle}`);
+      }
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,12 +160,25 @@ export default function SignupPage() {
                     <input
                       type="text"
                       value={handle}
-                      onChange={(e) => setHandle(e.target.value)}
-                      className="flex-1 rounded-r-md border border-indigo-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                      onChange={(e) => {
+                        setHandle(e.target.value);
+                        checkHandleAvailability(e.target.value);
+                      }}
+                      className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800 ${
+                        handleAvailable === null ? 'border-indigo-300' :
+                        handleAvailable ? 'border-green-300' : 'border-red-300'
+                      }`}
                       placeholder="your-name"
                       required
                     />
                   </div>
+                  {handle && handleAvailable !== null && (
+                    <p className={`text-sm mt-1 ${
+                      handleAvailable ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {handleAvailable ? '✓ Handle is available' : '✗ Handle is already taken'}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -279,13 +348,25 @@ export default function SignupPage() {
               </div>
             </div>
 
+            {/* Error Display */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+
             {/* Submit Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                disabled={loading || !handleAvailable}
+                className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
+                  loading || !handleAvailable
+                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+                }`}
               >
-                Create My Card
+                {loading ? 'Creating...' : 'Create My Card'}
               </button>
             </div>
           </form>

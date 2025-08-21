@@ -1,0 +1,219 @@
+'use client';
+
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { QrCode, Edit, Settings, LogOut, User, Mail, Phone } from 'lucide-react';
+
+export default function DashboardPage() {
+  const { user, profile, loading, signOut } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-indigo-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Viszy
+            </Link>
+            <div className="flex items-center space-x-4">
+              <span className="text-slate-600">Welcome, {profile?.name || user.email}</span>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"
+              >
+                <LogOut size={16} />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Profile Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-800">Your Profile</h2>
+              <Link
+                href="/edit-profile"
+                className="flex items-center space-x-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-200 transition-colors"
+              >
+                <Edit size={16} />
+                <span>Edit</span>
+              </Link>
+            </div>
+
+            {profile ? (
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <User className="text-slate-400" size={20} />
+                  <div>
+                    <p className="font-semibold text-slate-800">{profile.name}</p>
+                    {profile.title && (
+                      <p className="text-slate-600 text-sm">{profile.title}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Mail className="text-slate-400" size={20} />
+                  <p className="text-slate-700">{profile.email}</p>
+                </div>
+
+                {profile.phone && (
+                  <div className="flex items-center space-x-3">
+                    <Phone className="text-slate-400" size={20} />
+                    <p className="text-slate-700">{profile.phone}</p>
+                  </div>
+                )}
+
+                {profile.bio && (
+                  <div className="mt-4 p-4 bg-slate-50 rounded-lg">
+                    <p className="text-slate-700">{profile.bio}</p>
+                  </div>
+                )}
+
+                <div className="mt-6">
+                  <p className="text-sm text-slate-500 mb-2">Your handle:</p>
+                  <p className="font-mono text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg inline-block">
+                    {profile.handle}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-slate-600 mb-4">No profile found</p>
+                <Link
+                  href="/signup"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  Create Profile
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* QR Code Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-800">Your QR Code</h2>
+              <QrCode className="text-indigo-600" size={24} />
+            </div>
+
+            {profile ? (
+              <div className="text-center">
+                <div className="bg-white border-2 border-indigo-200 rounded-lg p-4 inline-block mb-4">
+                  <div className="w-48 h-48 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <p className="text-slate-500 text-sm">QR Code will be generated here</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <p className="text-slate-600">
+                    Share this QR code to let people access your digital business card
+                  </p>
+                  
+                  <div className="flex space-x-3">
+                    <Link
+                      href={`/qr/${profile.handle}`}
+                      className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+                    >
+                      View QR Code
+                    </Link>
+                    <Link
+                      href={`/profile/${profile.handle}`}
+                      className="flex-1 bg-slate-100 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors"
+                    >
+                      View Profile
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-slate-600 mb-4">Create a profile to generate your QR code</p>
+                <Link
+                  href="/signup"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-slate-800 mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link
+              href="/demo"
+              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+            >
+              <QrCode className="text-indigo-600" size={20} />
+              <div>
+                <p className="font-semibold text-slate-800">See Demo</p>
+                <p className="text-slate-600 text-sm">View how it works</p>
+              </div>
+            </Link>
+            
+            <Link
+              href="/settings"
+              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+            >
+              <Settings className="text-indigo-600" size={20} />
+              <div>
+                <p className="font-semibold text-slate-800">Settings</p>
+                <p className="text-slate-600 text-sm">Manage your account</p>
+              </div>
+            </Link>
+            
+            <Link
+              href="/help"
+              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+            >
+              <User className="text-indigo-600" size={20} />
+              <div>
+                <p className="font-semibold text-slate-800">Help</p>
+                <p className="text-slate-600 text-sm">Get support</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

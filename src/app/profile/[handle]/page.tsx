@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { 
   Mail, 
   Phone, 
@@ -12,6 +13,7 @@ import {
   Download,
   Share2
 } from 'lucide-react';
+import { getProfileWithSocialLinks } from '@/lib/auth';
 
 interface ProfileData {
   name: string;
@@ -36,44 +38,57 @@ const socialIcons: { [key: string]: React.ComponentType<{ className?: string }> 
 };
 
 export default function ProfilePage() {
+  const params = useParams();
+  const handle = params.handle as string;
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showCopied, setShowCopied] = useState(false);
 
-  // Load profile data from localStorage for demo
+  // Load profile data from Supabase
   useEffect(() => {
-    const storedProfile = localStorage.getItem('viszy_profile');
-    if (storedProfile) {
-      const profile = JSON.parse(storedProfile);
-      setProfileData({
-        name: profile.name || 'Demo User',
-        title: profile.title || 'Professional',
-        email: profile.email || 'demo@example.com',
-        phone: profile.phone || '+1 (555) 123-4567',
-        bio: profile.bio || 'This is a demo profile created with Viszy. Connect with me to learn more!',
-        socialLinks: profile.socialLinks || [
-          { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-          { platform: 'Instagram', url: 'https://instagram.com/demo' },
-          { platform: 'Twitter', url: 'https://twitter.com/demo' }
-        ]
-      });
-    } else {
-      // Fallback demo data
-      setProfileData({
-        name: 'Demo User',
-        title: 'Professional',
-        email: 'demo@example.com',
-        phone: '+1 (555) 123-4567',
-        bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
-        socialLinks: [
-          { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-          { platform: 'Instagram', url: 'https://instagram.com/demo' },
-          { platform: 'Twitter', url: 'https://twitter.com/demo' }
-        ]
-      });
-    }
-    setIsLoading(false);
-  }, []);
+    const loadProfile = async () => {
+      if (!handle) return;
+      
+      try {
+        const { profile, socialLinks, error } = await getProfileWithSocialLinks(handle);
+        
+        if (error) {
+          console.error('Error loading profile:', error);
+          // Fallback to demo data
+          setProfileData({
+            name: 'Demo User',
+            title: 'Professional',
+            email: 'demo@example.com',
+            phone: '+1 (555) 123-4567',
+            bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
+            socialLinks: [
+              { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
+              { platform: 'Instagram', url: 'https://instagram.com/demo' },
+              { platform: 'Twitter', url: 'https://twitter.com/demo' }
+            ]
+          });
+        } else if (profile) {
+          setProfileData({
+            name: profile.name,
+            title: profile.title || '',
+            email: profile.email,
+            phone: profile.phone || '',
+            bio: profile.bio || '',
+            socialLinks: socialLinks.map(link => ({
+              platform: link.platform,
+              url: link.url
+            }))
+          });
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [handle]);
 
   const copyToClipboard = async (text: string) => {
     if (typeof window === 'undefined') return;

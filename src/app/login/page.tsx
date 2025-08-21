@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { signIn } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -13,14 +18,24 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo: Check if profile exists in localStorage
-    const storedProfile = localStorage.getItem('viszy_profile');
-    if (storedProfile) {
-      const profile = JSON.parse(storedProfile);
-      window.location.href = `/qr/${profile.handle}`;
-    } else {
-      // If no profile exists, redirect to signup
-      window.location.href = '/signup';
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { user, error } = await signIn(formData);
+
+      if (error) {
+        throw error;
+      }
+
+      if (user) {
+        // Redirect to QR page or dashboard
+        router.push('/dashboard');
+      }
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,11 +109,23 @@ export default function LoginPage() {
               </Link>
             </div>
 
+            {/* Error Display */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+              disabled={loading}
+              className={`w-full py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl ${
+                loading
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+              }`}
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 

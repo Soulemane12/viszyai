@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Download, Share2, Smartphone } from 'lucide-react';
 import QRCode from 'react-qr-code';
+import { getProfileWithSocialLinks } from '@/lib/auth';
 
 interface ProfileData {
   name: string;
@@ -21,36 +22,49 @@ export default function QRPage({ params }: { params: { handle: string } }) {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load profile data from localStorage for demo
+  // Load profile data from Supabase
   useEffect(() => {
-    const storedProfile = localStorage.getItem('viszy_profile');
-    if (storedProfile) {
-      const profile = JSON.parse(storedProfile);
-      setProfileData({
-        name: profile.name || 'Demo User',
-        title: profile.title || 'Professional',
-        email: profile.email || 'demo@example.com',
-        phone: profile.phone || '+1 (555) 123-4567',
-        bio: profile.bio || 'This is a demo profile created with Viszy.',
-        socialLinks: profile.socialLinks || []
-      });
-    } else {
-      // Fallback demo data
-      setProfileData({
-        name: 'Demo User',
-        title: 'Professional',
-        email: 'demo@example.com',
-        phone: '+1 (555) 123-4567',
-        bio: 'This is a demo profile created with Viszy.',
-        socialLinks: [
-          { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-          { platform: 'Instagram', url: 'https://instagram.com/demo' },
-          { platform: 'Twitter', url: 'https://twitter.com/demo' }
-        ]
-      });
-    }
-    setIsLoading(false);
-  }, []);
+    const loadProfile = async () => {
+      try {
+        const { profile, socialLinks, error } = await getProfileWithSocialLinks(params.handle);
+        
+        if (error) {
+          console.error('Error loading profile:', error);
+          // Fallback to demo data
+          setProfileData({
+            name: 'Demo User',
+            title: 'Professional',
+            email: 'demo@example.com',
+            phone: '+1 (555) 123-4567',
+            bio: 'This is a demo profile created with Viszy.',
+            socialLinks: [
+              { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
+              { platform: 'Instagram', url: 'https://instagram.com/demo' },
+              { platform: 'Twitter', url: 'https://twitter.com/demo' }
+            ]
+          });
+        } else if (profile) {
+          setProfileData({
+            name: profile.name,
+            title: profile.title || '',
+            email: profile.email,
+            phone: profile.phone || '',
+            bio: profile.bio || '',
+            socialLinks: socialLinks.map(link => ({
+              platform: link.platform,
+              url: link.url
+            }))
+          });
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [params.handle]);
 
   const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${params.handle}` : `/profile/${params.handle}`;
 
