@@ -102,11 +102,13 @@ npm run dev
 
 ### 3. Troubleshooting RLS Issues
 If you encounter `42501` errors (Row Level Security policy violations):
-1. Make sure you've run the complete `supabase-schema.sql` script
-2. Check that RLS is enabled on both `profiles` and `social_links` tables
-3. Verify that the RLS policies are properly created
-4. Ensure your Supabase API keys are correct
-5. Check that users are properly authenticated before making requests
+1. **Run the fix script**: Execute `fix-rls-policies.sql` in your Supabase SQL Editor
+2. **Check RLS policies**: Ensure policies are applied to `authenticated` role, not `public` role
+3. **Verify authentication**: Make sure users are properly authenticated before making requests
+4. **Check API keys**: Ensure your Supabase API keys are correct in `.env.local`
+5. **Test with SQL**: Run the verification query at the end of the fix script
+
+**Common Issue**: If your policies show "Applied to: public role" instead of "authenticated", run the fix script.
 
 ### 4. Configure Authentication
 - In Supabase dashboard, go to Authentication > Settings
