@@ -10,15 +10,27 @@ export default function DashboardPage() {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
 
+  // Immediate redirect if no user and not loading
+  useEffect(() => {
+    if (!loading && !user) {
+      console.log('Dashboard: No user detected, immediate redirect to login');
+      router.replace('/login');
+    }
+  }, [user, loading, router]);
+
   useEffect(() => {
     console.log('Dashboard useEffect triggered:', { user, loading });
+    
+    // Only redirect after loading is complete
     if (!loading) {
       if (!user) {
         console.log('No user, redirecting to login');
-        router.replace('/login');
+        router.replace('/login'); // Use replace to prevent back button issues
+        return;
       } else if (user && profile === null) {
         console.log('User exists but no profile, redirecting to create profile');
-        router.replace('/create-profile');
+        router.replace('/create-profile'); // Use replace to prevent back button issues
+        return;
       }
     }
   }, [user, loading, profile, router]);
@@ -53,8 +65,22 @@ export default function DashboardPage() {
     );
   }
 
+  // Show loading state while checking authentication
+  if (loading) {
+    console.log('Dashboard: Still loading, showing loading state');
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render dashboard if user is not authenticated
   if (!user) {
-    console.log('No user, showing loading while redirecting');
+    console.log('Dashboard: No user, not rendering dashboard (redirect should happen)');
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
