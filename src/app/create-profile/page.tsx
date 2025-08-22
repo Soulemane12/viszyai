@@ -157,6 +157,11 @@ export default function CreateProfilePage() {
           throw createError;
         }
 
+        console.log('Profile created successfully! Redirecting to QR page...');
+        
+        // Add a small delay to ensure the profile is fully created
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         // Redirect to QR page
         router.push(`/qr/${handle}`);
       } else {
