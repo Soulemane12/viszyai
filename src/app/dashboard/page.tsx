@@ -12,11 +12,16 @@ export default function DashboardPage() {
 
   useEffect(() => {
     console.log('Dashboard useEffect triggered:', { user, loading });
-    if (!loading && !user) {
-      console.log('No user, redirecting to login');
-      router.push('/login');
+    if (!loading) {
+      if (!user) {
+        console.log('No user, redirecting to login');
+        router.push('/login');
+      } else if (user && profile === null) {
+        console.log('User exists but no profile, redirecting to create profile');
+        router.push('/create-profile');
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading, profile, router]);
 
   useEffect(() => {
     console.log('Dashboard current state:', { user, profile, loading });

@@ -136,12 +136,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         hint: error.hint
       } : 'No error');
 
-      if (error) {
+            if (error) {
         console.error('Error fetching profile:', error);
 
         // If the error suggests no profile exists, it might be a new user
         if (error.code === 'PGRST116') {
-          console.log('No profile found for user, setting profile to null');
+          console.log('No profile found for user - user needs to create profile');
+          console.log('Profile fetch error details:', error);
+          setProfile(null);
+          return;
+        }
+
+        // Handle 406 errors (Not Acceptable) which might be due to headers
+        if (error.code === 'PGRST301') {
+          console.log('406 error - checking request headers and configuration');
+          console.log('Profile fetch error details:', error);
           setProfile(null);
           return;
         }
