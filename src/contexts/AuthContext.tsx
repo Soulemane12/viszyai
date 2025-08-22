@@ -28,6 +28,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
         console.log('Supabase Key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
+        // Check if user has "Remember me" enabled
+        const rememberMe = localStorage.getItem('viszy_remember_me') === 'true';
+        console.log('Remember me enabled:', rememberMe);
+
         const { data, error } = await supabase.auth.getSession();
 
         console.log('Session retrieval response:', { data, error });
@@ -177,6 +181,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await supabase.auth.signOut();
       setUser(null);
       setProfile(null);
+      
+      // Clear remember me preference on sign out
+      localStorage.removeItem('viszy_remember_me');
+      console.log('Signed out and cleared remember me preference');
     } catch (error) {
       console.error('Error signing out:', error);
     }

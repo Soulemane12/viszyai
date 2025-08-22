@@ -24,6 +24,7 @@ export default function LoginPage() {
     email: '',
     password: ''
   });
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,13 +32,20 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const { user, error } = await signIn(formData);
+      const { user, error } = await signIn({ ...formData, rememberMe });
 
       if (error) {
         throw error;
       }
 
       if (user) {
+        // Store remember me preference
+        if (rememberMe) {
+          localStorage.setItem('viszy_remember_me', 'true');
+        } else {
+          localStorage.removeItem('viszy_remember_me');
+        }
+        
         // Redirect to QR page or dashboard
         router.push('/dashboard');
       }
@@ -109,6 +117,8 @@ export default function LoginPage() {
               <label className="flex items-center">
                 <input
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-indigo-300 rounded"
                 />
                 <span className="ml-2 text-sm text-slate-600">Remember me</span>

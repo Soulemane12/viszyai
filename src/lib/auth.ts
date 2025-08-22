@@ -58,7 +58,7 @@ export async function signUp(data: SignUpData) {
 }
 
 // Sign in
-export async function signIn(data: SignInData) {
+export async function signIn(data: SignInData & { rememberMe?: boolean }) {
   try {
     const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: data.email,
@@ -66,6 +66,14 @@ export async function signIn(data: SignInData) {
     });
 
     if (error) throw error;
+    
+    // If remember me is enabled, ensure session persistence
+    if (data.rememberMe) {
+      // Supabase automatically handles session persistence with persistSession: true
+      // But we can add additional logic here if needed
+      console.log('Remember me enabled - session will persist');
+    }
+    
     return { user: authData.user, error: null };
   } catch (error) {
     return { user: null, error };
