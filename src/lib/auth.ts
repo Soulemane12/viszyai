@@ -175,7 +175,32 @@ export async function getProfileWithSocialLinks(handle: string): Promise<{
   }
 }
 
-// Update profile
+// Create new profile (for new users)
+export async function createProfile(userId: string, profileData: Omit<Profile, 'id' | 'created_at' | 'updated_at'>): Promise<{
+  profile: Profile | null;
+  error: unknown;
+}> {
+  try {
+    // Check rate limit
+    if (!profileUpdateLimiter.canMakeRequest(userId)) {
+      throw new Error('Too many profile creation attempts. Please wait a moment before trying again.');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
+      .from('profiles')
+      .insert(profileData)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return { profile: data, error: null };
+  } catch (error) {
+    return { profile: null, error };
+  }
+}
+
+// Update existing profile
 export async function updateProfile(profileId: string, updates: Partial<Profile>): Promise<{
   profile: Profile | null;
   error: unknown;

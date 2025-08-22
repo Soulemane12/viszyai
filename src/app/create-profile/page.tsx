@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, User, Instagram, Linkedin, Twitter, Globe, Plus, X } from 'lucide-react';
-import { isHandleAvailable, updateProfile } from '@/lib/auth';
+import { isHandleAvailable, updateProfile, createProfile } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -113,8 +113,9 @@ export default function CreateProfilePage() {
         throw new Error('This handle is already taken. Please choose another one.');
       }
 
-      // Update profile with handle and additional info
+      // Create or update profile with handle and additional info
       if (profile) {
+        // Update existing profile
         const { error: updateError } = await updateProfile(profile.id, {
           handle,
           title: formData.title,
@@ -128,8 +129,26 @@ export default function CreateProfilePage() {
 
         // Redirect to QR page
         router.push(`/qr/${handle}`);
+      } else if (user) {
+        // Create new profile for new user
+        const { error: createError } = await createProfile(user.id, {
+          user_id: user.id,
+          handle,
+          name: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+          title: formData.title,
+          phone: formData.phone,
+          email: user.email || '',
+          bio: formData.bio
+        });
+
+        if (createError) {
+          throw createError;
+        }
+
+        // Redirect to QR page
+        router.push(`/qr/${handle}`);
       } else {
-        throw new Error('Profile not found. Please try logging in again.');
+        throw new Error('User not authenticated. Please try logging in again.');
       }
     } catch (error: unknown) {
       console.error('Profile creation error:', error);
