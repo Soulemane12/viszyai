@@ -101,14 +101,21 @@ export default function CreateProfilePage() {
     setLoading(true);
     setError(null);
 
+    console.log('Form submission started');
+    console.log('Form data:', { handle, formData, user: user?.id });
+
     try {
       // Validate required fields
       if (!handle) {
         throw new Error('Please choose a profile handle');
       }
 
+      console.log('Handle validation passed:', handle);
+
       // Check handle availability
+      console.log('Checking handle availability for:', handle);
       const { available } = await isHandleAvailable(handle);
+      console.log('Handle availability result:', available);
       if (!available) {
         throw new Error('This handle is already taken. Please choose another one.');
       }
@@ -131,7 +138,8 @@ export default function CreateProfilePage() {
         router.push(`/qr/${handle}`);
       } else if (user) {
         // Create new profile for new user
-        const { error: createError } = await createProfile(user.id, {
+        console.log('Creating new profile for user:', user.id);
+        const profileData = {
           user_id: user.id,
           handle,
           name: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
@@ -139,7 +147,11 @@ export default function CreateProfilePage() {
           phone: formData.phone,
           email: user.email || '',
           bio: formData.bio
-        });
+        };
+        console.log('Profile data to create:', profileData);
+        
+        const { error: createError } = await createProfile(user.id, profileData);
+        console.log('Profile creation result:', { createError });
 
         if (createError) {
           throw createError;
