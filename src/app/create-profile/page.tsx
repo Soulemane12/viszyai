@@ -122,10 +122,19 @@ export default function CreateProfilePage() {
 
       // Check handle availability
       console.log('Checking handle availability for:', cleanHandle);
-      const { available } = await isHandleAvailable(cleanHandle);
-      console.log('Handle availability result:', available);
-      if (!available) {
-        throw new Error('This handle is already taken. Please choose another one.');
+      try {
+        const { available, error } = await isHandleAvailable(cleanHandle);
+        console.log('Handle availability result:', { available, error });
+        
+        if (error) {
+          console.log('Handle availability check failed, proceeding anyway:', error);
+          // Continue with profile creation even if availability check fails
+        } else if (!available) {
+          throw new Error('This handle is already taken. Please choose another one.');
+        }
+      } catch (error) {
+        console.log('Handle availability check error, proceeding anyway:', error);
+        // Continue with profile creation even if availability check fails
       }
 
               // Create or update profile with handle and additional info

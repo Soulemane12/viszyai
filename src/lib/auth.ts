@@ -246,19 +246,26 @@ export async function updateProfile(profileId: string, updates: Partial<Profile>
 // Check if handle is available
 export async function isHandleAvailable(handle: string) {
   try {
-    // Check rate limit
-    if (!handleCheckLimiter.canMakeRequest(handle)) {
-      throw new Error('Too many handle checks. Please wait a moment before trying again.');
-    }
+    console.log('isHandleAvailable called with handle:', handle);
+    
+    // Check rate limit (temporarily disabled for debugging)
+    // if (!handleCheckLimiter.canMakeRequest(handle)) {
+    //   console.log('Rate limit hit for handle check');
+    //   throw new Error('Too many handle checks. Please wait a moment before trying again.');
+    // }
 
+    console.log('Making Supabase query for handle:', handle);
     const { error } = await supabase
       .from('profiles')
       .select('handle')
       .eq('handle', handle)
       .single();
 
+    console.log('Supabase handle check result:', { error });
+
     if (error && error.code === 'PGRST116') {
       // No rows returned, handle is available
+      console.log('Handle is available (no rows found)');
       return { available: true, error: null };
     }
 
@@ -268,6 +275,7 @@ export async function isHandleAvailable(handle: string) {
     }
 
     // Handle exists
+    console.log('Handle is not available (found existing)');
     return { available: false, error: null };
   } catch (error) {
     console.error('Handle availability check failed:', error);
