@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { User, Instagram, Linkedin, Twitter, Globe, Plus, X } from 'lucide-react';
-import { isHandleAvailable, updateProfile, createProfile } from '@/lib/auth';
+import { isHandleAvailable, updateProfile, createProfile, createSocialLinks, updateSocialLinks, getUserProfile, getProfileWithSocialLinks } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import BackButton from '@/components/BackButton';
@@ -33,14 +33,8 @@ export default function CreateProfilePage() {
   const [handle, setHandle] = useState('');
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Redirect if not authenticated and load existing profile data
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
-    // If user has a profile, load existing data into the form
+  // Load existing profile data
+  const loadExistingProfileData = async () => {
     if (profile) {
       console.log('Loading existing profile data:', profile);
       setFormData({
@@ -52,9 +46,32 @@ export default function CreateProfilePage() {
       });
       setHandle(profile.handle || '');
       
-      // Load existing social links if any
-      // Note: We'll need to fetch social links separately
+      // Load existing social links
+      try {
+        const { socialLinks: existingSocialLinks } = await getProfileWithSocialLinks(profile.handle);
+        if (existingSocialLinks && existingSocialLinks.length > 0) {
+          console.log('Loading existing social links:', existingSocialLinks);
+          setSocialLinks(existingSocialLinks.map(link => ({
+            id: link.id,
+            platform: link.platform,
+            url: link.url
+          })));
+        }
+      } catch (error) {
+        console.error('Error loading social links:', error);
+      }
     }
+  };
+
+  // Redirect if not authenticated and load existing profile data
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    // Load existing profile data if available
+    loadExistingProfileData();
   }, [user, profile, router]);
 
   const socialPlatforms = [
@@ -176,7 +193,16 @@ export default function CreateProfilePage() {
             throw updateError;
           }
 
-          console.log('Profile updated successfully! Refreshing profile data...');
+          console.log('Profile updated successfully! Now updating social links...');
+          
+          // Update social links
+          const { error: socialError } = await updateSocialLinks(profile.id, socialLinks);
+          if (socialError) {
+            console.error('Error updating social links:', socialError);
+            // Don't throw error, just log it - profile was updated successfully
+          } else {
+            console.log('Social links updated successfully');
+          }
           
           // Refresh the user's profile data
           if (refreshProfile) {
@@ -213,7 +239,22 @@ export default function CreateProfilePage() {
           throw createError;
         }
 
-        console.log('Profile created successfully! Refreshing profile data...');
+        console.log('Profile created successfully! Now creating social links...');
+        
+        // Get the created profile to get its ID
+        const { profile: createdProfile } = await getUserProfile(user.id);
+        
+        if (createdProfile) {
+          // Create social links
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { error: socialError } = await createSocialLinks((createdProfile as any).id, socialLinks);
+          if (socialError) {
+            console.error('Error creating social links:', socialError);
+            // Don't throw error, just log it - profile was created successfully
+          } else {
+            console.log('Social links created successfully');
+          }
+        }
         
         // Refresh the user's profile data
         if (refreshProfile) {

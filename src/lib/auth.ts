@@ -283,6 +283,77 @@ export async function isHandleAvailable(handle: string) {
   }
 }
 
+// Social links functions
+export async function createSocialLinks(profileId: string, socialLinks: Array<{ platform: string; url: string }>) {
+  try {
+    console.log('Creating social links for profile:', profileId, socialLinks);
+    
+    if (socialLinks.length === 0) {
+      console.log('No social links to create');
+      return { success: true, error: null };
+    }
+
+    // Filter out empty social links
+    const validSocialLinks = socialLinks.filter(link => link.platform && link.url);
+    
+    if (validSocialLinks.length === 0) {
+      console.log('No valid social links to create');
+      return { success: true, error: null };
+    }
+
+    // Create social links data
+    const socialLinksData = validSocialLinks.map(link => ({
+      profile_id: profileId,
+      platform: link.platform,
+      url: link.url
+    }));
+
+    console.log('Social links data to insert:', socialLinksData);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from('social_links')
+      .insert(socialLinksData);
+
+    if (error) {
+      console.error('Error creating social links:', error);
+      throw error;
+    }
+
+    console.log('Social links created successfully');
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error in createSocialLinks:', error);
+    return { success: false, error };
+  }
+}
+
+export async function updateSocialLinks(profileId: string, socialLinks: Array<{ platform: string; url: string }>) {
+  try {
+    console.log('Updating social links for profile:', profileId, socialLinks);
+    
+    // First, delete existing social links
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: deleteError } = await (supabase as any)
+      .from('social_links')
+      .delete()
+      .eq('profile_id', profileId);
+
+    if (deleteError) {
+      console.error('Error deleting existing social links:', deleteError);
+      throw deleteError;
+    }
+
+    console.log('Existing social links deleted');
+
+    // Then create new social links
+    return await createSocialLinks(profileId, socialLinks);
+  } catch (error) {
+    console.error('Error in updateSocialLinks:', error);
+    return { success: false, error };
+  }
+}
+
 // Analytics functions
 export async function trackProfileView(profileId: string, analyticsData: Partial<ProfileView>) {
   try {
