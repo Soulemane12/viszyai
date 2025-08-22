@@ -27,13 +27,11 @@ export default function DashboardPage() {
         console.log('No user, redirecting to login');
         router.replace('/login'); // Use replace to prevent back button issues
         return;
-      } else if (user && profile === null) {
-        console.log('User exists but no profile, redirecting to create profile');
-        router.replace('/create-profile'); // Use replace to prevent back button issues
-        return;
       }
+      // Don't redirect if user has no profile - let them see the dashboard
+      // and choose to create a profile from there
     }
-  }, [user, loading, profile, router]);
+  }, [user, loading, router]);
 
   useEffect(() => {
     console.log('Dashboard current state:', { user, profile, loading });
@@ -239,6 +237,18 @@ export default function DashboardPage() {
         <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
           <h3 className="text-xl font-bold text-slate-800 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {!profile && (
+              <Link
+                href="/create-profile"
+                className="flex items-center space-x-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg hover:from-green-100 hover:to-emerald-100 transition-all duration-200 border-2 border-green-200"
+              >
+                <User className="text-green-600" size={20} />
+                <div>
+                  <p className="font-semibold text-slate-800">Create Profile</p>
+                  <p className="text-slate-600 text-sm">Set up your digital card</p>
+                </div>
+              </Link>
+            )}
             <Link
               href="/demo"
               className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
