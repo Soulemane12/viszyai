@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { Profile, SocialLink } from './database.types';
+import { Profile, SocialLink, ProfileView, QRScan, ContactDownload, SocialClick } from './database.types';
 import { signupLimiter, profileUpdateLimiter, handleCheckLimiter } from './rateLimit';
 
 export interface SignUpData {
@@ -262,5 +262,148 @@ export async function isHandleAvailable(handle: string) {
   } catch (error) {
     console.error('Handle availability check failed:', error);
     return { available: false, error };
+  }
+}
+
+// Analytics functions
+export async function trackProfileView(profileId: string, analyticsData: Partial<ProfileView>) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from('profile_views')
+      .insert({
+        profile_id: profileId,
+        viewer_ip: analyticsData.viewer_ip,
+        viewer_user_agent: analyticsData.viewer_user_agent,
+        viewer_country: analyticsData.viewer_country,
+        viewer_city: analyticsData.viewer_city,
+        viewer_latitude: analyticsData.viewer_latitude,
+        viewer_longitude: analyticsData.viewer_longitude,
+        referrer: analyticsData.referrer,
+        utm_source: analyticsData.utm_source,
+        utm_medium: analyticsData.utm_medium,
+        utm_campaign: analyticsData.utm_campaign,
+      });
+
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error tracking profile view:', error);
+    return { success: false, error };
+  }
+}
+
+export async function trackQRScan(profileId: string, analyticsData: Partial<QRScan>) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from('qr_scans')
+      .insert({
+        profile_id: profileId,
+        scanner_ip: analyticsData.scanner_ip,
+        scanner_user_agent: analyticsData.scanner_user_agent,
+        scanner_country: analyticsData.scanner_country,
+        scanner_city: analyticsData.scanner_city,
+        scanner_latitude: analyticsData.scanner_latitude,
+        scanner_longitude: analyticsData.scanner_longitude,
+        device_type: analyticsData.device_type,
+      });
+
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error tracking QR scan:', error);
+    return { success: false, error };
+  }
+}
+
+export async function trackContactDownload(profileId: string, analyticsData: Partial<ContactDownload>) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from('contact_downloads')
+      .insert({
+        profile_id: profileId,
+        downloader_ip: analyticsData.downloader_ip,
+        downloader_user_agent: analyticsData.downloader_user_agent,
+        downloader_country: analyticsData.downloader_country,
+        downloader_city: analyticsData.downloader_city,
+        download_type: analyticsData.download_type,
+      });
+
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error tracking contact download:', error);
+    return { success: false, error };
+  }
+}
+
+export async function trackSocialClick(profileId: string, socialLinkId: string, analyticsData: Partial<SocialClick>) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
+      .from('social_clicks')
+      .insert({
+        profile_id: profileId,
+        social_link_id: socialLinkId,
+        clicker_ip: analyticsData.clicker_ip,
+        clicker_user_agent: analyticsData.clicker_user_agent,
+        clicker_country: analyticsData.clicker_country,
+        clicker_city: analyticsData.clicker_city,
+      });
+
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error tracking social click:', error);
+    return { success: false, error };
+  }
+}
+
+export async function getAnalytics(profileHandle: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
+      .rpc('get_profile_analytics', { profile_handle: profileHandle });
+
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      const analytics = data[0];
+      return {
+        totalViews: analytics.total_views || 0,
+        totalScans: analytics.total_scans || 0,
+        totalDownloads: analytics.total_downloads || 0,
+        totalSocialClicks: analytics.total_social_clicks || 0,
+        uniqueVisitors: analytics.unique_visitors || 0,
+        topCountries: analytics.top_countries || [],
+        recentActivity: analytics.recent_activity || [],
+        monthlyViews: analytics.monthly_views || [],
+      };
+    }
+    
+    return {
+      totalViews: 0,
+      totalScans: 0,
+      totalDownloads: 0,
+      totalSocialClicks: 0,
+      uniqueVisitors: 0,
+      topCountries: [],
+      recentActivity: [],
+      monthlyViews: [],
+    };
+  } catch (error) {
+    console.error('Error fetching analytics:', error);
+    return {
+      totalViews: 0,
+      totalScans: 0,
+      totalDownloads: 0,
+      totalSocialClicks: 0,
+      uniqueVisitors: 0,
+      topCountries: [],
+      recentActivity: [],
+      monthlyViews: [],
+    };
   }
 }

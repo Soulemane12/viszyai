@@ -13,8 +13,8 @@ import {
   Download,
   Share2
 } from 'lucide-react';
-import { getProfileWithSocialLinks } from '@/lib/auth';
-import { Profile, SocialLink } from '@/lib/database.types';
+import { getProfileWithSocialLinks, trackProfileView, trackSocialClick, trackContactDownload } from '@/lib/auth';
+import { Profile } from '@/lib/database.types';
 
 interface ProfileData {
   name: string;
@@ -42,6 +42,8 @@ export default function ProfilePage() {
   const params = useParams();
   const handle = params.handle as string;
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [socialLinks, setSocialLinks] = useState<{ id: string; platform: string; url: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCopied, setShowCopied] = useState(false);
 
@@ -51,7 +53,7 @@ export default function ProfilePage() {
       if (!handle) return;
       
       try {
-        const { profile, socialLinks, error } = await getProfileWithSocialLinks(handle);
+        const { profile: fetchedProfile, socialLinks: fetchedSocialLinks, error } = await getProfileWithSocialLinks(handle);
         
         if (error) {
           console.error('Error loading profile:', error);
@@ -68,18 +70,28 @@ export default function ProfilePage() {
               { platform: 'Twitter', url: 'https://twitter.com/demo' }
             ]
           });
-        } else if (profile) {
-          const typedProfile = profile as Profile;
+        } else if (fetchedProfile) {
+          const typedProfile = fetchedProfile as Profile;
+          setProfile(typedProfile);
+          setSocialLinks(fetchedSocialLinks);
           setProfileData({
             name: typedProfile.name,
             title: typedProfile.title || '',
             email: typedProfile.email,
             phone: typedProfile.phone || '',
             bio: typedProfile.bio || '',
-            socialLinks: socialLinks.map(link => ({
+            socialLinks: fetchedSocialLinks.map(link => ({
               platform: link.platform,
               url: link.url
             }))
+          });
+
+          // Track profile view
+          trackProfileView(typedProfile.id, {
+            viewer_ip: '127.0.0.1', // In production, get from request
+            viewer_user_agent: navigator.userAgent,
+            viewer_country: 'Unknown', // In production, get from IP geolocation
+            viewer_city: 'Unknown',
           });
         } else {
           // No profile found
@@ -159,6 +171,18 @@ export default function ProfilePage() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+
+    // Track contact download if we have profile data
+    if (profile) {
+      const typedProfile = profile as Profile;
+      trackContactDownload(typedProfile.id, {
+        downloader_ip: '127.0.0.1',
+        downloader_user_agent: navigator.userAgent,
+        downloader_country: 'Unknown',
+        downloader_city: 'Unknown',
+        download_type: 'vcf',
+      });
+    }
   };
 
   const shareProfile = async () => {
@@ -298,6 +322,21 @@ export default function ProfilePage() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => {
+                        // Track social click if we have profile data
+                        if (profile) {
+                          const typedProfile = profile as Profile;
+                          const socialLink = socialLinks.find(sl => sl.platform === link.platform);
+                          if (socialLink) {
+                            trackSocialClick(typedProfile.id, socialLink.id, {
+                              clicker_ip: '127.0.0.1',
+                              clicker_user_agent: navigator.userAgent,
+                              clicker_country: 'Unknown',
+                              clicker_city: 'Unknown',
+                            });
+                          }
+                        }
+                      }}
                       className="flex items-center justify-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
                     >
                       <IconComponent className="h-5 w-5 text-indigo-600 mr-2" />

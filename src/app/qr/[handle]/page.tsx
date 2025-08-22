@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Download, Share2, Smartphone } from 'lucide-react';
 import QRCode from 'react-qr-code';
-import { getProfileWithSocialLinks } from '@/lib/auth';
+import { getProfileWithSocialLinks, trackQRScan } from '@/lib/auth';
 
 interface ProfileData {
   name: string;
@@ -54,6 +54,15 @@ export default function QRPage({ params }: { params: { handle: string } }) {
               platform: link.platform,
               url: link.url
             }))
+          });
+
+          // Track QR scan
+          trackQRScan(profile.id, {
+            scanner_ip: '127.0.0.1', // In production, get from request
+            scanner_user_agent: navigator.userAgent,
+            scanner_country: 'Unknown', // In production, get from IP geolocation
+            scanner_city: 'Unknown',
+            device_type: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
           });
         }
       } catch (error) {

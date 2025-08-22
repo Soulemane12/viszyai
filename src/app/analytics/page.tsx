@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, TrendingUp, Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
+import { getAnalytics } from '@/lib/auth';
 
 interface AnalyticsData {
   totalViews: number;
@@ -16,7 +17,7 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const router = useRouter();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,38 +28,52 @@ export default function AnalyticsPage() {
       return;
     }
 
-    // Simulate loading analytics data
-    setTimeout(() => {
-      setAnalytics({
-        totalViews: 1247,
-        totalScans: 892,
-        uniqueVisitors: 567,
-        topCountries: [
-          { country: 'United States', views: 456 },
-          { country: 'Canada', views: 234 },
-          { country: 'United Kingdom', views: 189 },
-          { country: 'Germany', views: 156 },
-          { country: 'Australia', views: 123 }
-        ],
-        recentActivity: [
-          { date: '2024-01-15', action: 'Profile viewed', location: 'New York, US' },
-          { date: '2024-01-15', action: 'QR code scanned', location: 'Toronto, CA' },
-          { date: '2024-01-14', action: 'Contact downloaded', location: 'London, UK' },
-          { date: '2024-01-14', action: 'Profile viewed', location: 'Berlin, DE' },
-          { date: '2024-01-13', action: 'QR code scanned', location: 'Sydney, AU' }
-        ],
-        monthlyViews: [
-          { month: 'Jan', views: 1247 },
-          { month: 'Dec', views: 892 },
-          { month: 'Nov', views: 756 },
-          { month: 'Oct', views: 634 },
-          { month: 'Sep', views: 523 },
-          { month: 'Aug', views: 412 }
-        ]
-      });
-      setLoading(false);
-    }, 1000);
-  }, [user, router]);
+    const loadAnalytics = async () => {
+      try {
+        if (profile?.handle) {
+          console.log('Loading analytics for profile:', profile.handle);
+          const analyticsData = await getAnalytics(profile.handle);
+          
+          // Transform the data to match our interface
+          const transformedData: AnalyticsData = {
+            totalViews: analyticsData.totalViews,
+            totalScans: analyticsData.totalScans,
+            uniqueVisitors: analyticsData.uniqueVisitors,
+            topCountries: analyticsData.topCountries || [],
+            recentActivity: analyticsData.recentActivity || [],
+            monthlyViews: analyticsData.monthlyViews || []
+          };
+          
+          setAnalytics(transformedData);
+        } else {
+          // No profile yet, show empty analytics
+          setAnalytics({
+            totalViews: 0,
+            totalScans: 0,
+            uniqueVisitors: 0,
+            topCountries: [],
+            recentActivity: [],
+            monthlyViews: []
+          });
+        }
+      } catch (error) {
+        console.error('Error loading analytics:', error);
+        // Show empty analytics on error
+        setAnalytics({
+          totalViews: 0,
+          totalScans: 0,
+          uniqueVisitors: 0,
+          topCountries: [],
+          recentActivity: [],
+          monthlyViews: []
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAnalytics();
+  }, [user, profile, router]);
 
   if (loading) {
     return (
@@ -73,6 +88,46 @@ export default function AnalyticsPage() {
 
   if (!user) {
     return null;
+  }
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+        <header className="bg-white shadow-sm border-b border-indigo-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <div className="flex items-center space-x-4">
+                <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 transition-colors">
+                  <ArrowLeft className="h-5 w-5" />
+                </Link>
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-800">Analytics</h1>
+                  <p className="text-slate-600">Track your profile performance</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+              <BarChart3 className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-slate-800 mb-4">No Profile Yet</h2>
+              <p className="text-slate-600 mb-6">
+                Create your profile to start tracking analytics and see how people interact with your digital business card.
+              </p>
+              <Link
+                href="/create-profile"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+              >
+                Create Profile
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   return (
