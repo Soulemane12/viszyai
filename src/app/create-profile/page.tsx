@@ -30,6 +30,7 @@ export default function CreateProfilePage() {
   
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [handle, setHandle] = useState('');
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -80,19 +81,19 @@ export default function CreateProfilePage() {
       return;
     }
     
-    // Add a small delay to prevent too many requests
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
     try {
       const { available, error } = await isHandleAvailable(handleValue);
       if (error) {
         console.error('Error checking handle:', error);
+        // Set to null on error to allow form submission
+        setHandleAvailable(null);
         return;
       }
       setHandleAvailable(available);
     } catch (error) {
       console.error('Handle availability check failed:', error);
-      // Don't show error to user for availability checks
+      // Set to null on error to allow form submission
+      setHandleAvailable(null);
     }
   };
 
@@ -223,7 +224,17 @@ export default function CreateProfilePage() {
                       value={handle}
                       onChange={(e) => {
                         setHandle(e.target.value);
-                        checkHandleAvailability(e.target.value);
+                        
+                        // Clear previous timer
+                        if (debounceTimer) {
+                          clearTimeout(debounceTimer);
+                        }
+                        
+                        // Set new timer for debounced check
+                        const newTimer = setTimeout(() => {
+                          checkHandleAvailability(e.target.value);
+                        }, 500);
+                        setDebounceTimer(newTimer);
                       }}
                       className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800 ${
                         handleAvailable === null ? 'border-indigo-300' :
@@ -392,14 +403,21 @@ export default function CreateProfilePage() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                disabled={loading || !handleAvailable}
+                disabled={loading || handleAvailable === false || !handle}
                 className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
-                  loading || !handleAvailable
+                  loading || handleAvailable === false || !handle
                     ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                     : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
                 }`}
               >
-                {loading ? 'Creating...' : 'Create My Card'}
+                {loading 
+                  ? 'Creating...' 
+                  : !handle 
+                    ? 'Enter Handle First'
+                    : handleAvailable === false
+                      ? 'Handle Unavailable'
+                      : 'Create My Card'
+                }
               </button>
             </div>
           </form>
