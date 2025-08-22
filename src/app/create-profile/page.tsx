@@ -33,12 +33,29 @@ export default function CreateProfilePage() {
   const [handle, setHandle] = useState('');
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated and load existing profile data
   useEffect(() => {
     if (!user) {
       router.push('/login');
+      return;
     }
-  }, [user, router]);
+
+    // If user has a profile, load existing data into the form
+    if (profile) {
+      console.log('Loading existing profile data:', profile);
+      setFormData({
+        name: profile.name || '',
+        title: profile.title || '',
+        phone: profile.phone || '',
+        photo: null, // We'll handle photo separately
+        bio: profile.bio || ''
+      });
+      setHandle(profile.handle || '');
+      
+      // Load existing social links if any
+      // Note: We'll need to fetch social links separately
+    }
+  }, [user, profile, router]);
 
   const socialPlatforms = [
     { name: 'Instagram', icon: Instagram, placeholder: 'https://instagram.com/username' },
@@ -121,27 +138,33 @@ export default function CreateProfilePage() {
       console.log('Handle validation passed:', handle);
       console.log('Clean handle for submission:', cleanHandle);
 
-      // Check handle availability
-      console.log('Checking handle availability for:', cleanHandle);
-      try {
-        const { available, error } = await isHandleAvailable(cleanHandle);
-        console.log('Handle availability result:', { available, error });
-        
-        if (error) {
-          console.log('Handle availability check failed, proceeding anyway:', error);
+      // Check handle availability (skip if editing existing profile)
+      if (!profile) {
+        console.log('Checking handle availability for:', cleanHandle);
+        try {
+          const { available, error } = await isHandleAvailable(cleanHandle);
+          console.log('Handle availability result:', { available, error });
+          
+          if (error) {
+            console.log('Handle availability check failed, proceeding anyway:', error);
+            // Continue with profile creation even if availability check fails
+          } else if (!available) {
+            throw new Error('This handle is already taken. Please choose another one.');
+          }
+        } catch (error) {
+          console.log('Handle availability check error, proceeding anyway:', error);
           // Continue with profile creation even if availability check fails
-        } else if (!available) {
-          throw new Error('This handle is already taken. Please choose another one.');
         }
-      } catch (error) {
-        console.log('Handle availability check error, proceeding anyway:', error);
-        // Continue with profile creation even if availability check fails
+      } else {
+        console.log('Skipping handle availability check for existing profile');
       }
 
               // Create or update profile with handle and additional info
         if (profile) {
           // Update existing profile
+          console.log('Updating existing profile:', profile.id);
           const { error: updateError } = await updateProfile(profile.id, {
+            name: formData.name,
             handle: cleanHandle,
             title: formData.title,
             phone: formData.phone,
@@ -149,9 +172,17 @@ export default function CreateProfilePage() {
           });
 
           if (updateError) {
+            console.error('Profile update error:', updateError);
             throw updateError;
           }
 
+          console.log('Profile updated successfully! Refreshing profile data...');
+          
+          // Refresh the user's profile data
+          if (refreshProfile) {
+            await refreshProfile();
+          }
+          
           // Redirect to QR page
           router.push(`/qr/${cleanHandle}`);
       } else if (user) {
@@ -229,8 +260,12 @@ export default function CreateProfilePage() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
           </Link>
-          <h1 className="text-3xl font-bold text-slate-800">Create Your Digital Business Card</h1>
-          <p className="text-slate-600 mt-2">Fill in your information to generate your unique QR code</p>
+          <h1 className="text-3xl font-bold text-slate-800">
+            {profile ? 'Edit Your Digital Business Card' : 'Create Your Digital Business Card'}
+          </h1>
+          <p className="text-slate-600 mt-2">
+            {profile ? 'Update your information and regenerate your QR code' : 'Fill in your information to generate your unique QR code'}
+          </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
@@ -266,6 +301,7 @@ export default function CreateProfilePage() {
                       type="text"
                       value={handle}
                       onChange={(e) => {
+                        if (profile) return; // Don't allow handle changes when editing
                         setHandle(e.target.value);
                         
                         // Clear previous timer
@@ -280,11 +316,14 @@ export default function CreateProfilePage() {
                         setDebounceTimer(newTimer);
                       }}
                       className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800 ${
+                        profile ? 'bg-gray-100 cursor-not-allowed' : ''
+                      } ${
                         handleAvailable === null ? 'border-indigo-300' :
                         handleAvailable ? 'border-green-300' : 'border-red-300'
                       }`}
                       placeholder="your-name"
                       required
+                      disabled={!!profile}
                     />
                   </div>
                   {handle && handleAvailable !== null && (
@@ -454,12 +493,12 @@ export default function CreateProfilePage() {
                 }`}
               >
                 {loading 
-                  ? 'Creating...' 
+                  ? (profile ? 'Updating...' : 'Creating...')
                   : !handle 
                     ? 'Enter Handle First'
                     : handleAvailable === false
                       ? 'Handle Unavailable'
-                      : 'Create My Card'
+                      : (profile ? 'Update My Card' : 'Create My Card')
                 }
               </button>
             </div>
