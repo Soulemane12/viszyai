@@ -189,6 +189,8 @@ export async function createProfile(userId: string, profileData: Omit<Profile, '
   error: unknown;
 }> {
   try {
+    console.log('createProfile called with:', { userId, profileData });
+    
     // Check rate limit
     if (!profileUpdateLimiter.canMakeRequest(userId)) {
       throw new Error('Too many profile creation attempts. Please wait a moment before trying again.');
@@ -201,9 +203,17 @@ export async function createProfile(userId: string, profileData: Omit<Profile, '
       .select()
       .single();
 
-    if (error) throw error;
+    console.log('Supabase insert result:', { data, error });
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      throw error;
+    }
+    
+    console.log('Profile created successfully:', data);
     return { profile: data, error: null };
   } catch (error) {
+    console.error('createProfile error:', error);
     return { profile: null, error };
   }
 }

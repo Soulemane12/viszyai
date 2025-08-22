@@ -111,38 +111,51 @@ export default function CreateProfilePage() {
         throw new Error('Please choose a profile handle');
       }
 
+      // Clean and validate handle format
+      const cleanHandle = handle.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (cleanHandle.length < 3) {
+        throw new Error('Handle must be at least 3 characters long');
+      }
+
       console.log('Handle validation passed:', handle);
+      console.log('Clean handle for submission:', cleanHandle);
 
       // Check handle availability
-      console.log('Checking handle availability for:', handle);
-      const { available } = await isHandleAvailable(handle);
+      console.log('Checking handle availability for:', cleanHandle);
+      const { available } = await isHandleAvailable(cleanHandle);
       console.log('Handle availability result:', available);
       if (!available) {
         throw new Error('This handle is already taken. Please choose another one.');
       }
 
-      // Create or update profile with handle and additional info
-      if (profile) {
-        // Update existing profile
-        const { error: updateError } = await updateProfile(profile.id, {
-          handle,
-          title: formData.title,
-          phone: formData.phone,
-          bio: formData.bio
-        });
+              // Create or update profile with handle and additional info
+        if (profile) {
+          // Update existing profile
+          const { error: updateError } = await updateProfile(profile.id, {
+            handle: cleanHandle,
+            title: formData.title,
+            phone: formData.phone,
+            bio: formData.bio
+          });
 
-        if (updateError) {
-          throw updateError;
-        }
+          if (updateError) {
+            throw updateError;
+          }
 
-        // Redirect to QR page
-        router.push(`/qr/${handle}`);
+          // Redirect to QR page
+          router.push(`/qr/${cleanHandle}`);
       } else if (user) {
         // Create new profile for new user
         console.log('Creating new profile for user:', user.id);
+        
+        // Clean the handle - remove spaces and special characters
+        const cleanHandle = handle.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        console.log('Original handle:', handle);
+        console.log('Clean handle:', cleanHandle);
+        
         const profileData = {
           user_id: user.id,
-          handle,
+          handle: cleanHandle,
           name: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
           title: formData.title,
           phone: formData.phone,
@@ -155,6 +168,7 @@ export default function CreateProfilePage() {
         console.log('Profile creation result:', { createError });
 
         if (createError) {
+          console.error('Profile creation error details:', createError);
           throw createError;
         }
 
@@ -164,7 +178,7 @@ export default function CreateProfilePage() {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Redirect to QR page
-        router.push(`/qr/${handle}`);
+        router.push(`/qr/${cleanHandle}`);
       } else {
         throw new Error('User not authenticated. Please try logging in again.');
       }
