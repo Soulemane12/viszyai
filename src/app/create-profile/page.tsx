@@ -195,9 +195,9 @@ export default function CreateProfilePage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-slate-600 hover:text-indigo-600 mb-4 font-medium transition-colors">
+          <Link href="/" className="inline-flex items-center text-slate-600 hover:text-indigo-600 mb-4 font-medium transition-colors">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
+            Back to Home
           </Link>
           <h1 className="text-3xl font-bold text-slate-800">Create Your Digital Business Card</h1>
           <p className="text-slate-600 mt-2">Fill in your information to generate your unique QR code</p>
