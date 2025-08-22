@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { getProfileWithSocialLinks, trackProfileView, trackSocialClick, trackContactDownload } from '@/lib/auth';
 import { Profile } from '@/lib/database.types';
+import BackButton from '@/components/BackButton';
 
 interface ProfileData {
   name: string;
@@ -231,6 +232,12 @@ export default function ProfilePage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
+              <BackButton 
+                fallbackPath="/"
+                className="text-slate-600 hover:text-indigo-600 transition-colors mr-2"
+              >
+                Back
+              </BackButton>
               <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
                 <span className="text-lg font-bold text-indigo-600">
                   {profileData.name.charAt(0)}

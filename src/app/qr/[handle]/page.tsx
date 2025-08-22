@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Download, Share2, Smartphone } from 'lucide-react';
+import { Download, Share2, Smartphone } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { getProfileWithSocialLinks, trackQRScan } from '@/lib/auth';
+import BackButton from '@/components/BackButton';
 
 interface ProfileData {
   name: string;
@@ -136,10 +137,12 @@ export default function QRPage({ params }: { params: { handle: string } }) {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
-          <Link href="/" className="inline-flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <BackButton 
+            fallbackPath="/"
+            className="text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+          >
             Back
-          </Link>
+          </BackButton>
           <div className="flex items-center space-x-4">
             <button
               onClick={downloadQR}

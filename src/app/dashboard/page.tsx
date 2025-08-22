@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3, Star } from 'lucide-react';
+import BackButton from '@/components/BackButton';
 
 export default function DashboardPage() {
   const { user, profile, loading, signOut } = useAuth();
@@ -100,9 +101,17 @@ export default function DashboardPage() {
       <header className="bg-white shadow-sm border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Viszy
-            </Link>
+            <div className="flex items-center space-x-4">
+              <BackButton 
+                fallbackPath="/"
+                className="text-slate-600 hover:text-indigo-600 transition-colors"
+              >
+                Back
+              </BackButton>
+              <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Viszy
+              </Link>
+            </div>
             <div className="flex items-center space-x-4">
               <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
               <button

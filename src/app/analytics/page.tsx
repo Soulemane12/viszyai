@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, TrendingUp, Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
+import { TrendingUp, Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
 import { getAnalytics } from '@/lib/auth';
+import BackButton from '@/components/BackButton';
 
 interface AnalyticsData {
   totalViews: number;
@@ -97,9 +98,12 @@ export default function AnalyticsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center space-x-4">
-                <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 transition-colors">
-                  <ArrowLeft className="h-5 w-5" />
-                </Link>
+                <BackButton 
+                  fallbackPath="/dashboard"
+                  className="text-slate-600 hover:text-indigo-600 transition-colors"
+                >
+                  Back
+                </BackButton>
                 <div>
                   <h1 className="text-2xl font-bold text-slate-800">Analytics</h1>
                   <p className="text-slate-600">Track your profile performance</p>
@@ -137,9 +141,12 @@ export default function AnalyticsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 transition-colors">
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
+              <BackButton 
+                fallbackPath="/dashboard"
+                className="text-slate-600 hover:text-indigo-600 transition-colors"
+              >
+                Back
+              </BackButton>
               <div>
                 <h1 className="text-2xl font-bold text-slate-800">Analytics</h1>
                 <p className="text-slate-600">Track your profile performance</p>
