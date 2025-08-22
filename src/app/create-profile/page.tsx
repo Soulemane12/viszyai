@@ -15,13 +15,14 @@ interface SocialLink {
 }
 
 export default function CreateProfilePage() {
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [handleAvailable, setHandleAvailable] = useState<boolean | null>(null);
   
   const [formData, setFormData] = useState({
+    name: '',
     title: '',
     phone: '',
     photo: null as File | null,
@@ -165,7 +166,7 @@ export default function CreateProfilePage() {
         const profileData = {
           user_id: user.id,
           handle: cleanHandle,
-          name: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+          name: formData.name || user.user_metadata?.name || user.email?.split('@')[0] || 'User',
           title: formData.title,
           phone: formData.phone,
           email: user.email || '',
@@ -181,7 +182,12 @@ export default function CreateProfilePage() {
           throw createError;
         }
 
-        console.log('Profile created successfully! Redirecting to QR page...');
+        console.log('Profile created successfully! Refreshing profile data...');
+        
+        // Refresh the user's profile data
+        if (refreshProfile) {
+          await refreshProfile();
+        }
         
         // Add a small delay to ensure the profile is fully created
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -234,6 +240,20 @@ export default function CreateProfilePage() {
               <h2 className="text-xl font-semibold mb-6 text-slate-800">Basic Information</h2>
               
               <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                    placeholder="Your full name"
+                    required
+                  />
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Profile Handle *

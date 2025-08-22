@@ -104,7 +104,7 @@ export default function DashboardPage() {
               Viszy
             </Link>
             <div className="flex items-center space-x-4">
-              <span className="text-slate-600">Welcome, {profile?.name || user.email}</span>
+              <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
               <button
                 onClick={handleSignOut}
                 className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"
@@ -125,11 +125,11 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-slate-800">Your Profile</h2>
               <Link
-                href="/edit-profile"
+                href="/create-profile"
                 className="flex items-center space-x-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-200 transition-colors"
               >
                 <Edit size={16} />
-                <span>Edit</span>
+                <span>{profile ? 'Edit' : 'Create'}</span>
               </Link>
             </div>
 
