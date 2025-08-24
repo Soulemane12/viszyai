@@ -1,28 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, QrCode, Smartphone, Users, Zap } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
 
 export default function DemoPage() {
   const { user } = useAuth();
-  const router = useRouter();
   
-  // Redirect if user is already logged in
-  useEffect(() => {
-    if (user) {
-      router.push('/dashboard');
-    }
-  }, [user, router]);
+  console.log('Demo page loaded, user:', user);
+  
+  // Don't redirect logged-in users - let them see the demo
+  // useEffect(() => {
+  //   if (user) {
+  //     router.push('/dashboard');
+  //   }
+  // }, [user, router]);
   const [showQR, setShowQR] = useState(false);
 
-  const demoProfileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/jane-doe` : '/profile/jane-doe';
+  const demoProfileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/demo` : '/profile/demo';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <Link href="/" className="inline-flex items-center text-slate-600 hover:text-indigo-600 mb-4 font-medium transition-colors">
@@ -38,7 +38,7 @@ export default function DemoPage() {
           {/* Demo Section */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Left: QR Code */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-indigo-200/50">
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-slate-800 mb-6">Jane Doe&apos;s QR Code</h2>
                 <div className="mb-6">
@@ -62,7 +62,7 @@ export default function DemoPage() {
             </div>
 
             {/* Right: What happens */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-indigo-200/50">
               <h2 className="text-2xl font-bold text-slate-800 mb-6">What Happens Next?</h2>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
@@ -110,7 +110,7 @@ export default function DemoPage() {
 
                     {/* Features Grid */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-indigo-200/50 text-center">
               <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <QrCode className="h-8 w-8 text-indigo-600" />
               </div>
@@ -118,7 +118,7 @@ export default function DemoPage() {
               <p className="text-slate-600">Create your unique QR code in seconds, no design skills needed.</p>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-indigo-200/50 text-center">
               <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Zap className="h-8 w-8 text-purple-600" />
               </div>
@@ -126,7 +126,7 @@ export default function DemoPage() {
               <p className="text-slate-600">Update your info anytime - no need to reprint or redistribute.</p>
             </div>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-indigo-200/50 text-center">
               <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Users className="h-8 w-8 text-pink-600" />
               </div>
