@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -19,47 +19,18 @@ export default function DashboardPage() {
     }
   }, [user, loading, router]);
 
-  useEffect(() => {
-    console.log('Dashboard useEffect triggered:', { user, profile, loading });
-    
-    // Only redirect after loading is complete
-    if (!loading) {
-      if (!user) {
-        console.log('No user, redirecting to login');
-        router.replace('/login'); // Use replace to prevent back button issues
-        return;
-      }
-      // Don't redirect if user has no profile - let them see the dashboard
-      // and choose to create a profile from there
-    }
-  }, [user, profile, loading, router]);
+  // Memoize loading state check
+  const isStillLoading = useMemo(() => {
+    return loading || (user && !profile);
+  }, [loading, user, profile]);
 
-  useEffect(() => {
-    console.log('Dashboard current state:', { user, profile, loading });
-  }, [user, profile, loading]);
-
-  // Additional debugging effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('Dashboard status check:', {
-        user: user ? 'Present' : 'Null',
-        profile: profile ? 'Present' : 'Null',
-        loading,
-        timestamp: new Date().toISOString()
-      });
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [user, profile, loading]);
-
-  // Show loading state only while checking authentication
-  if (loading) {
-    console.log('Rendering loading state');
+  // Simplified loading state
+  if (isStillLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
+          <p className="mt-4 text-slate-600">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -67,15 +38,7 @@ export default function DashboardPage() {
 
   // Don't render dashboard if user is not authenticated
   if (!user) {
-    console.log('Dashboard: No user, not rendering dashboard (redirect should happen)');
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Redirecting to login...</p>
-        </div>
-      </div>
-    );
+    return null; // Redirect should have happened in useEffect
   }
 
   const handleSignOut = async () => {

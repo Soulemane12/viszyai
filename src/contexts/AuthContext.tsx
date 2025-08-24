@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { Profile, SocialLink } from '@/lib/database.types';
+import { Profile } from '@/lib/database.types';
 import { getProfileWithSocialLinks } from '@/lib/auth';
 
 interface AuthContextType {
@@ -122,95 +122,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       console.log(`Fetching profile for user ID: ${userId}`);
-      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-      console.log('Current user session exists:', !!supabase.auth.getUser());
 
       // Add timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000);
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 3000);
       });
 
-      // First, get the basic profile to get the handle
+      // Fetch profile with minimal data first
       const profilePromise = supabase
         .from('profiles')
-        .select('*')
+        .select('id, handle, name, email, title, phone, bio')
         .eq('user_id', userId)
         .single();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as { data: Profile | null; error: any };
-
-      console.log('Profile fetch response:', { data, error });
-      console.log('Error details:', error ? {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint
-      } : 'No error');
+      const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as { data: Profile | null; error: Error | null };
 
       if (error) {
-        console.error('Error fetching profile:', error);
-
-        // If the error suggests no profile exists, it might be a new user
-        if (error.code === 'PGRST116') {
-          console.log('No profile found for user - user needs to create profile');
-          console.log('Profile fetch error details:', error);
-          setProfile(null);
-          return;
-        }
-
-        // Handle 406 errors (Not Acceptable) which might be due to headers
-        if (error.code === 'PGRST301') {
-          console.log('406 error - checking request headers and configuration');
-          console.log('Profile fetch error details:', error);
-          setProfile(null);
-          return;
-        }
-
-        throw error;
+        console.error('Profile fetch error:', error);
+        setProfile(null);
+        return;
       }
 
       if (data) {
-        console.log('Profile fetched successfully:', data);
-        
-        // Type the data as Profile to ensure TypeScript knows about the handle property
-        const profileData = data as Profile;
-        
-        // Now fetch the complete profile with social links
+        // Immediately set basic profile to improve perceived performance
+        setProfile(data);
+
+        // Fetch additional data in background
         try {
-          console.log('Fetching complete profile with social links for handle:', profileData.handle);
+          const result = await getProfileWithSocialLinks(data.handle);
           
-          // Add timeout for social links fetch
-          const socialLinksTimeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Social links fetch timeout')), 3000);
-          });
-          
-          const socialLinksPromise = getProfileWithSocialLinks(profileData.handle);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const { profile: completeProfile, socialLinks } = await Promise.race([socialLinksPromise, socialLinksTimeoutPromise]) as { profile: Profile | null; socialLinks: SocialLink[]; error: any };
-          
-          if (completeProfile) {
-            console.log('Complete profile with social links fetched:', completeProfile);
-            console.log('Social links count:', socialLinks?.length || 0);
-            
-            // Set the complete profile data
-            setProfile(completeProfile);
-          } else {
-            console.log('No complete profile found, using basic profile data');
-            setProfile(profileData);
+          if (result.profile) {
+            // Update with complete profile if available
+            setProfile(result.profile);
           }
         } catch (socialLinksError) {
-          console.error('Error fetching social links, using basic profile:', socialLinksError);
-          // Fall back to basic profile data if social links fetch fails
-          setProfile(profileData);
+          console.error('Background social links fetch failed:', socialLinksError);
         }
-      } else {
-        console.log('No profile data found');
-        setProfile(null);
       }
     } catch (error) {
       console.error('Unexpected error in fetchProfile:', error);
-      console.error('Error stack:', error instanceof Error ? error.stack : String(error));
       setProfile(null);
     }
   };
