@@ -2,11 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reduce initial load by deferring non-critical styles */
 @layer base {
   :root {
-    --color-primary: #4f46e5;  /* indigo-600 */
-    --color-secondary: #9333ea; /* purple-600 */
+    --color-primary: theme('colors.primary.600');
+    --color-secondary: theme('colors.secondary.600');
+  }
+
+  body {
+    @apply text-slate-900 bg-white;
+    font-display: swap;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 text-white hover:from-primary-700 hover:to-secondary-700;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-primary-100;
+  }
+
+  .animate-slow {
+    animation-duration: 0.5s;
   }
 }
 
@@ -14,17 +32,12 @@
   .text-balance {
     text-wrap: balance;
   }
-}
 
-/* Minimal critical CSS */
-body {
-  @apply antialiased text-slate-900 bg-white;
-  font-display: swap;
-}
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
 
-/* Defer non-critical animations and transitions */
-@layer components {
-  .animate-slow {
-    animation-duration: 0.5s;
+  .shadow-custom {
+    @apply shadow-md hover:shadow-xl transition-shadow duration-300;
   }
 }
