@@ -217,7 +217,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      console.log('AuthContext: Starting sign out process');
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        console.error('Supabase sign out error:', error);
+        throw error;
+      }
+      
+      console.log('AuthContext: Supabase sign out successful');
       setUser(null);
       setProfile(null);
       
@@ -226,6 +234,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Signed out and cleared remember me preference');
     } catch (error) {
       console.error('Error signing out:', error);
+      throw error; // Re-throw to let the calling function handle it
     }
   };
 

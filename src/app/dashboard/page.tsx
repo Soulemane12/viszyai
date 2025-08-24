@@ -79,8 +79,14 @@ export default function DashboardPage() {
   }
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push('/');
+    try {
+      console.log('Sign out button clicked');
+      await signOut();
+      console.log('Sign out completed, redirecting to home');
+      router.replace('/');
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   };
 
   return (
@@ -112,7 +118,8 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={handleSignOut}
-                className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"
+                className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer"
+                type="button"
               >
                 <LogOut size={16} />
                 <span>Sign Out</span>
