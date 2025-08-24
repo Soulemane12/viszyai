@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { Profile, SocialLink, ProfileView, QRScan, ContactDownload, SocialClick } from './database.types';
-import { signupLimiter, profileUpdateLimiter, handleCheckLimiter } from './rateLimit';
+import { signupLimiter, profileUpdateLimiter } from './rateLimit';
 
 export interface SignUpData {
   email: string;

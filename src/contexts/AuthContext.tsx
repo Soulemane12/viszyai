@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { Profile } from '@/lib/database.types';
+import { getProfileWithSocialLinks } from '@/lib/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -54,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(session.user);
 
           try {
+            // Wait for profile to be fetched before setting loading to false
             await fetchProfile(session.user.id);
           } catch (profileError) {
             console.error('Error fetching profile:', profileError);
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(session.user);
             
             try {
+              // Wait for profile to be fetched before setting loading to false
               await fetchProfile(session.user.id);
             } catch (profileError) {
               console.error('Error fetching profile during auth state change:', profileError);
@@ -126,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
       console.log('Current user session exists:', !!supabase.auth.getUser());
 
+      // First, get the basic profile to get the handle
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -140,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         hint: error.hint
       } : 'No error');
 
-            if (error) {
+      if (error) {
         console.error('Error fetching profile:', error);
 
         // If the error suggests no profile exists, it might be a new user
@@ -164,7 +168,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (data) {
         console.log('Profile fetched successfully:', data);
-        setProfile(data);
+        
+        // Type the data as Profile to ensure TypeScript knows about the handle property
+        const profileData = data as Profile;
+        
+        // Now fetch the complete profile with social links
+        try {
+          console.log('Fetching complete profile with social links for handle:', profileData.handle);
+          const { profile: completeProfile, socialLinks } = await getProfileWithSocialLinks(profileData.handle);
+          
+          if (completeProfile) {
+            console.log('Complete profile with social links fetched:', completeProfile);
+            console.log('Social links count:', socialLinks?.length || 0);
+            
+            // Set the complete profile data
+            setProfile(completeProfile);
+          } else {
+            console.log('No complete profile found, using basic profile data');
+            setProfile(profileData);
+          }
+        } catch (socialLinksError) {
+          console.error('Error fetching social links, using basic profile:', socialLinksError);
+          // Fall back to basic profile data if social links fetch fails
+          setProfile(profileData);
+        }
       } else {
         console.log('No profile data found');
         setProfile(null);

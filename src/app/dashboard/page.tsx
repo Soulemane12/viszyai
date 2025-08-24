@@ -20,7 +20,7 @@ export default function DashboardPage() {
   }, [user, loading, router]);
 
   useEffect(() => {
-    console.log('Dashboard useEffect triggered:', { user, loading });
+    console.log('Dashboard useEffect triggered:', { user, profile, loading });
     
     // Only redirect after loading is complete
     if (!loading) {
@@ -32,7 +32,7 @@ export default function DashboardPage() {
       // Don't redirect if user has no profile - let them see the dashboard
       // and choose to create a profile from there
     }
-  }, [user, loading, router]);
+  }, [user, profile, loading, router]);
 
   useEffect(() => {
     console.log('Dashboard current state:', { user, profile, loading });
@@ -52,26 +52,14 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [user, profile, loading]);
 
-  if (loading) {
+  // Show loading state while checking authentication or fetching profile
+  if (loading || (user && profile === null && !loading)) {
     console.log('Rendering loading state');
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show loading state while checking authentication
-  if (loading) {
-    console.log('Dashboard: Still loading, showing loading state');
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
+          <p className="mt-4 text-slate-600">Loading your profile...</p>
         </div>
       </div>
     );
@@ -113,7 +101,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
+              <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
               <button
                 onClick={handleSignOut}
                 className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"

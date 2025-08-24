@@ -17,7 +17,11 @@ export default function LoginPage() {
   // Redirect if user is already logged in
   useEffect(() => {
     if (user) {
-      router.push('/dashboard');
+      // Add a small delay to ensure auth context is fully initialized
+      const timer = setTimeout(() => {
+        router.push('/dashboard');
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [user, router]);
   const [formData, setFormData] = useState({
@@ -46,8 +50,10 @@ export default function LoginPage() {
           localStorage.removeItem('viszy_remember_me');
         }
         
-        // Redirect to QR page or dashboard
-        router.push('/dashboard');
+        // Add a small delay to ensure auth context is fully initialized before redirect
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 200);
       }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred');
