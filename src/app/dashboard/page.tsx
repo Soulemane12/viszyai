@@ -52,14 +52,14 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [user, profile, loading]);
 
-  // Show loading state while checking authentication or fetching profile
-  if (loading || (user && profile === null && !loading)) {
+  // Show loading state only while checking authentication
+  if (loading) {
     console.log('Rendering loading state');
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading your profile...</p>
+          <p className="mt-4 text-slate-600">Loading...</p>
         </div>
       </div>
     );
@@ -101,7 +101,15 @@ export default function DashboardPage() {
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
+                {user && !profile && (
+                  <div className="flex items-center space-x-1 text-slate-400">
+                    <div className="animate-spin rounded-full h-3 w-3 border-b border-slate-400"></div>
+                    <span className="text-xs">Loading profile...</span>
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleSignOut}
                 className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors"

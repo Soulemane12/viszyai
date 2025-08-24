@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { Profile } from '@/lib/database.types';
+import { Profile, SocialLink } from '@/lib/database.types';
 import { getProfileWithSocialLinks } from '@/lib/auth';
 
 interface AuthContextType {
@@ -54,12 +54,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log('User email confirmed:', session.user.email_confirmed_at);
           setUser(session.user);
 
-          try {
-            // Wait for profile to be fetched before setting loading to false
-            await fetchProfile(session.user.id);
-          } catch (profileError) {
+          // Don't wait for profile - fetch it in background
+          fetchProfile(session.user.id).catch((profileError) => {
             console.error('Error fetching profile:', profileError);
-          }
+          });
         } else {
           console.log('No user in session');
           setUser(null);
@@ -93,12 +91,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             console.log('User found in auth state change:', session.user.id);
             setUser(session.user);
             
-            try {
-              // Wait for profile to be fetched before setting loading to false
-              await fetchProfile(session.user.id);
-            } catch (profileError) {
+            // Don't wait for profile - fetch it in background
+            fetchProfile(session.user.id).catch((profileError) => {
               console.error('Error fetching profile during auth state change:', profileError);
-            }
+            });
           } else {
             console.log('No user in auth state change');
             setUser(null);
@@ -129,12 +125,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
       console.log('Current user session exists:', !!supabase.auth.getUser());
 
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000);
+      });
+
       // First, get the basic profile to get the handle
-      const { data, error } = await supabase
+      const profilePromise = supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .single();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as { data: Profile | null; error: any };
 
       console.log('Profile fetch response:', { data, error });
       console.log('Error details:', error ? {
@@ -175,7 +179,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Now fetch the complete profile with social links
         try {
           console.log('Fetching complete profile with social links for handle:', profileData.handle);
-          const { profile: completeProfile, socialLinks } = await getProfileWithSocialLinks(profileData.handle);
+          
+          // Add timeout for social links fetch
+          const socialLinksTimeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Social links fetch timeout')), 3000);
+          });
+          
+          const socialLinksPromise = getProfileWithSocialLinks(profileData.handle);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { profile: completeProfile, socialLinks } = await Promise.race([socialLinksPromise, socialLinksTimeoutPromise]) as { profile: Profile | null; socialLinks: SocialLink[]; error: any };
           
           if (completeProfile) {
             console.log('Complete profile with social links fetched:', completeProfile);
