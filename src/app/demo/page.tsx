@@ -19,7 +19,7 @@ export default function DemoPage() {
   // }, [user, router]);
   const [showQR, setShowQR] = useState(false);
 
-  const demoProfileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/demo` : '/profile/demo';
+  const demoProfileUrl = typeof window !== 'undefined' ? `https://viszyai.vercel.app/profile/demo` : '/profile/demo';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">

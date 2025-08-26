@@ -76,7 +76,7 @@ export default function QRPage({ params }: { params: { handle: string } }) {
     loadProfile();
   }, [params.handle]);
 
-  const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/${params.handle}` : `/profile/${params.handle}`;
+  const profileUrl = typeof window !== 'undefined' ? `https://viszyai.vercel.app/profile/${params.handle}` : `/profile/${params.handle}`;
 
   const downloadQR = () => {
     if (typeof window === 'undefined') return;

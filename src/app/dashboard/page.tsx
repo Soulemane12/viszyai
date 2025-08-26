@@ -176,9 +176,9 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-6">
-                  <p className="text-sm text-slate-500 mb-2">Your handle:</p>
+                  <p className="text-sm text-slate-500 mb-2">Your profile URL:</p>
                   <p className="font-mono text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg inline-block">
-                    {profile.handle}
+                    https://viszyai.vercel.app/profile/{profile.handle}
                   </p>
                 </div>
               </div>

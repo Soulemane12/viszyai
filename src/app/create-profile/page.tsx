@@ -155,25 +155,26 @@ export default function CreateProfilePage() {
       console.log('Handle validation passed:', handle);
       console.log('Clean handle for submission:', cleanHandle);
 
-      // Check handle availability (skip if editing existing profile)
-      if (!profile) {
-        console.log('Checking handle availability for:', cleanHandle);
-        try {
-          const { available, error } = await isHandleAvailable(cleanHandle);
-          console.log('Handle availability result:', { available, error });
-          
-          if (error) {
-            console.log('Handle availability check failed, proceeding anyway:', error);
-            // Continue with profile creation even if availability check fails
-          } else if (!available) {
+      // Check handle availability (always check, but allow if it's the same handle for existing profile)
+      console.log('Checking handle availability for:', cleanHandle);
+      try {
+        const { available, error } = await isHandleAvailable(cleanHandle);
+        console.log('Handle availability result:', { available, error });
+        
+        if (error) {
+          console.log('Handle availability check failed, proceeding anyway:', error);
+          // Continue with profile creation even if availability check fails
+        } else if (!available) {
+          // If editing existing profile and handle hasn't changed, allow it
+          if (profile && profile.handle === cleanHandle) {
+            console.log('Handle unchanged for existing profile, allowing update');
+          } else {
             throw new Error('This handle is already taken. Please choose another one.');
           }
-        } catch (error) {
-          console.log('Handle availability check error, proceeding anyway:', error);
-          // Continue with profile creation even if availability check fails
         }
-      } else {
-        console.log('Skipping handle availability check for existing profile');
+      } catch (error) {
+        console.log('Handle availability check error, proceeding anyway:', error);
+        // Continue with profile creation even if availability check fails
       }
 
               // Create or update profile with handle and additional info
@@ -337,13 +338,12 @@ export default function CreateProfilePage() {
                   </label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-indigo-300 bg-indigo-50 text-indigo-600 text-sm font-medium">
-                      viszy.ai/u/
+                      viszyai.vercel.app/profile/
                     </span>
                     <input
                       type="text"
                       value={handle}
                       onChange={(e) => {
-                        if (profile) return; // Don't allow handle changes when editing
                         setHandle(e.target.value);
                         
                         // Clear previous timer
@@ -358,14 +358,11 @@ export default function CreateProfilePage() {
                         setDebounceTimer(newTimer);
                       }}
                       className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800 ${
-                        profile ? 'bg-gray-100 cursor-not-allowed' : ''
-                      } ${
                         handleAvailable === null ? 'border-indigo-300' :
                         handleAvailable ? 'border-green-300' : 'border-red-300'
                       }`}
                       placeholder="your-name"
                       required
-                      disabled={!!profile}
                     />
                   </div>
                   {handle && handleAvailable !== null && (
@@ -373,6 +370,11 @@ export default function CreateProfilePage() {
                       handleAvailable ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {handleAvailable ? '✓ Handle is available' : '✗ Handle is already taken'}
+                    </p>
+                  )}
+                  {profile && (
+                    <p className="text-sm mt-1 text-blue-600">
+                      💡 You can change your handle anytime. Your old links will redirect to the new one.
                     </p>
                   )}
                 </div>
