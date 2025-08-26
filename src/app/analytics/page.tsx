@@ -158,11 +158,7 @@ export default function AnalyticsPage() {
                 <p className="text-slate-600">Track your profile performance</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                Pro Plan
-              </span>
-            </div>
+
           </div>
         </div>
       </header>
@@ -301,20 +297,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Upgrade CTA */}
-        <div className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white">
-          <h3 className="text-2xl font-bold mb-4">Unlock Advanced Analytics</h3>
-          <p className="text-indigo-100 mb-6 max-w-2xl mx-auto">
-            Get detailed insights, export data, and track engagement with our Pro plan. 
-            Upgrade now to access advanced analytics features.
-          </p>
-          <Link 
-            href="/pricing" 
-            className="bg-white text-indigo-600 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-all duration-200 inline-block"
-          >
-            Upgrade to Pro
-          </Link>
-        </div>
+
       </main>
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Sparkles, Smartphone, Users, Zap, ArrowRight, CheckCircle, Shield, QrCode, Download, Share2 } from 'lucide-react';
+import { Sparkles, Smartphone, Users, Zap, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Home() {
@@ -21,12 +21,7 @@ export default function Home() {
                 <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
                   Dashboard
                 </Link>
-                <Link 
-                  href="/pricing" 
-                  className="text-slate-600 hover:text-indigo-600 font-medium transition-colors"
-                >
-                  Pricing
-                </Link>
+
                 <Link 
                   href="/dashboard" 
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -151,192 +146,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pricing Section */}
-        <div className="mt-20">
-          <h2 className="text-3xl font-bold text-center mb-4 text-slate-800">Choose Your Plan</h2>
-          <p className="text-center text-slate-600 mb-12 max-w-2xl mx-auto">Start free and upgrade when you need more features</p>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Free Plan */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 relative">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Free</h3>
-                <div className="text-4xl font-bold text-indigo-600 mb-2">$0</div>
-                <p className="text-slate-600">Perfect for getting started</p>
-              </div>
-              
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">1 Digital Business Card</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Basic QR Code</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Social Media Links</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Contact Download (.vcf)</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Mobile-Optimized Profile</span>
-                </li>
-              </ul>
-              
-              <Link 
-                href="/signup" 
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 text-center block"
-              >
-                Get Started Free
-              </Link>
-            </div>
 
-            {/* Pro Plan */}
-            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 shadow-xl border-2 border-indigo-200 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                  Most Popular
-                </span>
-              </div>
-              
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Pro</h3>
-                <div className="text-4xl font-bold text-indigo-600 mb-2">$9<span className="text-lg text-slate-600">/month</span></div>
-                <p className="text-slate-600">For professionals and teams</p>
-              </div>
-              
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Everything in Free</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Up to 5 Business Cards</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Custom Branded QR Codes</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Analytics & Insights</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Priority Support</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Photo Upload</span>
-          </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Custom Domain</span>
-          </li>
-              </ul>
-              
-              <Link 
-                href="/signup?plan=pro" 
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 text-center block"
-              >
-                Start Pro Trial
-              </Link>
-            </div>
-
-            {/* Enterprise Plan */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 relative">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Enterprise</h3>
-                <div className="text-4xl font-bold text-indigo-600 mb-2">$29<span className="text-lg text-slate-600">/month</span></div>
-                <p className="text-slate-600">For large organizations</p>
-              </div>
-              
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Everything in Pro</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Unlimited Business Cards</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Team Management</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Advanced Analytics</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">API Access</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">White-label Options</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-slate-700">Dedicated Support</span>
-                </li>
-              </ul>
-              
-              <Link 
-                href="/contact" 
-                className="w-full bg-slate-100 text-slate-700 py-3 px-6 rounded-xl font-semibold hover:bg-slate-200 transition-all duration-200 text-center block"
-              >
-                Contact Sales
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Premium Features */}
-        <div className="mt-20">
-          <h2 className="text-3xl font-bold text-center mb-4 text-slate-800">Premium Features</h2>
-          <p className="text-center text-slate-600 mb-12 max-w-2xl mx-auto">Unlock powerful features to make your digital business card stand out</p>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 text-center">
-              <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <QrCode className="h-6 w-6 text-indigo-600" />
-              </div>
-              <h3 className="font-semibold mb-2 text-slate-800">Custom QR Codes</h3>
-              <p className="text-sm text-slate-600">Brand your QR codes with your logo and colors</p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 text-center">
-              <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Download className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold mb-2 text-slate-800">Analytics Dashboard</h3>
-              <p className="text-sm text-slate-600">Track profile views, scans, and engagement</p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 text-center">
-              <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Share2 className="h-6 w-6 text-pink-600" />
-              </div>
-              <h3 className="font-semibold mb-2 text-slate-800">Multiple Profiles</h3>
-              <p className="text-sm text-slate-600">Create different cards for different purposes</p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 text-center">
-              <div className="bg-gradient-to-br from-rose-100 to-red-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-6 w-6 text-rose-600" />
-              </div>
-              <h3 className="font-semibold mb-2 text-slate-800">Priority Support</h3>
-              <p className="text-sm text-slate-600">Get help when you need it most</p>
-            </div>
-          </div>
-        </div>
       </main>
 
       {/* Footer */}

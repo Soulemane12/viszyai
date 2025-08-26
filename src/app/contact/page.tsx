@@ -286,12 +286,7 @@ export default function ContactPage() {
                 >
                   Help Center →
                 </Link>
-                <Link 
-                  href="/pricing"
-                  className="block text-indigo-600 hover:text-indigo-700 font-medium"
-                >
-                  View Pricing →
-                </Link>
+
                 <Link 
                   href="/demo"
                   className="block text-indigo-600 hover:text-indigo-700 font-medium"

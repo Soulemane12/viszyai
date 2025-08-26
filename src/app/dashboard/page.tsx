@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3, Star } from 'lucide-react';
+import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
 import BackButton from '@/components/BackButton';
 
 export default function DashboardPage() {
@@ -283,16 +283,7 @@ export default function DashboardPage() {
               </div>
             </Link>
             
-            <Link
-              href="/pricing"
-              className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
-            >
-              <Star className="text-indigo-600" size={20} />
-              <div>
-                <p className="font-semibold text-slate-800">Upgrade</p>
-                <p className="text-slate-600 text-sm">Get premium features</p>
-              </div>
-            </Link>
+
             
             <Link
               href="/settings"
