@@ -43,7 +43,7 @@ async function getLocationFromIP(): Promise<GeolocationData> {
 }
 
 // Function to upload profile photo to Supabase storage
-export async function uploadProfilePhoto(file: File, userId: string): Promise<{ url: string; error: Error | null }> {
+export async function uploadProfilePhoto(file: File, _userId: string): Promise<{ url: string; error: Error | null }> {
   try {
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -55,29 +55,18 @@ export async function uploadProfilePhoto(file: File, userId: string): Promise<{ 
       throw new Error('File size must be less than 5MB');
     }
 
-    // Generate unique filename
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}-${Date.now()}.${fileExt}`;
-
-    // Upload to Supabase storage
-    const { data, error } = await supabase.storage
-      .from('profile-photos')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
-
-    if (error) {
-      console.error('Upload error:', error);
-      throw error;
-    }
-
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('profile-photos')
-      .getPublicUrl(fileName);
-
-    return { url: urlData.publicUrl, error: null };
+    // Convert file to base64 for storage
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        resolve({ url: base64String, error: null });
+      };
+      reader.onerror = () => {
+        resolve({ url: '', error: new Error('Failed to read file') });
+      };
+      reader.readAsDataURL(file);
+    });
   } catch (error) {
     console.error('Photo upload error:', error);
     return { url: '', error: error as Error };
