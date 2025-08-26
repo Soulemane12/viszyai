@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Sparkles, Smartphone, Users, Zap, ArrowRight } from 'lucide-react';
+import { Smartphone, Users, Zap, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import Logo from '@/components/Logo';
 
 export default function Home() {
   const { user } = useAuth();
@@ -11,10 +12,7 @@ export default function Home() {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Sparkles className="h-8 w-8 text-indigo-600" />
-            <span className="text-2xl font-bold text-slate-800">Viszy</span>
-          </div>
+          <Logo size="md" />
           <div className="flex items-center space-x-4">
             {user ? (
               <>

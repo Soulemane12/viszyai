@@ -6,6 +6,7 @@ import { ArrowLeft, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 import { signUp } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Logo from '@/components/Logo';
 
 export default function SignupPage() {
   const { user } = useAuth();
@@ -107,6 +108,7 @@ export default function SignupPage() {
               <Link href="/" className="text-slate-600 hover:text-indigo-600 transition-colors">
                 <ArrowLeft className="h-5 w-5" />
               </Link>
+              <Logo size="md" />
               <div>
                 <h1 className="text-2xl font-bold text-slate-800">Create Your Account</h1>
                 <p className="text-slate-600">Sign up to start creating your digital business cards</p>
@@ -120,6 +122,9 @@ export default function SignupPage() {
       <main className="max-w-md mx-auto px-4 py-12">
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-indigo-200/50">
           <div className="text-center mb-8">
+            <div className="flex justify-center mb-6">
+              <Logo size="lg" />
+            </div>
             <h2 className="text-2xl font-bold text-slate-800 mb-2">Join Viszy</h2>
             <p className="text-slate-600">Create your account to get started</p>
           </div>

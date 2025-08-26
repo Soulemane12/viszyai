@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
 import { getAnalytics } from '@/lib/auth';
 import BackButton from '@/components/BackButton';
+import Logo from '@/components/Logo';
 
 interface AnalyticsData {
   totalViews: number;
@@ -151,6 +152,7 @@ export default function AnalyticsPage() {
               >
                 Back
               </BackButton>
+              <Logo size="sm" />
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Analytics</h1>
                 <p className="text-slate-600 text-sm sm:text-base">Track your profile performance</p>

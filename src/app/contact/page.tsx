@@ -6,6 +6,7 @@ import { ArrowLeft, Mail, Phone, MessageSquare, Building, Users, Globe } from 'l
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Logo from '@/components/Logo';
 
 export default function ContactPage() {
   const { user } = useAuth();
@@ -56,6 +57,7 @@ export default function ContactPage() {
               <Link href="/" className="text-slate-600 hover:text-indigo-600 transition-colors">
                 <ArrowLeft className="h-5 w-5" />
               </Link>
+              <Logo size="md" />
               <div>
                 <h1 className="text-2xl font-bold text-slate-800">Contact Us</h1>
                 <p className="text-slate-600">Get in touch with our team</p>

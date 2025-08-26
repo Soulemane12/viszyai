@@ -18,16 +18,29 @@ export const metadata: Metadata = {
   description: "Create your professional digital business card in minutes. Share your contact info, social media, and more with a simple QR code scan. No printing costs, always up-to-date.",
   keywords: "digital business card, QR code, networking, contact sharing, professional profile",
   authors: [{ name: "Viszy Team" }],
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: "Viszy - Digital Business Cards for Everyone",
     description: "Create your professional digital business card in minutes. Share your contact info, social media, and more with a simple QR code scan.",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: '/logo.png',
+        width: 512,
+        height: 512,
+        alt: 'Viszy Logo',
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Viszy - Digital Business Cards for Everyone",
     description: "Create your professional digital business card in minutes. Share your contact info, social media, and more with a simple QR code scan.",
+    images: ['/logo.png'],
   },
 };
 

@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
 import BackButton from '@/components/BackButton';
+import Logo from '@/components/Logo';
 
 export default function DashboardPage() {
   const { user, profile, loading, signOut } = useAuth();
@@ -103,9 +104,7 @@ export default function DashboardPage() {
               >
                 <span className="hidden sm:inline">Back</span>
               </BackButton>
-              <Link href="/" className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Viszy
-              </Link>
+              <Logo size="sm" />
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="hidden sm:flex items-center space-x-2">
