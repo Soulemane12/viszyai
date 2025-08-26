@@ -2,6 +2,46 @@ import { supabase } from './supabase';
 import { Profile, SocialLink, ProfileView, QRScan, ContactDownload, SocialClick } from './database.types';
 import { signupLimiter, profileUpdateLimiter } from './rateLimit';
 
+// Interface for geolocation data
+interface GeolocationData {
+  country?: string;
+  city?: string;
+  latitude?: number;
+  longitude?: number;
+  ip?: string;
+}
+
+// Function to get location data from IP address (no permission required)
+async function getLocationFromIP(): Promise<GeolocationData> {
+  try {
+    // Use a free IP geolocation service
+    const response = await fetch('https://ipapi.co/json/', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch location data');
+    }
+
+    const data = await response.json();
+    
+    return {
+      country: data.country_name || undefined,
+      city: data.city || undefined,
+      latitude: data.latitude || undefined,
+      longitude: data.longitude || undefined,
+      ip: data.ip || undefined,
+    };
+  } catch (error) {
+    console.error('Error getting location from IP:', error);
+    // Return empty data on error - analytics will still work
+    return {};
+  }
+}
+
 export interface SignUpData {
   email: string;
   password: string;
@@ -357,17 +397,20 @@ export async function updateSocialLinks(profileId: string, socialLinks: Array<{ 
 // Analytics functions
 export async function trackProfileView(profileId: string, analyticsData: Partial<ProfileView>) {
   try {
+    // Get location data from IP automatically
+    const locationData = await getLocationFromIP();
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from('profile_views')
       .insert({
         profile_id: profileId,
-        viewer_ip: analyticsData.viewer_ip,
+        viewer_ip: analyticsData.viewer_ip || locationData.ip,
         viewer_user_agent: analyticsData.viewer_user_agent,
-        viewer_country: analyticsData.viewer_country,
-        viewer_city: analyticsData.viewer_city,
-        viewer_latitude: analyticsData.viewer_latitude,
-        viewer_longitude: analyticsData.viewer_longitude,
+        viewer_country: analyticsData.viewer_country || locationData.country,
+        viewer_city: analyticsData.viewer_city || locationData.city,
+        viewer_latitude: analyticsData.viewer_latitude || locationData.latitude,
+        viewer_longitude: analyticsData.viewer_longitude || locationData.longitude,
         referrer: analyticsData.referrer,
         utm_source: analyticsData.utm_source,
         utm_medium: analyticsData.utm_medium,
@@ -384,17 +427,20 @@ export async function trackProfileView(profileId: string, analyticsData: Partial
 
 export async function trackQRScan(profileId: string, analyticsData: Partial<QRScan>) {
   try {
+    // Get location data from IP automatically
+    const locationData = await getLocationFromIP();
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from('qr_scans')
       .insert({
         profile_id: profileId,
-        scanner_ip: analyticsData.scanner_ip,
+        scanner_ip: analyticsData.scanner_ip || locationData.ip,
         scanner_user_agent: analyticsData.scanner_user_agent,
-        scanner_country: analyticsData.scanner_country,
-        scanner_city: analyticsData.scanner_city,
-        scanner_latitude: analyticsData.scanner_latitude,
-        scanner_longitude: analyticsData.scanner_longitude,
+        scanner_country: analyticsData.scanner_country || locationData.country,
+        scanner_city: analyticsData.scanner_city || locationData.city,
+        scanner_latitude: analyticsData.scanner_latitude || locationData.latitude,
+        scanner_longitude: analyticsData.scanner_longitude || locationData.longitude,
         device_type: analyticsData.device_type,
       });
 
@@ -408,15 +454,18 @@ export async function trackQRScan(profileId: string, analyticsData: Partial<QRSc
 
 export async function trackContactDownload(profileId: string, analyticsData: Partial<ContactDownload>) {
   try {
+    // Get location data from IP automatically
+    const locationData = await getLocationFromIP();
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from('contact_downloads')
       .insert({
         profile_id: profileId,
-        downloader_ip: analyticsData.downloader_ip,
+        downloader_ip: analyticsData.downloader_ip || locationData.ip,
         downloader_user_agent: analyticsData.downloader_user_agent,
-        downloader_country: analyticsData.downloader_country,
-        downloader_city: analyticsData.downloader_city,
+        downloader_country: analyticsData.downloader_country || locationData.country,
+        downloader_city: analyticsData.downloader_city || locationData.city,
         download_type: analyticsData.download_type,
       });
 
@@ -430,16 +479,19 @@ export async function trackContactDownload(profileId: string, analyticsData: Par
 
 export async function trackSocialClick(profileId: string, socialLinkId: string, analyticsData: Partial<SocialClick>) {
   try {
+    // Get location data from IP automatically
+    const locationData = await getLocationFromIP();
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from('social_clicks')
       .insert({
         profile_id: profileId,
         social_link_id: socialLinkId,
-        clicker_ip: analyticsData.clicker_ip,
+        clicker_ip: analyticsData.clicker_ip || locationData.ip,
         clicker_user_agent: analyticsData.clicker_user_agent,
-        clicker_country: analyticsData.clicker_country,
-        clicker_city: analyticsData.clicker_city,
+        clicker_country: analyticsData.clicker_country || locationData.country,
+        clicker_city: analyticsData.clicker_city || locationData.city,
       });
 
     if (error) throw error;

@@ -57,12 +57,9 @@ export default function QRPage({ params }: { params: { handle: string } }) {
             }))
           });
 
-          // Track QR scan
+          // Track QR scan (location will be automatically detected from IP)
           trackQRScan(profile.id, {
-            scanner_ip: '127.0.0.1', // In production, get from request
             scanner_user_agent: navigator.userAgent,
-            scanner_country: 'Unknown', // In production, get from IP geolocation
-            scanner_city: 'Unknown',
             device_type: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
           });
         }

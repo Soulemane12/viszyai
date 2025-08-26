@@ -87,12 +87,9 @@ export default function ProfilePage() {
             }))
           });
 
-          // Track profile view
+          // Track profile view (location will be automatically detected from IP)
           trackProfileView(typedProfile.id, {
-            viewer_ip: '127.0.0.1', // In production, get from request
             viewer_user_agent: navigator.userAgent,
-            viewer_country: 'Unknown', // In production, get from IP geolocation
-            viewer_city: 'Unknown',
           });
         } else {
           // No profile found
@@ -173,14 +170,11 @@ export default function ProfilePage() {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    // Track contact download if we have profile data
+    // Track contact download if we have profile data (location will be automatically detected from IP)
     if (profile) {
       const typedProfile = profile as Profile;
       trackContactDownload(typedProfile.id, {
-        downloader_ip: '127.0.0.1',
         downloader_user_agent: navigator.userAgent,
-        downloader_country: 'Unknown',
-        downloader_city: 'Unknown',
         download_type: 'vcf',
       });
     }
@@ -330,16 +324,13 @@ export default function ProfilePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => {
-                        // Track social click if we have profile data
+                        // Track social click if we have profile data (location will be automatically detected from IP)
                         if (profile) {
                           const typedProfile = profile as Profile;
                           const socialLink = socialLinks.find(sl => sl.platform === link.platform);
                           if (socialLink) {
                             trackSocialClick(typedProfile.id, socialLink.id, {
-                              clicker_ip: '127.0.0.1',
                               clicker_user_agent: navigator.userAgent,
-                              clicker_country: 'Unknown',
-                              clicker_city: 'Unknown',
                             });
                           }
                         }
