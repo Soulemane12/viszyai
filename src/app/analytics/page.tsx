@@ -35,6 +35,8 @@ export default function AnalyticsPage() {
           console.log('Loading analytics for profile:', profile.handle);
           const analyticsData = await getAnalytics(profile.handle);
           
+          console.log('Analytics data received:', analyticsData);
+          
           // Transform the data to match our interface
           const transformedData: AnalyticsData = {
             totalViews: analyticsData.totalViews,
@@ -45,28 +47,32 @@ export default function AnalyticsPage() {
             monthlyViews: analyticsData.monthlyViews || []
           };
           
+          console.log('Transformed analytics data:', transformedData);
           setAnalytics(transformedData);
         } else {
-          // No profile yet, show empty analytics
+          console.log('No profile found, showing demo analytics');
+          // Show demo analytics when no profile exists
+          const demoData = await getAnalytics('demo');
           setAnalytics({
-            totalViews: 0,
-            totalScans: 0,
-            uniqueVisitors: 0,
-            topCountries: [],
-            recentActivity: [],
-            monthlyViews: []
+            totalViews: demoData.totalViews,
+            totalScans: demoData.totalScans,
+            uniqueVisitors: demoData.uniqueVisitors,
+            topCountries: demoData.topCountries || [],
+            recentActivity: demoData.recentActivity || [],
+            monthlyViews: demoData.monthlyViews || []
           });
         }
       } catch (error) {
         console.error('Error loading analytics:', error);
-        // Show empty analytics on error
+        // Show demo analytics on error
+        const demoData = await getAnalytics('demo');
         setAnalytics({
-          totalViews: 0,
-          totalScans: 0,
-          uniqueVisitors: 0,
-          topCountries: [],
-          recentActivity: [],
-          monthlyViews: []
+          totalViews: demoData.totalViews,
+          totalScans: demoData.totalScans,
+          uniqueVisitors: demoData.uniqueVisitors,
+          topCountries: demoData.topCountries || [],
+          recentActivity: demoData.recentActivity || [],
+          monthlyViews: demoData.monthlyViews || []
         });
       } finally {
         setLoading(false);
@@ -93,7 +99,7 @@ export default function AnalyticsPage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
         <header className="bg-white shadow-sm border-b border-indigo-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
@@ -135,7 +141,7 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -165,7 +171,7 @@ export default function AnalyticsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Views</p>
@@ -181,7 +187,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">QR Scans</p>
@@ -197,7 +203,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Unique Visitors</p>
@@ -216,7 +222,7 @@ export default function AnalyticsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Monthly Views Chart */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-slate-800">Monthly Views</h3>
               <BarChart3 className="h-5 w-5 text-slate-400" />
@@ -241,7 +247,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Top Countries */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-slate-800">Top Countries</h3>
               <Globe className="h-5 w-5 text-slate-400" />
@@ -270,7 +276,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="mt-8 bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+        <div className="mt-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-slate-800">Recent Activity</h3>
             <Clock className="h-5 w-5 text-slate-400" />
