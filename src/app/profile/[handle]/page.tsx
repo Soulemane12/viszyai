@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Mail, 
   Phone, 
@@ -232,10 +233,20 @@ export default function ProfilePage() {
               >
                 <span className="hidden sm:inline">Back</span>
               </BackButton>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-base sm:text-lg font-bold text-indigo-600">
-                  {profileData.name.charAt(0)}
-                </span>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+                {profile?.photo_url ? (
+                  <Image
+                    src={profile.photo_url}
+                    alt={profileData.name}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-base sm:text-lg font-bold text-indigo-600">
+                    {profileData.name.charAt(0)}
+                  </span>
+                )}
               </div>
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg sm:text-xl font-bold text-slate-800 truncate">{profileData.name}</h1>
@@ -262,10 +273,20 @@ export default function ProfilePage() {
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
             <div className="text-center mb-6">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl sm:text-3xl font-bold text-indigo-600">
-                  {profileData.name.charAt(0)}
-                </span>
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                {profile?.photo_url ? (
+                  <Image
+                    src={profile.photo_url}
+                    alt={profileData.name}
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl sm:text-3xl font-bold text-indigo-600">
+                    {profileData.name.charAt(0)}
+                  </span>
+                )}
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
                 {profileData.name}

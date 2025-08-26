@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { User, Instagram, Linkedin, Twitter, Globe, Plus, X } from 'lucide-react';
-import { isHandleAvailable, updateProfile, createProfile, createSocialLinks, updateSocialLinks, getUserProfile, getProfileWithSocialLinks } from '@/lib/auth';
+import { isHandleAvailable, updateProfile, createProfile, createSocialLinks, updateSocialLinks, getUserProfile, getProfileWithSocialLinks, uploadProfilePhoto } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import BackButton from '@/components/BackButton';
@@ -29,6 +29,8 @@ export default function CreateProfilePage() {
     bio: ''
   });
   
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [handle, setHandle] = useState('');
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
@@ -45,6 +47,7 @@ export default function CreateProfilePage() {
         bio: profile.bio || ''
       });
       setHandle(profile.handle || '');
+      setPhotoPreview(profile.photo_url || null);
       
       // Load existing social links
       try {
@@ -105,8 +108,21 @@ export default function CreateProfilePage() {
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, photo: e.target.files[0] });
+      const file = e.target.files[0];
+      setFormData({ ...formData, photo: file });
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const removePhoto = () => {
+    setFormData({ ...formData, photo: null });
+    setPhotoPreview(null);
   };
 
   // Check handle availability with debouncing
@@ -181,12 +197,28 @@ export default function CreateProfilePage() {
         if (profile) {
           // Update existing profile
           console.log('Updating existing profile:', profile.id);
+          
+          let photoUrl = profile.photo_url;
+          
+          // Upload photo if a new one is selected
+          if (formData.photo && user) {
+            console.log('Uploading new photo...');
+            const { url, error: uploadError } = await uploadProfilePhoto(formData.photo, user.id);
+            if (uploadError) {
+              console.error('Photo upload error:', uploadError);
+              throw new Error('Failed to upload photo. Please try again.');
+            }
+            photoUrl = url;
+            console.log('Photo uploaded successfully:', photoUrl);
+          }
+          
           const { error: updateError } = await updateProfile(profile.id, {
             name: formData.name,
             handle: cleanHandle,
             title: formData.title,
             phone: formData.phone,
-            bio: formData.bio
+            bio: formData.bio,
+            photo_url: photoUrl
           });
 
           if (updateError) {
@@ -221,6 +253,20 @@ export default function CreateProfilePage() {
         console.log('Original handle:', handle);
         console.log('Clean handle:', cleanHandle);
         
+        let photoUrl = null;
+        
+        // Upload photo if one is selected
+        if (formData.photo && user) {
+          console.log('Uploading photo for new profile...');
+          const { url, error: uploadError } = await uploadProfilePhoto(formData.photo, user.id);
+          if (uploadError) {
+            console.error('Photo upload error:', uploadError);
+            throw new Error('Failed to upload photo. Please try again.');
+          }
+          photoUrl = url;
+          console.log('Photo uploaded successfully:', photoUrl);
+        }
+        
         const profileData = {
           user_id: user.id,
           handle: cleanHandle,
@@ -228,7 +274,8 @@ export default function CreateProfilePage() {
           title: formData.title,
           phone: formData.phone,
           email: user.email || '',
-          bio: formData.bio
+          bio: formData.bio,
+          photo_url: photoUrl || undefined
         };
         console.log('Profile data to create:', profileData);
         
@@ -330,6 +377,57 @@ export default function CreateProfilePage() {
                     placeholder="Your full name"
                     required
                   />
+                </div>
+
+                {/* Profile Photo */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Profile Photo
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      {photoPreview ? (
+                        <div className="relative">
+                          <Image
+                            src={photoPreview}
+                            alt="Profile preview"
+                            width={80}
+                            height={80}
+                            className="w-20 h-20 rounded-full object-cover border-2 border-indigo-200"
+                          />
+                          <button
+                            type="button"
+                            onClick={removePhoto}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center border-2 border-dashed border-indigo-300">
+                          <User className="w-8 h-8 text-indigo-400" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        className="hidden"
+                        id="photo-upload"
+                      />
+                      <label
+                        htmlFor="photo-upload"
+                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-indigo-300 rounded-lg text-sm font-medium text-indigo-700 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+                      >
+                        {photoPreview ? 'Change Photo' : 'Upload Photo'}
+                      </label>
+                      <p className="text-xs text-slate-500 mt-1">
+                        JPG, PNG, GIF up to 5MB
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div>

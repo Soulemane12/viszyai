@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
@@ -147,8 +148,21 @@ export default function DashboardPage() {
 
             {profile ? (
               <div className="space-y-4">
+                {/* Profile Photo and Name */}
                 <div className="flex items-center space-x-3">
-                  <User className="text-slate-400" size={20} />
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+                    {profile.photo_url ? (
+                      <Image
+                        src={profile.photo_url}
+                        alt={profile.name}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User className="text-indigo-600" size={20} />
+                    )}
+                  </div>
                   <div>
                     <p className="font-semibold text-slate-800">{profile.name}</p>
                     {profile.title && (

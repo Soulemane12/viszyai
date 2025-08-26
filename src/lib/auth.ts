@@ -42,6 +42,48 @@ async function getLocationFromIP(): Promise<GeolocationData> {
   }
 }
 
+// Function to upload profile photo to Supabase storage
+export async function uploadProfilePhoto(file: File, userId: string): Promise<{ url: string; error: Error | null }> {
+  try {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      throw new Error('File must be an image');
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error('File size must be less than 5MB');
+    }
+
+    // Generate unique filename
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}-${Date.now()}.${fileExt}`;
+
+    // Upload to Supabase storage
+    const { data, error } = await supabase.storage
+      .from('profile-photos')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      throw error;
+    }
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('profile-photos')
+      .getPublicUrl(fileName);
+
+    return { url: urlData.publicUrl, error: null };
+  } catch (error) {
+    console.error('Photo upload error:', error);
+    return { url: '', error: error as Error };
+  }
+}
+
 export interface SignUpData {
   email: string;
   password: string;
