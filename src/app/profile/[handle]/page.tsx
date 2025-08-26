@@ -225,22 +225,22 @@ export default function ProfilePage() {
       <header className="bg-white shadow-lg border-b border-indigo-100">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3">
               <BackButton 
                 fallbackPath="/"
-                className="text-slate-600 hover:text-indigo-600 transition-colors mr-2"
+                className="text-slate-600 hover:text-indigo-600 transition-colors"
               >
-                Back
+                <span className="hidden sm:inline">Back</span>
               </BackButton>
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-lg font-bold text-indigo-600">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                <span className="text-base sm:text-lg font-bold text-indigo-600">
                   {profileData.name.charAt(0)}
                 </span>
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-800">{profileData.name}</h1>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-800 truncate">{profileData.name}</h1>
                 {profileData.title && (
-                  <p className="text-sm text-slate-600">{profileData.title}</p>
+                  <p className="text-xs sm:text-sm text-slate-600 truncate">{profileData.title}</p>
                 )}
               </div>
             </div>
@@ -257,24 +257,24 @@ export default function ProfilePage() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-md mx-auto">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-indigo-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
             <div className="text-center mb-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl font-bold text-indigo-600">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl sm:text-3xl font-bold text-indigo-600">
                   {profileData.name.charAt(0)}
                 </span>
               </div>
-              <h2 className="text-2xl font-bold text-slate-800 mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
                 {profileData.name}
               </h2>
               {profileData.title && (
-                <p className="text-slate-600 mb-3">{profileData.title}</p>
+                <p className="text-slate-600 mb-3 text-sm sm:text-base">{profileData.title}</p>
               )}
               {profileData.bio && (
-                <p className="text-slate-600 text-sm leading-relaxed">
+                <p className="text-slate-600 text-sm leading-relaxed px-2 sm:px-0">
                   {profileData.bio}
                 </p>
               )}
@@ -285,26 +285,26 @@ export default function ProfilePage() {
               {profileData.email && (
                 <button
                   onClick={() => copyToClipboard(profileData.email)}
-                  className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
+                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
                 >
-                  <div className="flex items-center">
-                    <Mail className="h-5 w-5 text-indigo-600 mr-3" />
-                    <span className="text-slate-800 font-medium">{profileData.email}</span>
+                  <div className="flex items-center min-w-0 flex-1">
+                    <Mail className="h-5 w-5 text-indigo-600 mr-3 flex-shrink-0" />
+                    <span className="text-slate-800 font-medium text-sm sm:text-base truncate">{profileData.email}</span>
                   </div>
-                  <span className="text-sm text-indigo-600 font-medium">Copy</span>
+                  <span className="text-sm text-indigo-600 font-medium ml-2 flex-shrink-0">Copy</span>
                 </button>
               )}
 
               {profileData.phone && (
                 <a
                   href={`tel:${profileData.phone}`}
-                  className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl hover:from-purple-100 hover:to-pink-100 transition-all duration-200 border border-purple-100"
+                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl hover:from-purple-100 hover:to-pink-100 transition-all duration-200 border border-purple-100"
                 >
-                  <div className="flex items-center">
-                    <Phone className="h-5 w-5 text-purple-600 mr-3" />
-                    <span className="text-slate-800 font-medium">{profileData.phone}</span>
+                  <div className="flex items-center min-w-0 flex-1">
+                    <Phone className="h-5 w-5 text-purple-600 mr-3 flex-shrink-0" />
+                    <span className="text-slate-800 font-medium text-sm sm:text-base truncate">{profileData.phone}</span>
                   </div>
-                  <span className="text-sm text-purple-600 font-medium">Call</span>
+                  <span className="text-sm text-purple-600 font-medium ml-2 flex-shrink-0">Call</span>
                 </a>
               )}
             </div>
@@ -312,9 +312,9 @@ export default function ProfilePage() {
 
           {/* Social Links */}
           {profileData.socialLinks.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-indigo-100">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
               <h3 className="text-lg font-semibold text-slate-800 mb-6">Connect</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {profileData.socialLinks.map((link, index) => {
                   const IconComponent = socialIcons[link.platform] || Globe;
                   return (
@@ -335,7 +335,7 @@ export default function ProfilePage() {
                           }
                         }
                       }}
-                      className="flex items-center justify-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
+                      className="flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
                     >
                       <IconComponent className="h-5 w-5 text-indigo-600 mr-2" />
                       <span className="text-slate-800 font-medium">{link.platform}</span>
@@ -347,23 +347,23 @@ export default function ProfilePage() {
           )}
 
           {/* Add to Contacts */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 border border-indigo-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
             <h3 className="text-lg font-semibold text-slate-800 mb-6">Save Contact</h3>
             <button
               onClick={downloadVCard}
-              className="w-full flex items-center justify-center p-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               <Download className="h-5 w-5 mr-2" />
               Add to Contacts
             </button>
-            <p className="text-sm text-slate-500 text-center mt-3">
+            <p className="text-sm text-slate-500 text-center mt-3 px-2 sm:px-0">
               Downloads a .vcf file you can import to your phone
             </p>
           </div>
 
           {/* Copied Notification */}
           {showCopied && (
-            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
+            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 mx-4">
               Copied to clipboard!
             </div>
           )}

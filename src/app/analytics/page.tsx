@@ -152,8 +152,8 @@ export default function AnalyticsPage() {
                 Back
               </BackButton>
               <div>
-                <h1 className="text-2xl font-bold text-slate-800">Analytics</h1>
-                <p className="text-slate-600">Track your profile performance</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Analytics</h1>
+                <p className="text-slate-600 text-sm sm:text-base">Track your profile performance</p>
               </div>
             </div>
 
@@ -162,54 +162,51 @@ export default function AnalyticsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Views</p>
-                <p className="text-3xl font-bold text-slate-800">{analytics?.totalViews.toLocaleString()}</p>
-
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">Total Views</p>
+                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.totalViews.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-12 h-12 rounded-xl flex items-center justify-center">
-                <Eye className="h-6 w-6 text-indigo-600" />
+              <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">QR Scans</p>
-                <p className="text-3xl font-bold text-slate-800">{analytics?.totalScans.toLocaleString()}</p>
-
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">QR Scans</p>
+                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.totalScans.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-12 h-12 rounded-xl flex items-center justify-center">
-                <Smartphone className="h-6 w-6 text-purple-600" />
+              <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Unique Visitors</p>
-                <p className="text-3xl font-bold text-slate-800">{analytics?.uniqueVisitors.toLocaleString()}</p>
-
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">Unique Visitors</p>
+                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.uniqueVisitors.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-12 h-12 rounded-xl flex items-center justify-center">
-                <Users className="h-6 w-6 text-pink-600" />
+              <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-pink-600" />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Monthly Views Chart */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-slate-800">Monthly Views</h3>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-800">Monthly Views</h3>
               <BarChart3 className="h-5 w-5 text-slate-400" />
             </div>
             
@@ -240,9 +237,9 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Top Countries */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-slate-800">Top Countries</h3>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-800">Top Countries</h3>
               <Globe className="h-5 w-5 text-slate-400" />
             </div>
             
@@ -277,9 +274,9 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="mt-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-indigo-200/50">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-slate-800">Recent Activity</h3>
+        <div className="mt-6 sm:mt-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h3 className="text-base sm:text-lg font-semibold text-slate-800">Recent Activity</h3>
             <Clock className="h-5 w-5 text-slate-400" />
           </div>
           
