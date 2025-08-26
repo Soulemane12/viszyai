@@ -214,20 +214,28 @@ export default function AnalyticsPage() {
             </div>
             
             <div className="space-y-4">
-              {analytics?.monthlyViews.map((item, index) => (
-                <div key={index} className="flex items-center">
-                  <span className="w-12 text-sm text-slate-600">{item.month}</span>
-                  <div className="flex-1 mx-4">
-                    <div className="bg-slate-200 rounded-full h-2">
-                      <div 
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
-                        style={{ width: `${(item.views / Math.max(...analytics.monthlyViews.map(m => m.views))) * 100}%` }}
-                      ></div>
+              {analytics?.monthlyViews && analytics.monthlyViews.length > 0 ? (
+                analytics.monthlyViews.map((item, index) => (
+                  <div key={index} className="flex items-center">
+                    <span className="w-12 text-sm text-slate-600">{item.month}</span>
+                    <div className="flex-1 mx-4">
+                      <div className="bg-slate-200 rounded-full h-2">
+                        <div 
+                          className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
+                          style={{ width: `${(item.views / Math.max(...analytics.monthlyViews.map(m => m.views))) * 100}%` }}
+                        ></div>
+                      </div>
                     </div>
+                    <span className="w-16 text-sm font-medium text-slate-800">{item.views}</span>
                   </div>
-                  <span className="w-16 text-sm font-medium text-slate-800">{item.views}</span>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <BarChart3 className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500">No monthly data available yet</p>
+                  <p className="text-slate-400 text-sm">Monthly trends will appear here once you have profile views</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -239,23 +247,31 @@ export default function AnalyticsPage() {
             </div>
             
             <div className="space-y-4">
-              {analytics?.topCountries.map((country, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <span className="w-6 text-sm font-medium text-slate-600">{index + 1}</span>
-                    <span className="ml-3 text-slate-700">{country.country}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-20 bg-slate-200 rounded-full h-2 mr-3">
-                      <div 
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
-                        style={{ width: `${(country.views / Math.max(...analytics.topCountries.map(c => c.views))) * 100}%` }}
-                      ></div>
+              {analytics?.topCountries && analytics.topCountries.length > 0 ? (
+                analytics.topCountries.map((country, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className="w-6 text-sm font-medium text-slate-600">{index + 1}</span>
+                      <span className="ml-3 text-slate-700">{country.country}</span>
                     </div>
-                    <span className="text-sm font-medium text-slate-800">{country.views}</span>
+                    <div className="flex items-center">
+                      <div className="w-20 bg-slate-200 rounded-full h-2 mr-3">
+                        <div 
+                          className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
+                          style={{ width: `${(country.views / Math.max(...analytics.topCountries.map(c => c.views))) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-medium text-slate-800">{country.views}</span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <Globe className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500">No location data available yet</p>
+                  <p className="text-slate-400 text-sm">Location tracking will appear here once visitors access your profile</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -268,21 +284,29 @@ export default function AnalyticsPage() {
           </div>
           
           <div className="space-y-4">
-            {analytics?.recentActivity.map((activity, index) => (
-              <div key={index} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-indigo-600 rounded-full mr-3"></div>
-                  <div>
-                    <p className="text-slate-800 font-medium">{activity.action}</p>
-                    <div className="flex items-center text-sm text-slate-600">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      {activity.location}
+            {analytics?.recentActivity && analytics.recentActivity.length > 0 ? (
+              analytics.recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-indigo-600 rounded-full mr-3"></div>
+                    <div>
+                      <p className="text-slate-800 font-medium">{activity.action}</p>
+                      <div className="flex items-center text-sm text-slate-600">
+                        <MapPin className="h-4 w-4 mr-1" />
+                        {activity.location}
+                      </div>
                     </div>
                   </div>
+                  <span className="text-sm text-slate-500">{activity.date}</span>
                 </div>
-                <span className="text-sm text-slate-500">{activity.date}</span>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <Clock className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                <p className="text-slate-500">No recent activity</p>
+                <p className="text-slate-400 text-sm">Activity will appear here once people interact with your profile</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 

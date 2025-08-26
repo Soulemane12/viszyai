@@ -558,10 +558,9 @@ async function getTopCountries(profileId: string) {
     const countryCounts: { [key: string]: number } = {};
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [...(viewsData || []), ...(scansData || [])].forEach((item: any) => {
       const country = item.viewer_country || item.scanner_country;
-      if (country) {
+      if (country && country !== 'Unknown' && country !== 'unknown') {
         countryCounts[country] = (countryCounts[country] || 0) + 1;
       }
     });
@@ -614,9 +613,19 @@ async function getRecentActivity(profileId: string) {
     [...(viewsData || []), ...(scansData || []), ...(downloadsData || [])].forEach((item: any) => {
       const date = new Date(item.created_at);
       const timeAgo = getTimeAgo(date);
-      const city = item.viewer_city || item.scanner_city || item.downloader_city || 'Unknown';
-      const country = item.viewer_country || item.scanner_country || item.downloader_country || 'Unknown';
-      const location = `${city}, ${country}`;
+      
+      // Better location handling
+      const city = item.viewer_city || item.scanner_city || item.downloader_city;
+      const country = item.viewer_country || item.scanner_country || item.downloader_country;
+      
+      let location = 'Unknown location';
+      if (city && country && city !== 'Unknown' && country !== 'Unknown') {
+        location = `${city}, ${country}`;
+      } else if (country && country !== 'Unknown') {
+        location = country;
+      } else if (city && city !== 'Unknown') {
+        location = city;
+      }
       
       let action = 'Profile viewed';
       if (item.scanner_city || item.scanner_country) {
