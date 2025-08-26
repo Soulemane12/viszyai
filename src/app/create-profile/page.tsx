@@ -525,42 +525,7 @@ export default function CreateProfilePage() {
               </div>
             </div>
 
-            {/* Profile Photo */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-              <h2 className="text-xl font-semibold mb-6 text-slate-800">Profile Photo</h2>
-              
-              <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
-                  {formData.photo ? (
-                    <Image
-                      src={URL.createObjectURL(formData.photo)}
-                      alt="Profile"
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="h-8 w-8 text-indigo-400" />
-                  )}
-                </div>
-                <div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    className="hidden"
-                    id="photo-upload"
-                  />
-                  <label
-                    htmlFor="photo-upload"
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    Upload Photo
-                  </label>
-                  <p className="text-sm text-slate-500 mt-2">Optional but recommended</p>
-                </div>
-              </div>
-            </div>
+
 
             {/* Social Media Links */}
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
