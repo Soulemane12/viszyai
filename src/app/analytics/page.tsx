@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { TrendingUp, Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
+import { Eye, Smartphone, Globe, BarChart3, Users, MapPin, Clock } from 'lucide-react';
 import { getAnalytics } from '@/lib/auth';
 import BackButton from '@/components/BackButton';
 
@@ -50,29 +50,27 @@ export default function AnalyticsPage() {
           console.log('Transformed analytics data:', transformedData);
           setAnalytics(transformedData);
         } else {
-          console.log('No profile found, showing demo analytics');
-          // Show demo analytics when no profile exists
-          const demoData = await getAnalytics('demo');
+          console.log('No profile found, showing empty analytics');
+          // Show empty analytics when no profile exists
           setAnalytics({
-            totalViews: demoData.totalViews,
-            totalScans: demoData.totalScans,
-            uniqueVisitors: demoData.uniqueVisitors,
-            topCountries: demoData.topCountries || [],
-            recentActivity: demoData.recentActivity || [],
-            monthlyViews: demoData.monthlyViews || []
+            totalViews: 0,
+            totalScans: 0,
+            uniqueVisitors: 0,
+            topCountries: [],
+            recentActivity: [],
+            monthlyViews: []
           });
         }
       } catch (error) {
         console.error('Error loading analytics:', error);
-        // Show demo analytics on error
-        const demoData = await getAnalytics('demo');
+        // Show empty analytics on error
         setAnalytics({
-          totalViews: demoData.totalViews,
-          totalScans: demoData.totalScans,
-          uniqueVisitors: demoData.uniqueVisitors,
-          topCountries: demoData.topCountries || [],
-          recentActivity: demoData.recentActivity || [],
-          monthlyViews: demoData.monthlyViews || []
+          totalViews: 0,
+          totalScans: 0,
+          uniqueVisitors: 0,
+          topCountries: [],
+          recentActivity: [],
+          monthlyViews: []
         });
       } finally {
         setLoading(false);
@@ -172,10 +170,7 @@ export default function AnalyticsPage() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Views</p>
                 <p className="text-3xl font-bold text-slate-800">{analytics?.totalViews.toLocaleString()}</p>
-                <p className="text-green-600 text-sm font-medium flex items-center mt-1">
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                  +12% from last month
-                </p>
+
               </div>
               <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-12 h-12 rounded-xl flex items-center justify-center">
                 <Eye className="h-6 w-6 text-indigo-600" />
@@ -188,10 +183,7 @@ export default function AnalyticsPage() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">QR Scans</p>
                 <p className="text-3xl font-bold text-slate-800">{analytics?.totalScans.toLocaleString()}</p>
-                <p className="text-green-600 text-sm font-medium flex items-center mt-1">
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                  +8% from last month
-                </p>
+
               </div>
               <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-12 h-12 rounded-xl flex items-center justify-center">
                 <Smartphone className="h-6 w-6 text-purple-600" />
@@ -204,10 +196,7 @@ export default function AnalyticsPage() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">Unique Visitors</p>
                 <p className="text-3xl font-bold text-slate-800">{analytics?.uniqueVisitors.toLocaleString()}</p>
-                <p className="text-green-600 text-sm font-medium flex items-center mt-1">
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                  +15% from last month
-                </p>
+
               </div>
               <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-12 h-12 rounded-xl flex items-center justify-center">
                 <Users className="h-6 w-6 text-pink-600" />

@@ -463,8 +463,8 @@ export async function getAnalytics(profileHandle: string) {
 
     if (profileError) {
       console.error('Error fetching profile for analytics:', profileError);
-      // Return demo data for testing
-      return getDemoAnalytics();
+      // Return empty analytics when no profile exists
+      return getEmptyAnalytics();
     }
 
     const profileId = (profileData as { id: string }).id;
@@ -493,10 +493,10 @@ export async function getAnalytics(profileHandle: string) {
     ]);
     const uniqueVisitors = uniqueIPs.size;
 
-    // Generate demo data for countries and activity
-    const topCountries = generateDemoCountries();
-    const recentActivity = generateDemoActivity();
-    const monthlyViews = generateDemoMonthlyViews();
+    // Get real data for countries and activity
+    const topCountries = await getTopCountries(profileId);
+    const recentActivity = await getRecentActivity(profileId);
+    const monthlyViews = await getMonthlyViews(profileId);
 
     console.log('Analytics calculated:', {
       totalViews,
@@ -518,52 +518,173 @@ export async function getAnalytics(profileHandle: string) {
     };
   } catch (error) {
     console.error('Error fetching analytics:', error);
-    // Return demo data on error
-    return getDemoAnalytics();
+    // Return empty analytics on error
+    return getEmptyAnalytics();
   }
 }
 
-// Helper function to generate demo analytics data
-function getDemoAnalytics() {
+// Helper function to return empty analytics data
+function getEmptyAnalytics() {
   return {
-    totalViews: 156,
-    totalScans: 89,
-    totalDownloads: 23,
-    totalSocialClicks: 45,
-    uniqueVisitors: 98,
-    topCountries: generateDemoCountries(),
-    recentActivity: generateDemoActivity(),
-    monthlyViews: generateDemoMonthlyViews(),
+    totalViews: 0,
+    totalScans: 0,
+    totalDownloads: 0,
+    totalSocialClicks: 0,
+    uniqueVisitors: 0,
+    topCountries: [],
+    recentActivity: [],
+    monthlyViews: [],
   };
 }
 
-function generateDemoCountries() {
-  return [
-    { country: 'United States', views: 45 },
-    { country: 'Canada', views: 23 },
-    { country: 'United Kingdom', views: 18 },
-    { country: 'Germany', views: 12 },
-    { country: 'France', views: 8 }
-  ];
+// Helper function to get real top countries data
+async function getTopCountries(profileId: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: viewsData } = await supabase
+      .from('profile_views')
+      .select('viewer_country')
+      .eq('profile_id', profileId)
+      .not('viewer_country', 'is', null);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: scansData } = await supabase
+      .from('qr_scans')
+      .select('scanner_country')
+      .eq('profile_id', profileId)
+      .not('scanner_country', 'is', null);
+
+    // Count countries
+    const countryCounts: { [key: string]: number } = {};
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [...(viewsData || []), ...(scansData || [])].forEach((item: any) => {
+      const country = item.viewer_country || item.scanner_country;
+      if (country) {
+        countryCounts[country] = (countryCounts[country] || 0) + 1;
+      }
+    });
+
+    // Convert to array and sort
+    return Object.entries(countryCounts)
+      .map(([country, views]) => ({ country, views }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 5);
+  } catch (error) {
+    console.error('Error fetching top countries:', error);
+    return [];
+  }
 }
 
-function generateDemoActivity() {
-  return [
-    { date: '2 hours ago', action: 'Profile viewed', location: 'New York, US' },
-    { date: '4 hours ago', action: 'QR code scanned', location: 'Toronto, CA' },
-    { date: '1 day ago', action: 'Contact downloaded', location: 'London, UK' },
-    { date: '2 days ago', action: 'LinkedIn clicked', location: 'Berlin, DE' },
-    { date: '3 days ago', action: 'Profile viewed', location: 'Paris, FR' }
-  ];
+// Helper function to get real recent activity data
+async function getRecentActivity(profileId: string) {
+  try {
+    const activities: Array<{ date: string; action: string; location: string }> = [];
+    
+    // Get recent profile views
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: viewsData } = await supabase
+      .from('profile_views')
+      .select('created_at, viewer_city, viewer_country')
+      .eq('profile_id', profileId)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    // Get recent QR scans
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: scansData } = await supabase
+      .from('qr_scans')
+      .select('created_at, scanner_city, scanner_country')
+      .eq('profile_id', profileId)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    // Get recent contact downloads
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: downloadsData } = await supabase
+      .from('contact_downloads')
+      .select('created_at, downloader_city, downloader_country')
+      .eq('profile_id', profileId)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    // Combine and format activities
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [...(viewsData || []), ...(scansData || []), ...(downloadsData || [])].forEach((item: any) => {
+      const date = new Date(item.created_at);
+      const timeAgo = getTimeAgo(date);
+      const city = item.viewer_city || item.scanner_city || item.downloader_city || 'Unknown';
+      const country = item.viewer_country || item.scanner_country || item.downloader_country || 'Unknown';
+      const location = `${city}, ${country}`;
+      
+      let action = 'Profile viewed';
+      if (item.scanner_city || item.scanner_country) {
+        action = 'QR code scanned';
+      } else if (item.downloader_city || item.downloader_country) {
+        action = 'Contact downloaded';
+      }
+
+      activities.push({ date: timeAgo, action, location });
+    });
+
+    // Sort by date and return top 5
+    return activities
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
+  } catch (error) {
+    console.error('Error fetching recent activity:', error);
+    return [];
+  }
 }
 
-function generateDemoMonthlyViews() {
-  return [
-    { month: 'Jan', views: 12 },
-    { month: 'Feb', views: 18 },
-    { month: 'Mar', views: 25 },
-    { month: 'Apr', views: 32 },
-    { month: 'May', views: 28 },
-    { month: 'Jun', views: 41 }
-  ];
+// Helper function to get real monthly views data
+async function getMonthlyViews(profileId: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: viewsData } = await supabase
+      .from('profile_views')
+      .select('created_at')
+      .eq('profile_id', profileId);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: scansData } = await supabase
+      .from('qr_scans')
+      .select('created_at')
+      .eq('profile_id', profileId);
+
+    // Group by month
+    const monthlyCounts: { [key: string]: number } = {};
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [...(viewsData || []), ...(scansData || [])].forEach((item: any) => {
+      const date = new Date(item.created_at);
+      const monthKey = date.toLocaleDateString('en-US', { month: 'short' });
+      monthlyCounts[monthKey] = (monthlyCounts[monthKey] || 0) + 1;
+    });
+
+    // Convert to array and sort
+    return Object.entries(monthlyCounts)
+      .map(([month, views]) => ({ month, views }))
+      .sort((a, b) => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return months.indexOf(a.month) - months.indexOf(b.month);
+      });
+  } catch (error) {
+    console.error('Error fetching monthly views:', error);
+    return [];
+  }
+}
+
+// Helper function to format time ago
+function getTimeAgo(date: Date): string {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+  return `${Math.floor(diffInSeconds / 31536000)} years ago`;
 }
