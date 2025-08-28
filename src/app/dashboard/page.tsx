@@ -110,9 +110,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 animate-gradient">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100">
+      <header className="bg-white shadow-sm border-b border-indigo-100 glass animate-slideInLeft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -151,7 +151,7 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-2">
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your Profile</h2>
@@ -237,7 +237,7 @@ export default function DashboardPage() {
           </div>
 
           {/* QR Code Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your QR Code</h2>
               <QrCode className="text-indigo-600" size={24} />
@@ -292,13 +292,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-6 sm:mt-8 bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+        <div className="mt-6 sm:mt-8 bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-3">
           <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {!profile && (
               <Link
                 href="/create-profile"
-                className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg hover:from-green-100 hover:to-emerald-100 transition-all duration-200 border-2 border-green-200"
+                className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg hover:from-green-100 hover:to-emerald-100 transition-all duration-300 border-2 border-green-200 hover-scale hover-glow"
               >
                 <User className="text-green-600" size={18} />
                 <div>
@@ -310,7 +310,7 @@ export default function DashboardPage() {
 
             <Link
               href="/analytics"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 hover-scale hover-glow"
             >
               <BarChart3 className="text-indigo-600" size={18} />
               <div>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
             
             <Link
               href="/settings"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 hover-scale hover-glow"
             >
               <Settings className="text-indigo-600" size={18} />
               <div>

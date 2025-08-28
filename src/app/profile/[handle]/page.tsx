@@ -189,9 +189,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 animate-gradient">
       {/* Header */}
-      <header className="bg-white shadow-lg border-b border-indigo-100">
+      <header className="bg-white shadow-lg border-b border-indigo-100 glass animate-slideInLeft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
@@ -239,7 +239,7 @@ export default function ProfilePage() {
       <main className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-md mx-auto">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-1">
             <div className="text-center mb-6">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
                 {profile?.photo_url ? (
@@ -301,7 +301,7 @@ export default function ProfilePage() {
 
           {/* Social Links */}
           {profileData.socialLinks.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-2">
               <h3 className="text-lg font-semibold text-slate-800 mb-6">Connect</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {profileData.socialLinks.map((link, index) => {
@@ -336,7 +336,7 @@ export default function ProfilePage() {
           )}
 
           {/* Add to Contacts */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-3">
             <h3 className="text-lg font-semibold text-slate-800 mb-6">Save Contact</h3>
             <div className="space-y-3">
               {/* Smart Wallet Button - Primary action */}
