@@ -214,19 +214,20 @@ export default function QRPage({ params }: { params: { handle: string } }) {
 
           {/* Quick Actions */}
           <div className="mt-8 space-y-3">
+            {/* Smart Wallet Button for quick contact saving */}
+            <WalletButton 
+              profileData={profileData}
+              profileUrl={profileUrl}
+              className="w-full"
+              variant="primary"
+            />
+            
             <Link
               href={`/profile/${params.handle}`}
               className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
             >
               View My Profile
             </Link>
-            
-            {/* Wallet Button */}
-            <div className="bg-white rounded-xl border border-indigo-100 p-4">
-              <h4 className="text-sm font-semibold text-slate-700 mb-3">Save Contact</h4>
-              <WalletButton handle={params.handle} variant="secondary" />
-            </div>
-            
             <Link
               href="/edit"
               className="block w-full border-2 border-indigo-200 text-indigo-700 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 text-center"

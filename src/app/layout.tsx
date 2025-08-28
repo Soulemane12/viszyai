@@ -18,9 +18,15 @@ export const metadata: Metadata = {
   description: "Create your professional digital business card in minutes. Share your contact info, social media, and more with a simple QR code scan. No printing costs, always up-to-date.",
   keywords: "digital business card, QR code, networking, contact sharing, professional profile",
   authors: [{ name: "Viszy Team" }],
+  manifest: "/manifest.json",
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/logo.PNG',
+    apple: '/logo.PNG',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Viszy",
   },
   openGraph: {
     title: "Viszy - Digital Business Cards for Everyone",
@@ -40,8 +46,20 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Viszy - Digital Business Cards for Everyone",
     description: "Create your professional digital business card in minutes. Share your contact info, social media, and more with a simple QR code scan.",
-    images: ['/logo.png'],
+    images: ['/logo.PNG'],
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "theme-color": "#4f46e5",
+    "msapplication-TileColor": "#4f46e5",
+  }
 };
 
 export default function RootLayout({

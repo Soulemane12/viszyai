@@ -1,165 +1,154 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Smartphone, Download, Plus } from 'lucide-react';
-import { getDeviceInfo, addToAppleWallet, downloadVCard } from '@/lib/deviceDetection';
+import { Smartphone } from 'lucide-react';
+import { getWalletAction, createContactFromProfile, detectDevice } from '@/lib/wallet';
 
-interface WalletButtonProps {
-  handle: string;
-  variant?: 'primary' | 'secondary' | 'compact';
-  className?: string;
+interface ProfileData {
+  name: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+  bio?: string;
+  socialLinks?: Array<{ platform: string; url: string }>;
 }
 
-export default function WalletButton({ handle, variant = 'primary', className = '' }: WalletButtonProps) {
-  const [deviceInfo, setDeviceInfo] = useState({
-    supportsAppleWallet: false,
-    supportsGoogleWallet: false,
-    isMobile: false
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+interface WalletButtonProps {
+  profileData: ProfileData;
+  profileUrl?: string;
+  className?: string;
+  variant?: 'primary' | 'secondary' | 'compact';
+}
+
+export default function WalletButton({ 
+  profileData, 
+  profileUrl, 
+  className = '',
+  variant = 'primary'
+}: WalletButtonProps) {
+  const [walletAction, setWalletAction] = useState<{
+    label: string;
+    icon: string;
+    action: () => void | Promise<void>;
+    description: string;
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [device, setDevice] = useState({ isIOS: false, isAndroid: false, isMobile: false });
 
   useEffect(() => {
-    setDeviceInfo(getDeviceInfo());
-  }, []);
-
-  const handleAddToAppleWallet = async () => {
-    setLoading(true);
-    setError('');
+    // Detect device and set up wallet action
+    const deviceInfo = detectDevice();
+    setDevice(deviceInfo);
     
+    if (profileData) {
+      const contact = createContactFromProfile(profileData, profileUrl);
+      const action = getWalletAction(contact);
+      setWalletAction(action);
+    }
+  }, [profileData, profileUrl]);
+
+  const handleWalletAction = async () => {
+    if (!walletAction || !profileData) return;
+    
+    setIsLoading(true);
     try {
-      await addToAppleWallet(handle);
+      await walletAction.action();
+      
+      // Show success message based on device
+      if (device.isIOS) {
+        setTimeout(() => {
+          const showPWAHint = !window.matchMedia('(display-mode: standalone)').matches;
+          const message = showPWAHint 
+            ? 'Contact file ready! Tap to add to your iPhone contacts.\n\n💡 Tip: Add Viszy to your home screen for quick access - tap Share ⬆️ then "Add to Home Screen"'
+            : 'Contact file ready! Tap to add to your iPhone contacts.';
+          alert(message);
+        }, 500);
+      } else if (device.isAndroid) {
+        // Android will handle the sharing flow
+      } else {
+        alert('Contact file downloaded successfully!');
+      }
     } catch (error) {
-      console.error('Error adding to Apple Wallet:', error);
-      setError('Failed to add to Apple Wallet');
+      console.error('Error with wallet action:', error);
+      alert('There was an error processing your request. Please try again.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleDownloadContact = async () => {
-    setLoading(true);
-    setError('');
-    
-    try {
-      await downloadVCard(handle);
-    } catch (error) {
-      console.error('Error downloading contact:', error);
-      setError('Failed to download contact');
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!walletAction) return null;
 
+  // Compact variant for smaller spaces
   if (variant === 'compact') {
     return (
-      <div className={`flex space-x-2 ${className}`}>
-        {deviceInfo.supportsAppleWallet && (
-          <button
-            onClick={handleAddToAppleWallet}
-            disabled={loading}
-            className="flex items-center space-x-1 bg-black text-white px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
-            title="Add to Apple Wallet"
-          >
-            <Plus size={16} />
-            <Smartphone size={16} />
-          </button>
+      <button
+        onClick={handleWalletAction}
+        disabled={isLoading}
+        className={`inline-flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          device.isIOS 
+            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+            : device.isAndroid
+            ? 'bg-green-100 text-green-700 hover:bg-green-200'
+            : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+        } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'} ${className}`}
+        title={walletAction.description}
+      >
+        {isLoading ? (
+          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <Smartphone size={16} />
         )}
-        
-        <button
-          onClick={handleDownloadContact}
-          disabled={loading}
-          className="flex items-center space-x-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
-          title="Download Contact"
-        >
-          <Download size={16} />
-        </button>
-        
-        {error && (
-          <div className="text-red-500 text-xs">{error}</div>
-        )}
-      </div>
+        <span className="hidden sm:inline">{walletAction.label}</span>
+        <span className="sm:hidden">{walletAction.icon}</span>
+      </button>
     );
   }
 
-  return (
-    <div className={`space-y-3 ${className}`}>
-      {/* Apple Wallet Button */}
-      {deviceInfo.supportsAppleWallet && (
-        <button
-          onClick={handleAddToAppleWallet}
-          disabled={loading}
-          className={`
-            w-full flex items-center justify-center space-x-3 py-3 px-4 rounded-lg
-            transition-all duration-200 disabled:opacity-50
-            ${variant === 'primary' 
-              ? 'bg-black text-white hover:bg-gray-800' 
-              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-            }
-          `}
-        >
-          <div className="flex items-center space-x-2">
-            <Smartphone size={20} />
-            <span className="font-medium">Add to Apple Wallet</span>
-          </div>
-          {loading && (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-          )}
-        </button>
-      )}
-
-      {/* Google Wallet Button (placeholder for future) */}
-      {deviceInfo.supportsGoogleWallet && (
-        <button
-          disabled
-          className="w-full flex items-center justify-center space-x-3 py-3 px-4 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed"
-        >
+  // Secondary variant
+  if (variant === 'secondary') {
+    return (
+      <button
+        onClick={handleWalletAction}
+        disabled={isLoading}
+        className={`inline-flex items-center space-x-2 px-4 py-2 border-2 rounded-lg font-medium transition-all duration-200 ${
+          device.isIOS 
+            ? 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300' 
+            : device.isAndroid
+            ? 'border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300'
+            : 'border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300'
+        } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'} ${className}`}
+        title={walletAction.description}
+      >
+        {isLoading ? (
+          <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        ) : (
           <Smartphone size={20} />
-          <span className="font-medium">Add to Google Wallet (Coming Soon)</span>
-        </button>
-      )}
+        )}
+        <span>{walletAction.label}</span>
+      </button>
+    );
+  }
 
-      {/* Fallback: Download vCard */}
-      {(!deviceInfo.supportsAppleWallet && !deviceInfo.supportsGoogleWallet) && (
-        <button
-          onClick={handleDownloadContact}
-          disabled={loading}
-          className={`
-            w-full flex items-center justify-center space-x-3 py-3 px-4 rounded-lg
-            transition-all duration-200 disabled:opacity-50
-            ${variant === 'primary' 
-              ? 'bg-blue-600 text-white hover:bg-blue-700' 
-              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-            }
-          `}
-        >
-          <div className="flex items-center space-x-2">
-            <Download size={20} />
-            <span className="font-medium">Download Contact</span>
-          </div>
-          {loading && (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-          )}
-        </button>
+  // Primary variant (default)
+  return (
+    <button
+      onClick={handleWalletAction}
+      disabled={isLoading}
+      className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 shadow-lg ${
+        device.isIOS 
+          ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 hover:shadow-blue-200' 
+          : device.isAndroid
+          ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-green-200'
+          : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:shadow-purple-200'
+      } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 hover:shadow-xl'} ${className}`}
+      title={walletAction.description}
+    >
+      {isLoading ? (
+        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      ) : (
+        <Smartphone size={20} />
       )}
-
-      {/* Always show download option for iOS/Android users as backup */}
-      {(deviceInfo.supportsAppleWallet || deviceInfo.supportsGoogleWallet) && (
-        <button
-          onClick={handleDownloadContact}
-          disabled={loading}
-          className="w-full flex items-center justify-center space-x-3 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50 text-sm"
-        >
-          <Download size={16} />
-          <span>Download as vCard</span>
-        </button>
-      )}
-
-      {error && (
-        <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-lg">
-          {error}
-        </div>
-      )}
-    </div>
+      <span>{walletAction.label}</span>
+    </button>
   );
 }

@@ -11,12 +11,13 @@ import {
   Twitter, 
   Globe, 
   User, 
+  Download,
   Share2
 } from 'lucide-react';
-import { getProfileWithSocialLinks, trackProfileView, trackSocialClick } from '@/lib/auth';
+import WalletButton from '@/components/WalletButton';
+import { getProfileWithSocialLinks, trackProfileView, trackSocialClick, trackContactDownload } from '@/lib/auth';
 import { Profile } from '@/lib/database.types';
 import BackButton from '@/components/BackButton';
-import WalletButton from '@/components/WalletButton';
 
 interface ProfileData {
   name: string;
@@ -108,9 +109,45 @@ export default function ProfilePage() {
     }
   };
 
+  const generateVCard = () => {
+    if (!profileData) return '';
+    
+    const vcard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `FN:${profileData.name}`,
+      `TITLE:${profileData.title}`,
+      `EMAIL:${profileData.email}`,
+      `TEL:${profileData.phone}`,
+      `NOTE:${profileData.bio}`,
+      'END:VCARD'
+    ].join('\n');
+    
+    return vcard;
+  };
 
+  const downloadVCard = () => {
+    if (typeof window === 'undefined') return;
+    const vcard = generateVCard();
+    const blob = new Blob([vcard], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${profileData?.name?.toLowerCase().replace(/\s+/g, '-')}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 
-
+    // Track contact download if we have profile data (location will be automatically detected from IP)
+    if (profile) {
+      const typedProfile = profile as Profile;
+      trackContactDownload(typedProfile.id, {
+        downloader_user_agent: navigator.userAgent,
+        download_type: 'vcf',
+      });
+    }
+  };
 
   const shareProfile = async () => {
     if (typeof window !== 'undefined' && navigator.share) {
@@ -301,7 +338,27 @@ export default function ProfilePage() {
           {/* Add to Contacts */}
           <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
             <h3 className="text-lg font-semibold text-slate-800 mb-6">Save Contact</h3>
-            <WalletButton handle={handle} variant="primary" />
+            <div className="space-y-3">
+              {/* Smart Wallet Button - Primary action */}
+              <WalletButton 
+                profileData={profileData}
+                profileUrl={`https://viszyai.vercel.app/profile/${params.handle}`}
+                className="w-full"
+                variant="primary"
+              />
+              
+              {/* Fallback vCard Download */}
+              <button
+                onClick={downloadVCard}
+                className="w-full flex items-center justify-center p-2 sm:p-3 border-2 border-purple-200 text-purple-700 rounded-xl hover:bg-purple-50 hover:border-purple-300 transition-all duration-200"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span className="text-sm">Download vCard</span>
+              </button>
+            </div>
+            <p className="text-sm text-slate-500 text-center mt-3 px-2 sm:px-0">
+              Downloads a .vcf file you can import to your phone
+            </p>
           </div>
 
           {/* Copied Notification */}
