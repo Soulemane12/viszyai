@@ -1,17 +1,35 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
+import QRCode from 'react-qr-code';
 import BackButton from '@/components/BackButton';
 import Logo from '@/components/Logo';
 
 export default function DashboardPage() {
-  const { user, profile, loading, signOut } = useAuth();
+  const { user, profile, loading, profileLoading, signOut } = useAuth();
   const router = useRouter();
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  // Handle responsive QR code sizing
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 640);
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add event listener
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // Immediate redirect if no user and not loading
   useEffect(() => {
@@ -54,7 +72,7 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [user, profile, loading]);
 
-  // Show loading state only while checking authentication
+  // Show loading state only while checking authentication (not profile loading)
   if (loading) {
     console.log('Rendering loading state');
     return (
@@ -92,7 +110,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,7 +153,12 @@ export default function DashboardPage() {
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your Profile</h2>
+              <div className="flex items-center space-x-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your Profile</h2>
+                {profileLoading && (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+                )}
+              </div>
               <Link
                 href="/create-profile"
                 className="flex items-center space-x-1 sm:space-x-2 bg-indigo-100 text-indigo-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-indigo-200 transition-colors"
@@ -145,11 +168,16 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            {profile ? (
+            {profileLoading && !profile ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                <p className="text-slate-600">Loading profile...</p>
+              </div>
+            ) : profile ? (
               <div className="space-y-4">
                 {/* Profile Photo and Name */}
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
                     {profile.photo_url ? (
                       <Image
                         src={profile.photo_url}
@@ -190,7 +218,7 @@ export default function DashboardPage() {
 
                 <div className="mt-6">
                   <p className="text-sm text-slate-500 mb-2">Your profile URL:</p>
-                  <p className="font-mono text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
+                  <p className="font-mono text-blue-600 bg-blue-50 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
                     https://viszyai.vercel.app/profile/{profile.handle}
                   </p>
                 </div>
@@ -217,9 +245,14 @@ export default function DashboardPage() {
 
             {profile ? (
               <div className="text-center">
-                <div className="bg-white border-2 border-indigo-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
-                  <div className="w-32 h-32 sm:w-48 sm:h-48 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <p className="text-slate-500 text-xs sm:text-sm px-2 text-center">QR Code will be generated here</p>
+                <div className="bg-white border-2 border-purple-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
+                  <div className="w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center">
+                    <QRCode
+                      value={`https://viszyai.vercel.app/profile/${profile.handle}`}
+                      size={isSmallScreen ? 128 : 192}
+                      level="H"
+                      className="max-w-full max-h-full"
+                    />
                   </div>
                 </div>
                 
@@ -231,7 +264,7 @@ export default function DashboardPage() {
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                     <Link
                       href={`/qr/${profile.handle}`}
-                      className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 text-sm sm:text-base"
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-sm sm:text-base"
                     >
                       View QR Code
                     </Link>

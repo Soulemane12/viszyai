@@ -10,6 +10,7 @@ interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
+  profileLoading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   useEffect(() => {
     // Get initial session
@@ -54,7 +56,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log('User email confirmed:', session.user.email_confirmed_at);
           setUser(session.user);
 
-          // Don't wait for profile - fetch it in background
+          // Check if profile is cached in localStorage first
+          const cachedProfile = localStorage.getItem(`viszy_profile_${session.user.id}`);
+          if (cachedProfile) {
+            try {
+              const parsed = JSON.parse(cachedProfile);
+              // Check if cache is still valid (24 hours)
+              const cacheTime = new Date(parsed.cached_at);
+              const now = new Date();
+              const hoursDiff = (now.getTime() - cacheTime.getTime()) / (1000 * 60 * 60);
+              
+              if (hoursDiff < 24) {
+                console.log('Using cached profile');
+                setProfile(parsed.profile);
+                setLoading(false);
+                
+                // Still fetch fresh profile in background
+                fetchProfile(session.user.id, true).catch((profileError) => {
+                  console.error('Error fetching fresh profile:', profileError);
+                });
+                return;
+              }
+            } catch {
+              console.log('Invalid cached profile data');
+            }
+          }
+
+          // Fetch profile normally
           fetchProfile(session.user.id).catch((profileError) => {
             console.error('Error fetching profile:', profileError);
           });
@@ -113,21 +141,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, isBackgroundRefresh = false) => {
     if (!userId) {
       console.error('No user ID provided for profile fetch');
       setProfile(null);
       return;
     }
 
+    if (!isBackgroundRefresh) {
+      setProfileLoading(true);
+    }
+
     try {
       console.log(`Fetching profile for user ID: ${userId}`);
-      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-      console.log('Current user session exists:', !!supabase.auth.getUser());
 
       // Add timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000);
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 8000);
       });
 
       // First, get the basic profile to get the handle
@@ -141,12 +171,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as { data: Profile | null; error: any };
 
       console.log('Profile fetch response:', { data, error });
-      console.log('Error details:', error ? {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint
-      } : 'No error');
 
       if (error) {
         console.error('Error fetching profile:', error);
@@ -154,7 +178,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // If the error suggests no profile exists, it might be a new user
         if (error.code === 'PGRST116') {
           console.log('No profile found for user - user needs to create profile');
-          console.log('Profile fetch error details:', error);
           setProfile(null);
           return;
         }
@@ -162,7 +185,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Handle 406 errors (Not Acceptable) which might be due to headers
         if (error.code === 'PGRST301') {
           console.log('406 error - checking request headers and configuration');
-          console.log('Profile fetch error details:', error);
           setProfile(null);
           return;
         }
@@ -175,6 +197,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         // Type the data as Profile to ensure TypeScript knows about the handle property
         const profileData = data as Profile;
+        
+        // Cache the profile
+        const cacheData = {
+          profile: profileData,
+          cached_at: new Date().toISOString()
+        };
+        localStorage.setItem(`viszy_profile_${userId}`, JSON.stringify(cacheData));
+        
+        setProfile(profileData);
         
         // Now fetch the complete profile with social links
         try {
@@ -212,6 +243,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Unexpected error in fetchProfile:', error);
       console.error('Error stack:', error instanceof Error ? error.stack : String(error));
       setProfile(null);
+    } finally {
+      if (!isBackgroundRefresh) {
+        setProfileLoading(false);
+      }
     }
   };
 
@@ -240,6 +275,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshProfile = async () => {
     if (user) {
+      // Clear cache when explicitly refreshing
+      localStorage.removeItem(`viszy_profile_${user.id}`);
       await fetchProfile(user.id);
     }
   };
@@ -248,6 +285,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     profile,
     loading,
+    profileLoading,
     signOut,
     refreshProfile,
   };

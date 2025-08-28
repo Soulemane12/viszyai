@@ -19,14 +19,19 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
-  const { user, profile } = useAuth();
+  const { user, profile, loading: authLoading, profileLoading } = useAuth();
   const router = useRouter();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       router.push('/login');
+      return;
+    }
+
+    // Don't load analytics until auth and profile loading are complete
+    if (authLoading || profileLoading) {
       return;
     }
 
@@ -79,14 +84,16 @@ export default function AnalyticsPage() {
     };
 
     loadAnalytics();
-  }, [user, profile, router]);
+  }, [user, profile, authLoading, profileLoading, router]);
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading analytics...</p>
+          <p className="mt-4 text-slate-600">
+            {authLoading ? 'Loading...' : 'Loading analytics...'}
+          </p>
         </div>
       </div>
     );
@@ -98,7 +105,7 @@ export default function AnalyticsPage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-50">
         <header className="bg-white shadow-sm border-b border-indigo-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
@@ -122,16 +129,23 @@ export default function AnalyticsPage() {
           <div className="text-center py-12">
             <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
               <BarChart3 className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-slate-800 mb-4">No Profile Yet</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">
+                {profileLoading ? 'Loading Profile...' : 'No Profile Yet'}
+              </h2>
               <p className="text-slate-600 mb-6">
-                Create your profile to start tracking analytics and see how people interact with your digital business card.
+                {profileLoading 
+                  ? 'Please wait while we load your profile data...'
+                  : 'Create your profile to start tracking analytics and see how people interact with your digital business card.'
+                }
               </p>
-              <Link
-                href="/create-profile"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
-              >
-                Create Profile
-              </Link>
+              {!profileLoading && (
+                <Link
+                  href="/create-profile"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                >
+                  Create Profile
+                </Link>
+              )}
             </div>
           </div>
         </main>
