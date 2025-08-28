@@ -64,20 +64,12 @@ export default function Home() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             ) : (
-              <>
-                <Link 
-                  href="/signup" 
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                >
-                  Create Your Card
-                </Link>
-                <Link 
-                  href="/demo" 
-                  className="border-2 border-indigo-200 text-indigo-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200"
-                >
-                  See Demo
-                </Link>
-              </>
+              <Link 
+                href="/signup" 
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              >
+                Create Your Card
+              </Link>
             )}
           </div>
         </div>

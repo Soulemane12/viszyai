@@ -11,12 +11,12 @@ import {
   Twitter, 
   Globe, 
   User, 
-  Download,
   Share2
 } from 'lucide-react';
-import { getProfileWithSocialLinks, trackProfileView, trackSocialClick, trackContactDownload } from '@/lib/auth';
+import { getProfileWithSocialLinks, trackProfileView, trackSocialClick } from '@/lib/auth';
 import { Profile } from '@/lib/database.types';
 import BackButton from '@/components/BackButton';
+import WalletButton from '@/components/WalletButton';
 
 interface ProfileData {
   name: string;
@@ -59,19 +59,8 @@ export default function ProfilePage() {
         
         if (error) {
           console.error('Error loading profile:', error);
-          // Fallback to demo data
-          setProfileData({
-            name: 'Demo User',
-            title: 'Professional',
-            email: 'demo@example.com',
-            phone: '+1 (555) 123-4567',
-            bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
-            socialLinks: [
-              { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-              { platform: 'Instagram', url: 'https://instagram.com/demo' },
-              { platform: 'Twitter', url: 'https://twitter.com/demo' }
-            ]
-          });
+          // Profile not found - show error state
+          setProfileData(null);
         } else if (fetchedProfile) {
           const typedProfile = fetchedProfile as Profile;
           setProfile(typedProfile);
@@ -94,34 +83,12 @@ export default function ProfilePage() {
           });
         } else {
           // No profile found
-          setProfileData({
-            name: 'Demo User',
-            title: 'Professional',
-            email: 'demo@example.com',
-            phone: '+1 (555) 123-4567',
-            bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
-            socialLinks: [
-              { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-              { platform: 'Instagram', url: 'https://instagram.com/demo' },
-              { platform: 'Twitter', url: 'https://twitter.com/demo' }
-            ]
-          });
+          setProfileData(null);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
-        // Fallback to demo data
-        setProfileData({
-          name: 'Demo User',
-          title: 'Professional',
-          email: 'demo@example.com',
-          phone: '+1 (555) 123-4567',
-          bio: 'This is a demo profile created with Viszy. Connect with me to learn more!',
-          socialLinks: [
-            { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-            { platform: 'Instagram', url: 'https://instagram.com/demo' },
-            { platform: 'Twitter', url: 'https://twitter.com/demo' }
-          ]
-        });
+        // Error occurred - show error state
+        setProfileData(null);
       } finally {
         setIsLoading(false);
       }
@@ -141,45 +108,9 @@ export default function ProfilePage() {
     }
   };
 
-  const generateVCard = () => {
-    if (!profileData) return '';
-    
-    const vcard = [
-      'BEGIN:VCARD',
-      'VERSION:3.0',
-      `FN:${profileData.name}`,
-      `TITLE:${profileData.title}`,
-      `EMAIL:${profileData.email}`,
-      `TEL:${profileData.phone}`,
-      `NOTE:${profileData.bio}`,
-      'END:VCARD'
-    ].join('\n');
-    
-    return vcard;
-  };
 
-  const downloadVCard = () => {
-    if (typeof window === 'undefined') return;
-    const vcard = generateVCard();
-    const blob = new Blob([vcard], { type: 'text/vcard' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${profileData?.name?.toLowerCase().replace(/\s+/g, '-')}.vcf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
 
-    // Track contact download if we have profile data (location will be automatically detected from IP)
-    if (profile) {
-      const typedProfile = profile as Profile;
-      trackContactDownload(typedProfile.id, {
-        downloader_user_agent: navigator.userAgent,
-        download_type: 'vcf',
-      });
-    }
-  };
+
 
   const shareProfile = async () => {
     if (typeof window !== 'undefined' && navigator.share) {
@@ -370,16 +301,7 @@ export default function ProfilePage() {
           {/* Add to Contacts */}
           <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100">
             <h3 className="text-lg font-semibold text-slate-800 mb-6">Save Contact</h3>
-            <button
-              onClick={downloadVCard}
-              className="w-full flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <Download className="h-5 w-5 mr-2" />
-              Add to Contacts
-            </button>
-            <p className="text-sm text-slate-500 text-center mt-3 px-2 sm:px-0">
-              Downloads a .vcf file you can import to your phone
-            </p>
+            <WalletButton handle={handle} variant="primary" />
           </div>
 
           {/* Copied Notification */}

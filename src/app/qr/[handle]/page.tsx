@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Download, Share2, Smartphone } from 'lucide-react';
+import { Download, Share2, Smartphone, QrCode } from 'lucide-react';
+import WalletButton from '@/components/WalletButton';
 import QRCode from 'react-qr-code';
 import { getProfileWithSocialLinks, trackQRScan } from '@/lib/auth';
 import BackButton from '@/components/BackButton';
@@ -31,19 +32,8 @@ export default function QRPage({ params }: { params: { handle: string } }) {
         
         if (error) {
           console.error('Error loading profile:', error);
-          // Fallback to demo data
-          setProfileData({
-            name: 'Demo User',
-            title: 'Professional',
-            email: 'demo@example.com',
-            phone: '+1 (555) 123-4567',
-            bio: 'This is a demo profile created with Viszy.',
-            socialLinks: [
-              { platform: 'LinkedIn', url: 'https://linkedin.com/in/demo' },
-              { platform: 'Instagram', url: 'https://instagram.com/demo' },
-              { platform: 'Twitter', url: 'https://twitter.com/demo' }
-            ]
-          });
+          // Profile not found - show error state
+          setProfileData(null);
         } else if (profile) {
           setProfileData({
             name: profile.name,
@@ -65,6 +55,8 @@ export default function QRPage({ params }: { params: { handle: string } }) {
         }
       } catch (error) {
         console.error('Error loading profile:', error);
+        // Error occurred - show error state
+        setProfileData(null);
       } finally {
         setIsLoading(false);
       }
@@ -124,6 +116,18 @@ export default function QRPage({ params }: { params: { handle: string } }) {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading your QR code...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profileData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <QrCode className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">QR Code Not Available</h1>
+          <p className="text-gray-600">This profile doesn&apos;t exist or has been removed.</p>
         </div>
       </div>
     );
@@ -212,13 +216,20 @@ export default function QRPage({ params }: { params: { handle: string } }) {
           <div className="mt-8 space-y-3">
             <Link
               href={`/profile/${params.handle}`}
-              className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
             >
               View My Profile
             </Link>
+            
+            {/* Wallet Button */}
+            <div className="bg-white rounded-xl border border-indigo-100 p-4">
+              <h4 className="text-sm font-semibold text-slate-700 mb-3">Save Contact</h4>
+              <WalletButton handle={params.handle} variant="secondary" />
+            </div>
+            
             <Link
               href="/edit"
-              className="block w-full border-2 border-indigo-200 text-indigo-700 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200"
+              className="block w-full border-2 border-indigo-200 text-indigo-700 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 text-center"
             >
               Edit Profile
             </Link>

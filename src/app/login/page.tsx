@@ -168,18 +168,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Demo Login */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-slate-500 mb-2">For demo purposes:</p>
-          <button
-            onClick={() => {
-              setFormData({ email: 'demo@example.com', password: 'demo123' });
-            }}
-            className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
-          >
-            Fill demo credentials
-          </button>
-        </div>
+
       </div>
     </div>
   );
