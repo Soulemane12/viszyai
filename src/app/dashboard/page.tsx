@@ -307,17 +307,7 @@ export default function DashboardPage() {
                 </div>
               </Link>
             )}
-            <Link
-              href="/demo"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"
-            >
-              <QrCode className="text-indigo-600" size={18} />
-              <div>
-                <p className="font-semibold text-slate-800 text-sm sm:text-base">See Demo</p>
-                <p className="text-slate-600 text-xs sm:text-sm">View how it works</p>
-              </div>
-            </Link>
-            
+
             <Link
               href="/analytics"
               className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-200"

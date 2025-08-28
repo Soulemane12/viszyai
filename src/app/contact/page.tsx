@@ -288,13 +288,6 @@ export default function ContactPage() {
                 >
                   Help Center →
                 </Link>
-
-                <Link 
-                  href="/demo"
-                  className="block text-indigo-600 hover:text-indigo-700 font-medium"
-                >
-                  See Demo →
-                </Link>
               </div>
             </div>
           </div>
