@@ -110,9 +110,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 animate-gradient">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black animate-gradient">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100 glass animate-slideInLeft">
+      <header className="bg-gray-800 shadow-sm border-b border-gray-700 glass-dark animate-slideInLeft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -126,17 +126,17 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="hidden sm:flex items-center space-x-2">
-                <span className="text-slate-600">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
+                <span className="text-gray-300">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
                 {user && !profile && (
-                  <div className="flex items-center space-x-1 text-slate-400">
-                    <div className="animate-spin rounded-full h-3 w-3 border-b border-slate-400"></div>
+                  <div className="flex items-center space-x-1 text-gray-400">
+                    <div className="animate-spin rounded-full h-3 w-3 border-b border-orange-400"></div>
                     <span className="text-xs">Loading profile...</span>
                   </div>
                 )}
               </div>
               <button
                 onClick={handleSignOut}
-                className="flex items-center space-x-1 sm:space-x-2 text-slate-600 hover:text-slate-800 transition-colors px-2 sm:px-3 py-2 rounded-lg hover:bg-slate-100 cursor-pointer"
+                className="flex items-center space-x-1 sm:space-x-2 text-gray-300 hover:text-orange-400 transition-colors px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer"
                 type="button"
               >
                 <LogOut size={16} />
@@ -151,17 +151,17 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1 border border-gray-700">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your Profile</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-white">Your Profile</h2>
                 {profileLoading && (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
                 )}
               </div>
               <Link
                 href="/create-profile"
-                className="flex items-center space-x-1 sm:space-x-2 bg-indigo-100 text-indigo-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-indigo-200 transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 bg-orange-100 text-orange-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-orange-200 transition-colors"
               >
                 <Edit size={16} />
                 <span className="text-sm sm:text-base">{profile ? 'Edit' : 'Create'}</span>
@@ -237,15 +237,15 @@ export default function DashboardPage() {
           </div>
 
           {/* QR Code Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2 border border-gray-700">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Your QR Code</h2>
-              <QrCode className="text-indigo-600" size={24} />
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Your QR Code</h2>
+              <QrCode className="text-orange-500" size={24} />
             </div>
 
             {profile ? (
               <div className="text-center">
-                <div className="bg-white border-2 border-purple-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
+                <div className="bg-white border-2 border-orange-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
                   <div className="w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center">
                     <QRCode
                       value={`https://viszyai.vercel.app/profile/${profile.handle}`}
@@ -292,30 +292,30 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-6 sm:mt-8 bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-3">
-          <h3 className="text-lg sm:text-xl font-bold text-slate-800 mb-4">Quick Actions</h3>
+        <div className="mt-6 sm:mt-8 bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-3 border border-gray-700">
+          <h3 className="text-lg sm:text-xl font-bold text-white mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {!profile && (
               <Link
                 href="/create-profile"
-                className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg hover:from-green-100 hover:to-emerald-100 transition-all duration-300 border-2 border-green-200 hover-scale hover-glow"
+                className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 border-2 border-orange-400 hover-scale hover-glow-orange text-white"
               >
-                <User className="text-green-600" size={18} />
+                <User className="text-white" size={18} />
                 <div>
-                  <p className="font-semibold text-slate-800 text-sm sm:text-base">Create Profile</p>
-                  <p className="text-slate-600 text-xs sm:text-sm">Set up your digital card</p>
+                  <p className="font-semibold text-white text-sm sm:text-base">Create Profile</p>
+                  <p className="text-orange-100 text-xs sm:text-sm">Set up your digital card</p>
                 </div>
               </Link>
             )}
 
             <Link
               href="/analytics"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 hover-scale hover-glow"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600"
             >
-              <BarChart3 className="text-indigo-600" size={18} />
+              <BarChart3 className="text-orange-400" size={18} />
               <div>
-                <p className="font-semibold text-slate-800 text-sm sm:text-base">Analytics</p>
-                <p className="text-slate-600 text-xs sm:text-sm">Track your performance</p>
+                <p className="font-semibold text-white text-sm sm:text-base">Analytics</p>
+                <p className="text-gray-300 text-xs sm:text-sm">Track your performance</p>
               </div>
             </Link>
             
@@ -323,12 +323,12 @@ export default function DashboardPage() {
             
             <Link
               href="/settings"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 hover-scale hover-glow"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600"
             >
-              <Settings className="text-indigo-600" size={18} />
+              <Settings className="text-orange-400" size={18} />
               <div>
-                <p className="font-semibold text-slate-800 text-sm sm:text-base">Settings</p>
-                <p className="text-slate-600 text-xs sm:text-sm">Manage your account</p>
+                <p className="font-semibold text-white text-sm sm:text-base">Settings</p>
+                <p className="text-gray-300 text-xs sm:text-sm">Manage your account</p>
               </div>
             </Link>
           </div>
