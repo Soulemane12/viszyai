@@ -126,7 +126,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="hidden sm:flex items-center space-x-2">
-                <span className="text-gray-300">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
+                <span className="text-high-contrast">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
                 {user && !profile && (
                   <div className="flex items-center space-x-1 text-gray-400">
                     <div className="animate-spin rounded-full h-3 w-3 border-b border-orange-400"></div>
@@ -136,7 +136,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={handleSignOut}
-                className="flex items-center space-x-1 sm:space-x-2 text-gray-300 hover:text-orange-400 transition-colors px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer"
+                className="flex items-center space-x-1 sm:space-x-2 text-medium-contrast hover:text-orange-400 transition-colors px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer"
                 type="button"
               >
                 <LogOut size={16} />
@@ -151,10 +151,10 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Profile Card */}
-          <div className="bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1 border border-gray-700">
+          <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Your Profile</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-high-contrast">Your Profile</h2>
                 {profileLoading && (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
                 )}
@@ -237,9 +237,9 @@ export default function DashboardPage() {
           </div>
 
           {/* QR Code Card */}
-          <div className="bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2 border border-gray-700">
+          <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-white">Your QR Code</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-high-contrast">Your QR Code</h2>
               <QrCode className="text-orange-500" size={24} />
             </div>
 
@@ -292,30 +292,30 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-6 sm:mt-8 bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 hover-lift animate-fadeInUp stagger-3 border border-gray-700">
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-4">Quick Actions</h3>
+        <div className="mt-6 sm:mt-8 card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-3">
+          <h3 className="text-lg sm:text-xl font-bold text-high-contrast mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {!profile && (
               <Link
                 href="/create-profile"
-                className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 border-2 border-orange-400 hover-scale hover-glow-orange text-white"
+                className="btn-primary-enhanced flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 rounded-lg transition-all duration-300 hover-scale"
               >
                 <User className="text-white" size={18} />
                 <div>
                   <p className="font-semibold text-white text-sm sm:text-base">Create Profile</p>
-                  <p className="text-orange-100 text-xs sm:text-sm">Set up your digital card</p>
+                  <p className="text-white/80 text-xs sm:text-sm">Set up your digital card</p>
                 </div>
               </Link>
             )}
 
             <Link
               href="/analytics"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600 shadow-lg"
             >
               <BarChart3 className="text-orange-400" size={18} />
               <div>
                 <p className="font-semibold text-white text-sm sm:text-base">Analytics</p>
-                <p className="text-gray-300 text-xs sm:text-sm">Track your performance</p>
+                <p className="text-medium-contrast text-xs sm:text-sm">Track your performance</p>
               </div>
             </Link>
             
@@ -323,12 +323,12 @@ export default function DashboardPage() {
             
             <Link
               href="/settings"
-              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600"
+              className="flex items-center space-x-2 sm:space-x-3 p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-300 hover-scale hover-glow text-white border border-gray-600 shadow-lg"
             >
               <Settings className="text-orange-400" size={18} />
               <div>
                 <p className="font-semibold text-white text-sm sm:text-base">Settings</p>
-                <p className="text-gray-300 text-xs sm:text-sm">Manage your account</p>
+                <p className="text-medium-contrast text-xs sm:text-sm">Manage your account</p>
               </div>
             </Link>
           </div>
