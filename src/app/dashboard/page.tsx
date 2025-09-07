@@ -245,7 +245,7 @@ export default function DashboardPage() {
 
             {profile ? (
               <div className="text-center">
-                <div className="bg-white border-2 border-orange-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
+                <div className="bg-gray-800 border-2 border-orange-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
                   <div className="w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center">
                     <QRCode
                       value={`https://viszyai.vercel.app/profile/${profile.handle}`}

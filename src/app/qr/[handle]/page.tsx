@@ -15,6 +15,7 @@ interface ProfileData {
   email: string;
   phone: string;
   bio: string;
+  photo_url?: string;
   socialLinks: Array<{
     platform: string;
     url: string;
@@ -46,6 +47,7 @@ export default function QRPage({ params }: { params: { handle: string } }) {
             email: profile.email,
             phone: profile.phone || '',
             bio: profile.bio || '',
+            photo_url: profile.photo_url,
             socialLinks: socialLinks.map(link => ({
               platform: link.platform,
               url: link.url
@@ -152,13 +154,15 @@ export default function QRPage({ params }: { params: { handle: string } }) {
             Back
           </BackButton>
           <div className="flex items-center space-x-4">
-            <button
-              onClick={downloadQR}
-              className="flex items-center text-medium-contrast hover:text-orange-600 font-medium transition-colors"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Download
-            </button>
+            {!isOwnProfile && (
+              <button
+                onClick={downloadQR}
+                className="flex items-center text-medium-contrast hover:text-orange-600 font-medium transition-colors"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </button>
+            )}
             <button
               onClick={shareQR}
               className="flex items-center text-medium-contrast hover:text-orange-600 font-medium transition-colors"
@@ -174,25 +178,33 @@ export default function QRPage({ params }: { params: { handle: string } }) {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto text-center">
           {/* Profile Info */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-bold text-indigo-600">
-                {profileData?.name?.charAt(0)}
-              </span>
+          <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700 mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+              {profileData?.photo_url ? (
+                <img 
+                  src={profileData.photo_url} 
+                  alt={profileData.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl font-bold text-orange-600">
+                  {profileData?.name?.charAt(0)}
+                </span>
+              )}
             </div>
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">
+            <h1 className="text-2xl font-bold text-high-contrast mb-2">
               {profileData?.name}
             </h1>
             {profileData?.title && (
               <p className="text-medium-contrast mb-2">{profileData.title}</p>
             )}
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-subtle">
               Scan the QR code below to connect
             </p>
           </div>
 
           {/* QR Code */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100 mb-8">
+          <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700 mb-8">
             <div className="flex justify-center mb-4">
               <QRCode
                 value={profileUrl}
@@ -201,7 +213,7 @@ export default function QRPage({ params }: { params: { handle: string } }) {
                 className="mx-auto"
               />
             </div>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-medium-contrast">
               Point your camera at this QR code
             </p>
           </div>

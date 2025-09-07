@@ -52,15 +52,15 @@ function ConfirmEmailContent() {
   }, [searchParams, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
+      <div className="bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
         <div className="flex justify-center mb-6">
           {status === 'loading' && <Mail className="w-16 h-16 text-indigo-600 animate-pulse" />}
           {status === 'success' && <CheckCircle className="w-16 h-16 text-green-600" />}
           {status === 'error' && <AlertTriangle className="w-16 h-16 text-red-600" />}
         </div>
         
-        <h1 className="text-2xl font-bold mb-4 text-slate-800">
+        <h1 className="text-2xl font-bold mb-4 text-high-contrast">
           {status === 'loading' && 'Confirming Email'}
           {status === 'success' && 'Email Confirmed'}
           {status === 'error' && 'Confirmation Error'}
@@ -69,7 +69,7 @@ function ConfirmEmailContent() {
         <p className={`text-lg mb-6 ${
           status === 'success' ? 'text-green-700' : 
           status === 'error' ? 'text-red-700' : 
-          'text-slate-600'
+          'text-medium-contrast'
         }`}>
           {message}
         </p>
