@@ -108,7 +108,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-high-contrast animate-fadeInUp">How It Works</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center animate-fadeInUp stagger-1">
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow">
+              <div className="bg-gradient-to-br from-orange-300 to-orange-400 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow">
                 <span className="text-lg sm:text-2xl font-bold text-white">1</span>
               </div>
               <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-high-contrast">Create Profile</h3>
@@ -122,14 +122,14 @@ export default function Home() {
               <p className="text-xs sm:text-sm text-medium-contrast">Your unique QR code is generated instantly</p>
             </div>
             <div className="text-center animate-fadeInUp stagger-3">
-              <div className="bg-gradient-to-br from-gray-600 to-gray-700 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1s'}}>
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1s'}}>
                 <span className="text-lg sm:text-2xl font-bold text-white">3</span>
               </div>
               <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-high-contrast">Show & Share</h3>
               <p className="text-xs sm:text-sm text-medium-contrast">Display your QR code when meeting people</p>
             </div>
             <div className="text-center animate-fadeInUp stagger-4">
-              <div className="bg-gradient-to-br from-gray-800 to-black w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1.5s'}}>
+              <div className="bg-gradient-to-br from-orange-600 to-orange-700 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1.5s'}}>
                 <span className="text-lg sm:text-2xl font-bold text-white">4</span>
               </div>
               <h3 className="text-sm sm:text-base font-semibold mb-1 sm:mb-2 text-high-contrast">They Connect</h3>
