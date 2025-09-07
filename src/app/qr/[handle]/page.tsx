@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Download, Share2, Smartphone, QrCode } from 'lucide-react';
+import { Download, Share2, Smartphone, QrCode, Edit, BarChart3 } from 'lucide-react';
 import WalletButton from '@/components/WalletButton';
 import QRCode from 'react-qr-code';
 import { getProfileWithSocialLinks, trackQRScan } from '@/lib/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/BackButton';
 
 interface ProfileData {
@@ -21,8 +22,12 @@ interface ProfileData {
 }
 
 export default function QRPage({ params }: { params: { handle: string } }) {
+  const { user, profile } = useAuth();
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Check if this is the user's own profile
+  const isOwnProfile = user && profile && profile.handle === params.handle;
 
   // Load profile data from Supabase
   useEffect(() => {
@@ -47,11 +52,13 @@ export default function QRPage({ params }: { params: { handle: string } }) {
             }))
           });
 
-          // Track QR scan (location will be automatically detected from IP)
-          trackQRScan(profile.id, {
-            scanner_user_agent: navigator.userAgent,
-            device_type: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
-          });
+          // Track QR scan only if it's not the user's own profile
+          if (!isOwnProfile) {
+            trackQRScan(profile.id, {
+              scanner_user_agent: navigator.userAgent,
+              device_type: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+            });
+          }
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -200,40 +207,75 @@ export default function QRPage({ params }: { params: { handle: string } }) {
           </div>
 
           {/* Instructions */}
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100">
+          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200">
             <div className="flex items-center justify-center mb-3">
-              <Smartphone className="h-6 w-6 text-indigo-600 mr-2" />
-              <h3 className="font-semibold text-indigo-900">How to use</h3>
+              <Smartphone className="h-6 w-6 text-orange-600 mr-2" />
+              <h3 className="font-semibold text-orange-900">
+                {isOwnProfile ? 'Your QR Code' : 'How to use'}
+              </h3>
             </div>
-            <div className="text-sm text-indigo-800 space-y-2">
-              <p>1. Show this QR code to someone you meet</p>
-              <p>2. They scan it with their phone camera</p>
-              <p>3. They instantly get all your contact info</p>
+            <div className="text-sm text-orange-800 space-y-2">
+              {isOwnProfile ? (
+                <>
+                  <p>• This is your personal QR code</p>
+                  <p>• Share it with people you meet</p>
+                  <p>• They can scan it to get your contact info</p>
+                  <p>• Track views and scans in your analytics</p>
+                </>
+              ) : (
+                <>
+                  <p>1. Show this QR code to someone you meet</p>
+                  <p>2. They scan it with their phone camera</p>
+                  <p>3. They instantly get all your contact info</p>
+                </>
+              )}
             </div>
           </div>
 
           {/* Quick Actions */}
           <div className="mt-8 space-y-3">
-            {/* Smart Wallet Button for quick contact saving */}
-            <WalletButton 
-              profileData={profileData}
-              profileUrl={profileUrl}
-              className="w-full"
-              variant="primary"
-            />
-            
-            <Link
-              href={`/profile/${params.handle}`}
-              className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
-            >
-              View My Profile
-            </Link>
-            <Link
-              href="/edit"
-              className="block w-full border-2 border-indigo-200 text-indigo-700 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 text-center"
-            >
-              Edit Profile
-            </Link>
+            {isOwnProfile ? (
+              // Actions for user's own profile
+              <>
+                <Link
+                  href="/dashboard"
+                  className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
+                >
+                  <Edit className="h-4 w-4 inline mr-2" />
+                  Go to Dashboard
+                </Link>
+                <Link
+                  href="/analytics"
+                  className="block w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
+                >
+                  <BarChart3 className="h-4 w-4 inline mr-2" />
+                  View Analytics
+                </Link>
+                <Link
+                  href="/create-profile"
+                  className="block w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
+                >
+                  <Edit className="h-4 w-4 inline mr-2" />
+                  Edit Profile
+                </Link>
+              </>
+            ) : (
+              // Actions for other people's profiles
+              <>
+                <WalletButton 
+                  profileData={profileData}
+                  profileUrl={profileUrl}
+                  className="w-full"
+                  variant="primary"
+                />
+                <Link
+                  href={`/profile/${params.handle}`}
+                  className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl text-center"
+                >
+                  View Full Profile
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </main>
