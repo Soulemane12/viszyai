@@ -359,7 +359,7 @@ export default function CreateProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -368,30 +368,30 @@ export default function CreateProfilePage() {
           >
             {profile ? 'Back to Dashboard' : 'Back to Home'}
           </BackButton>
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-high-contrast">
             {profile ? 'Edit Your Digital Business Card' : 'Create Your Digital Business Card'}
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-medium-contrast mt-2">
             {profile ? 'Update your information and regenerate your QR code' : 'Fill in your information to generate your unique QR code'}
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 card-enhanced p-8 rounded-2xl">
             {/* Basic Information */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-              <h2 className="text-xl font-semibold mb-6 text-slate-800">Basic Information</h2>
+            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700">
+              <h2 className="text-xl font-semibold mb-6 text-high-contrast">Basic Information</h2>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Full Name *
                   </label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder:text-gray-400 text-white"
                     placeholder="Your full name"
                     required
                   />
@@ -399,7 +399,7 @@ export default function CreateProfilePage() {
 
                 {/* Profile Photo */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Profile Photo
                   </label>
                   <div className="flex items-center space-x-4">
@@ -422,7 +422,7 @@ export default function CreateProfilePage() {
                           </button>
                         </div>
                       ) : (
-                        <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center border-2 border-dashed border-indigo-300">
+                        <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-600">
                           <User className="w-8 h-8 text-indigo-400" />
                         </div>
                       )}
@@ -437,11 +437,11 @@ export default function CreateProfilePage() {
                       />
                       <label
                         htmlFor="photo-upload"
-                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-indigo-300 rounded-lg text-sm font-medium text-indigo-700 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-orange-300 rounded-lg text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors"
                       >
                         {photoPreview ? 'Change Photo' : 'Upload Photo'}
                       </label>
-                      <p className="text-xs text-slate-500 mt-1">
+                      <p className="text-xs text-subtle mt-1">
                         JPG, PNG, GIF up to 5MB
                       </p>
                     </div>
@@ -449,11 +449,11 @@ export default function CreateProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Profile Handle *
                   </label>
                   <div className="flex">
-                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-indigo-300 bg-indigo-50 text-indigo-600 text-sm font-medium">
+                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-600 bg-indigo-50 text-indigo-600 text-sm font-medium">
                       viszyai.vercel.app/profile/
                     </span>
                     <input
@@ -473,8 +473,8 @@ export default function CreateProfilePage() {
                         }, 500);
                         setDebounceTimer(newTimer);
                       }}
-                      className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800 ${
-                        handleAvailable === null ? 'border-indigo-300' :
+                      className={`flex-1 rounded-r-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-subtle text-high-contrast ${
+                        handleAvailable === null ? 'border-gray-600' :
                         handleAvailable ? 'border-green-300' : 'border-red-300'
                       }`}
                       placeholder="your-name"
@@ -496,26 +496,26 @@ export default function CreateProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Job Title
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white placeholder:text-subtle text-high-contrast"
                     placeholder="Software Engineer, Student, etc."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Bio
                   </label>
                   <textarea
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white placeholder:text-subtle text-high-contrast"
                     rows={3}
                     placeholder="Tell people about yourself..."
                   />
@@ -524,19 +524,19 @@ export default function CreateProfilePage() {
             </div>
 
             {/* Contact Information */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-              <h2 className="text-xl font-semibold mb-6 text-slate-800">Contact Information</h2>
+            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700">
+              <h2 className="text-xl font-semibold mb-6 text-high-contrast">Contact Information</h2>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-medium-contrast mb-2">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white placeholder:text-subtle text-high-contrast"
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
@@ -546,13 +546,13 @@ export default function CreateProfilePage() {
 
 
             {/* Social Media Links */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
+            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-slate-800">Social Media Links</h2>
+                <h2 className="text-xl font-semibold text-high-contrast">Social Media Links</h2>
                 <button
                   type="button"
                   onClick={addSocialLink}
-                  className="flex items-center text-indigo-600 hover:text-indigo-700 font-medium"
+                  className="flex items-center text-orange-500 hover:text-orange-600 font-medium"
                 >
                   <Plus className="h-4 w-4 mr-1" />
                   Add Link
@@ -565,11 +565,11 @@ export default function CreateProfilePage() {
                     <select
                       value={link.platform}
                       onChange={(e) => updateSocialLink(link.id, 'platform', e.target.value)}
-                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 bg-white"
+                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-medium-contrast bg-gray-800/50"
                     >
-                      <option value="" className="text-slate-500">Select platform</option>
+                      <option value="" className="text-subtle">Select platform</option>
                       {socialPlatforms.map((platform) => (
-                        <option key={platform.name} value={platform.name} className="text-slate-700">
+                        <option key={platform.name} value={platform.name} className="text-medium-contrast">
                           {platform.name}
                         </option>
                       ))}
@@ -578,7 +578,7 @@ export default function CreateProfilePage() {
                       type="url"
                       value={link.url}
                       onChange={(e) => updateSocialLink(link.id, 'url', e.target.value)}
-                      className="flex-1 border border-indigo-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-slate-500 text-slate-800"
+                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-subtle text-high-contrast"
                       placeholder="https://..."
                     />
                     <button
@@ -592,7 +592,7 @@ export default function CreateProfilePage() {
                 ))}
                 
                 {socialLinks.length === 0 && (
-                  <p className="text-slate-500 text-center py-6">
+                  <p className="text-subtle text-center py-6">
                     Add your social media links to help people connect with you
                   </p>
                 )}
@@ -601,8 +601,8 @@ export default function CreateProfilePage() {
 
             {/* Error Display */}
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                <p className="text-red-600 text-sm">{error}</p>
+              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
+                <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
 
@@ -613,8 +613,8 @@ export default function CreateProfilePage() {
                 disabled={loading || handleAvailable === false || !handle}
                 className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
                   loading || handleAvailable === false || !handle
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+                    ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                    : 'btn-primary-enhanced text-white '
                 }`}
               >
                 {loading 
