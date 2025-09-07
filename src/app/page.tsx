@@ -113,21 +113,21 @@ export default function Home() {
               <p className="text-medium-contrast">Add your info, photo, and social links</p>
             </div>
             <div className="text-center animate-fadeInUp stagger-2">
-              <div className="bg-gradient-to-br from-gray-600 to-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '0.5s'}}>
+              <div className="bg-gradient-to-br from-orange-400 to-orange-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '0.5s'}}>
                 <span className="text-2xl font-bold text-white">2</span>
               </div>
               <h3 className="font-semibold mb-2 text-high-contrast">Get QR Code</h3>
               <p className="text-medium-contrast">Your unique QR code is generated instantly</p>
             </div>
             <div className="text-center animate-fadeInUp stagger-3">
-              <div className="bg-gradient-to-br from-orange-400 to-orange-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1s'}}>
+              <div className="bg-gradient-to-br from-gray-600 to-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1s'}}>
                 <span className="text-2xl font-bold text-white">3</span>
               </div>
               <h3 className="font-semibold mb-2 text-high-contrast">Show & Share</h3>
               <p className="text-medium-contrast">Display your QR code when meeting people</p>
             </div>
             <div className="text-center animate-fadeInUp stagger-4">
-              <div className="bg-gradient-to-br from-black to-gray-800 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1.5s'}}>
+              <div className="bg-gradient-to-br from-gray-800 to-black w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg hover-scale animate-bounce-slow" style={{animationDelay: '1.5s'}}>
                 <span className="text-2xl font-bold text-white">4</span>
               </div>
               <h3 className="font-semibold mb-2 text-high-contrast">They Connect</h3>
