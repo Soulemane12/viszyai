@@ -191,17 +191,17 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 animate-gradient">
       {/* Header */}
-      <header className="bg-white shadow-lg border-b border-indigo-100 glass animate-slideInLeft">
+      <header className="bg-gray-800 shadow-lg border-b border-gray-700 glass animate-slideInLeft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
               <BackButton 
                 fallbackPath="/"
-                className="text-slate-600 hover:text-indigo-600 transition-colors"
+                className="text-medium-contrast hover:text-orange-600 transition-colors"
               >
                 <span className="hidden sm:inline">Back</span>
               </BackButton>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center overflow-hidden">
                 {profile?.photo_url ? (
                   <Image
                     src={profile.photo_url}
@@ -211,22 +211,22 @@ export default function ProfilePage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-base sm:text-lg font-bold text-indigo-600">
+                  <span className="text-base sm:text-lg font-bold text-orange-600">
                     {profileData.name.charAt(0)}
                   </span>
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h1 className="text-lg sm:text-xl font-bold text-slate-800 truncate">{profileData.name}</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-high-contrast truncate">{profileData.name}</h1>
                 {profileData.title && (
-                  <p className="text-xs sm:text-sm text-slate-600 truncate">{profileData.title}</p>
+                  <p className="text-xs sm:text-sm text-medium-contrast truncate">{profileData.title}</p>
                 )}
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <button
                 onClick={shareProfile}
-                className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
+                className="p-2 text-medium-contrast hover:text-orange-600 hover:bg-orange-50 rounded-full transition-colors"
               >
                 <Share2 className="h-5 w-5" />
               </button>
@@ -239,9 +239,9 @@ export default function ProfilePage() {
       <main className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-md mx-auto">
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-1">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-gray-700 hover-lift animate-fadeInUp stagger-1">
             <div className="text-center mb-6">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
                 {profile?.photo_url ? (
                   <Image
                     src={profile.photo_url}
@@ -251,19 +251,19 @@ export default function ProfilePage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-2xl sm:text-3xl font-bold text-indigo-600">
+                  <span className="text-2xl sm:text-3xl font-bold text-orange-600">
                     {profileData.name.charAt(0)}
                   </span>
                 )}
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-high-contrast mb-2">
                 {profileData.name}
               </h2>
               {profileData.title && (
-                <p className="text-slate-600 mb-3 text-sm sm:text-base">{profileData.title}</p>
+                <p className="text-medium-contrast mb-3 text-sm sm:text-base">{profileData.title}</p>
               )}
               {profileData.bio && (
-                <p className="text-slate-600 text-sm leading-relaxed px-2 sm:px-0">
+                <p className="text-medium-contrast text-sm leading-relaxed px-2 sm:px-0">
                   {profileData.bio}
                 </p>
               )}
@@ -274,13 +274,13 @@ export default function ProfilePage() {
               {profileData.email && (
                 <button
                   onClick={() => copyToClipboard(profileData.email)}
-                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
+                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-gray-700"
                 >
                   <div className="flex items-center min-w-0 flex-1">
-                    <Mail className="h-5 w-5 text-indigo-600 mr-3 flex-shrink-0" />
-                    <span className="text-slate-800 font-medium text-sm sm:text-base truncate">{profileData.email}</span>
+                    <Mail className="h-5 w-5 text-orange-600 mr-3 flex-shrink-0" />
+                    <span className="text-high-contrast font-medium text-sm sm:text-base truncate">{profileData.email}</span>
                   </div>
-                  <span className="text-sm text-indigo-600 font-medium ml-2 flex-shrink-0">Copy</span>
+                  <span className="text-sm text-orange-600 font-medium ml-2 flex-shrink-0">Copy</span>
                 </button>
               )}
 
@@ -291,7 +291,7 @@ export default function ProfilePage() {
                 >
                   <div className="flex items-center min-w-0 flex-1">
                     <Phone className="h-5 w-5 text-purple-600 mr-3 flex-shrink-0" />
-                    <span className="text-slate-800 font-medium text-sm sm:text-base truncate">{profileData.phone}</span>
+                    <span className="text-high-contrast font-medium text-sm sm:text-base truncate">{profileData.phone}</span>
                   </div>
                   <span className="text-sm text-purple-600 font-medium ml-2 flex-shrink-0">Call</span>
                 </a>
@@ -301,8 +301,8 @@ export default function ProfilePage() {
 
           {/* Social Links */}
           {profileData.socialLinks.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-2">
-              <h3 className="text-lg font-semibold text-slate-800 mb-6">Connect</h3>
+            <div className="bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-gray-700 hover-lift animate-fadeInUp stagger-2">
+              <h3 className="text-lg font-semibold text-high-contrast mb-6">Connect</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {profileData.socialLinks.map((link, index) => {
                   const IconComponent = socialIcons[link.platform] || Globe;
@@ -324,10 +324,10 @@ export default function ProfilePage() {
                           }
                         }
                       }}
-                      className="flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-indigo-100"
+                      className="flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-gray-700"
                     >
-                      <IconComponent className="h-5 w-5 text-indigo-600 mr-2" />
-                      <span className="text-slate-800 font-medium">{link.platform}</span>
+                      <IconComponent className="h-5 w-5 text-orange-600 mr-2" />
+                      <span className="text-high-contrast font-medium">{link.platform}</span>
                     </a>
                   );
                 })}
@@ -336,8 +336,8 @@ export default function ProfilePage() {
           )}
 
           {/* Add to Contacts */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-indigo-100 hover-lift animate-fadeInUp stagger-3">
-            <h3 className="text-lg font-semibold text-slate-800 mb-6">Save Contact</h3>
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-8 mb-6 border border-gray-700 hover-lift animate-fadeInUp stagger-3">
+            <h3 className="text-lg font-semibold text-high-contrast mb-6">Save Contact</h3>
             <div className="space-y-3">
               {/* Smart Wallet Button - Primary action */}
               <WalletButton 

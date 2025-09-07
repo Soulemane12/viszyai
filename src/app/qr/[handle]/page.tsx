@@ -112,10 +112,10 @@ export default function QRPage({ params }: { params: { handle: string } }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your QR code...</p>
+          <p className="text-medium-contrast">Loading your QR code...</p>
         </div>
       </div>
     );
@@ -123,38 +123,38 @@ export default function QRPage({ params }: { params: { handle: string } }) {
 
   if (!profileData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
           <QrCode className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">QR Code Not Available</h1>
-          <p className="text-gray-600">This profile doesn&apos;t exist or has been removed.</p>
+          <h1 className="text-2xl font-bold text-high-contrast mb-2">QR Code Not Available</h1>
+          <p className="text-medium-contrast">This profile doesn&apos;t exist or has been removed.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <BackButton 
             fallbackPath="/"
-            className="text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+            className="text-medium-contrast hover:text-orange-600 font-medium transition-colors"
           >
             Back
           </BackButton>
           <div className="flex items-center space-x-4">
             <button
               onClick={downloadQR}
-              className="flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+              className="flex items-center text-medium-contrast hover:text-orange-600 font-medium transition-colors"
             >
               <Download className="h-4 w-4 mr-2" />
               Download
             </button>
             <button
               onClick={shareQR}
-              className="flex items-center text-slate-600 hover:text-indigo-600 font-medium transition-colors"
+              className="flex items-center text-medium-contrast hover:text-orange-600 font-medium transition-colors"
             >
               <Share2 className="h-4 w-4 mr-2" />
               Share
@@ -177,7 +177,7 @@ export default function QRPage({ params }: { params: { handle: string } }) {
               {profileData?.name}
             </h1>
             {profileData?.title && (
-              <p className="text-slate-600 mb-2">{profileData.title}</p>
+              <p className="text-medium-contrast mb-2">{profileData.title}</p>
             )}
             <p className="text-sm text-slate-500">
               Scan the QR code below to connect

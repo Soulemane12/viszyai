@@ -48,23 +48,23 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100">
+      <header className="bg-gray-800 shadow-sm border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-slate-600 hover:text-indigo-600 transition-colors">
+              <Link href="/" className="text-medium-contrast hover:text-orange-600 transition-colors">
                 <ArrowLeft className="h-5 w-5" />
               </Link>
               <Logo size="md" />
               <div>
-                <h1 className="text-2xl font-bold text-slate-800">Contact Us</h1>
-                <p className="text-slate-600">Get in touch with our team</p>
+                <h1 className="text-2xl font-bold text-high-contrast">Contact Us</h1>
+                <p className="text-medium-contrast">Get in touch with our team</p>
               </div>
             </div>
             {user && (
-              <Link href="/dashboard" className="text-slate-600 hover:text-indigo-600 font-medium transition-colors">
+              <Link href="/dashboard" className="text-medium-contrast hover:text-orange-600 font-medium transition-colors">
                 Dashboard
               </Link>
             )}
@@ -76,16 +76,16 @@ export default function ContactPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">Send us a message</h2>
+          <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700">
+            <h2 className="text-2xl font-bold text-high-contrast mb-6">Send us a message</h2>
             
             {submitted ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MessageSquare className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">Message Sent!</h3>
-                <p className="text-slate-600 mb-6">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
+                <h3 className="text-xl font-semibold text-high-contrast mb-2">Message Sent!</h3>
+                <p className="text-medium-contrast mb-6">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
@@ -208,8 +208,8 @@ export default function ContactPage() {
           {/* Contact Information */}
           <div className="space-y-8">
             {/* General Contact */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-              <h3 className="text-xl font-bold text-slate-800 mb-6">Get in Touch</h3>
+            <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700">
+              <h3 className="text-xl font-bold text-high-contrast mb-6">Get in Touch</h3>
               
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
@@ -217,8 +217,8 @@ export default function ContactPage() {
                     <Mail className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-800">Email</p>
-                    <p className="text-slate-600">hello@viszy.ai</p>
+                    <p className="font-semibold text-high-contrast">Email</p>
+                    <p className="text-medium-contrast">hello@viszy.ai</p>
                   </div>
                 </div>
                 
@@ -227,8 +227,8 @@ export default function ContactPage() {
                     <Phone className="h-6 w-6 text-purple-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-800">Phone</p>
-                    <p className="text-slate-600">+1 (555) 123-4567</p>
+                    <p className="font-semibold text-high-contrast">Phone</p>
+                    <p className="text-medium-contrast">+1 (555) 123-4567</p>
                   </div>
                 </div>
                 
@@ -237,8 +237,8 @@ export default function ContactPage() {
                     <Globe className="h-6 w-6 text-pink-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-800">Website</p>
-                    <p className="text-slate-600">www.viszy.ai</p>
+                    <p className="font-semibold text-high-contrast">Website</p>
+                    <p className="text-medium-contrast">www.viszy.ai</p>
                   </div>
                 </div>
               </div>
@@ -268,16 +268,16 @@ export default function ContactPage() {
               
               <Link 
                 href="mailto:enterprise@viszy.ai"
-                className="inline-block mt-6 bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
+                className="inline-block mt-6 bg-gray-800 text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 Contact Enterprise Sales
               </Link>
             </div>
 
             {/* Support */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-indigo-100">
-              <h3 className="text-xl font-bold text-slate-800 mb-4">Need Help?</h3>
-              <p className="text-slate-600 mb-6">
+            <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700">
+              <h3 className="text-xl font-bold text-high-contrast mb-4">Need Help?</h3>
+              <p className="text-medium-contrast mb-6">
                 Check out our help center for quick answers to common questions.
               </p>
               

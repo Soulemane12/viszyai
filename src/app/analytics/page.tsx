@@ -116,9 +116,10 @@ export default function AnalyticsPage() {
                 >
                   Back
                 </BackButton>
+                <Logo size="sm" />
                 <div>
-                  <h1 className="text-2xl font-bold text-high-contrast">Analytics</h1>
-                  <p className="text-medium-contrast">Track your profile performance</p>
+                  <h1 className="text-xl sm:text-2xl font-bold text-high-contrast">Analytics</h1>
+                  <p className="text-medium-contrast text-sm sm:text-base">Track your profile performance</p>
                 </div>
               </div>
             </div>
