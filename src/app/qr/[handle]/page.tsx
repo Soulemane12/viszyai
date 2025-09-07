@@ -204,14 +204,28 @@ export default function QRPage({ params }: { params: { handle: string } }) {
           </div>
 
           {/* QR Code */}
-          <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700 mb-8">
+          <div className="bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-700 mb-8">
             <div className="flex justify-center mb-4">
-              <QRCode
-                value={profileUrl}
-                size={256}
-                level="H"
-                className="mx-auto"
-              />
+              <div className="relative bg-gradient-to-br from-gray-100 to-white border-2 border-orange-200 rounded-2xl p-4 sm:p-6 shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 hover:scale-105 animate-float qr-glow">
+                {/* Animated border glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-2xl opacity-20 blur-sm animate-pulse"></div>
+                
+                {/* QR Code container with rounded corners */}
+                <div className="relative flex items-center justify-center bg-white rounded-xl p-2 shadow-inner qr-pulse">
+                  <QRCode
+                    value={profileUrl}
+                    size={200}
+                    level="H"
+                    className="rounded-lg"
+                  />
+                </div>
+                
+                {/* Corner decorations */}
+                <div className="absolute -top-1 -left-1 w-4 h-4 bg-orange-400 rounded-full corner-bounce" style={{animationDelay: '0s'}}></div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full corner-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-orange-600 rounded-full corner-bounce" style={{animationDelay: '0.4s'}}></div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-orange-700 rounded-full corner-bounce" style={{animationDelay: '0.6s'}}></div>
+              </div>
             </div>
             <p className="text-sm text-medium-contrast">
               Point your camera at this QR code
