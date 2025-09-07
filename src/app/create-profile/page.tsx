@@ -7,6 +7,7 @@ import { isHandleAvailable, updateProfile, createProfile, createSocialLinks, upd
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import BackButton from '@/components/BackButton';
+import ImageCropper from '@/components/ImageCropper';
 
 interface SocialLink {
   id: string;
@@ -30,6 +31,8 @@ export default function CreateProfilePage() {
   });
   
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
   
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [handle, setHandle] = useState('');
@@ -109,15 +112,30 @@ export default function CreateProfilePage() {
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setFormData({ ...formData, photo: file });
       
-      // Create preview URL
+      // Create preview URL and show cropper
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPhotoPreview(e.target?.result as string);
+        const imageSrc = e.target?.result as string;
+        setImageToCrop(imageSrc);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (croppedImageBlob: Blob) => {
+    // Convert blob to File
+    const file = new File([croppedImageBlob], 'profile-photo.jpg', { type: 'image/jpeg' });
+    setFormData({ ...formData, photo: file });
+    setPhotoPreview(URL.createObjectURL(croppedImageBlob));
+    setShowCropper(false);
+    setImageToCrop(null);
+  };
+
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setImageToCrop(null);
   };
 
   const removePhoto = () => {
@@ -612,6 +630,17 @@ export default function CreateProfilePage() {
           </form>
         </div>
       </div>
+
+      {/* Image Cropper Modal */}
+      {showCropper && imageToCrop && (
+        <ImageCropper
+          imageSrc={imageToCrop}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+          aspectRatio={1}
+          circularCrop={true}
+        />
+      )}
     </div>
   );
 }
