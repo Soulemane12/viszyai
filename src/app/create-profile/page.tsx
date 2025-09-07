@@ -362,24 +362,25 @@ export default function CreateProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 animate-fadeInUp">
           <BackButton 
             fallbackPath={profile ? "/dashboard" : "/"}
+            className="inline-flex items-center text-medium-contrast hover:text-orange-400 mb-4 font-medium transition-colors hover-scale"
           >
             {profile ? 'Back to Dashboard' : 'Back to Home'}
           </BackButton>
-          <h1 className="text-3xl font-bold text-high-contrast">
+          <h1 className="text-3xl font-bold text-high-contrast animate-slideInLeft">
             {profile ? 'Edit Your Digital Business Card' : 'Create Your Digital Business Card'}
           </h1>
-          <p className="text-medium-contrast mt-2">
+          <p className="text-medium-contrast mt-2 animate-fadeInUp stagger-1">
             {profile ? 'Update your information and regenerate your QR code' : 'Fill in your information to generate your unique QR code'}
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-6 card-enhanced p-8 rounded-2xl">
+          <form onSubmit={handleSubmit} className="space-y-6 card-enhanced p-8 rounded-2xl hover-lift animate-fadeInUp">
             {/* Basic Information */}
-            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700">
+            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700 hover-lift hover-glow-orange animate-fadeInUp stagger-1 transition-all duration-300">
               <h2 className="text-xl font-semibold mb-6 text-high-contrast">Basic Information</h2>
               
               <div className="space-y-4">
@@ -391,7 +392,7 @@ export default function CreateProfilePage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder:text-gray-400 text-white"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder:text-gray-400 text-white hover:border-orange-400 transition-all duration-300"
                     placeholder="Your full name"
                     required
                   />
@@ -437,7 +438,7 @@ export default function CreateProfilePage() {
                       />
                       <label
                         htmlFor="photo-upload"
-                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-orange-300 rounded-lg text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors"
+                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-orange-300 rounded-lg text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all duration-300 hover-scale hover-glow-orange"
                       >
                         {photoPreview ? 'Change Photo' : 'Upload Photo'}
                       </label>
@@ -546,13 +547,13 @@ export default function CreateProfilePage() {
 
 
             {/* Social Media Links */}
-            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700">
+            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700 hover-lift hover-glow-orange animate-fadeInUp stagger-2 transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-high-contrast">Social Media Links</h2>
                 <button
                   type="button"
                   onClick={addSocialLink}
-                  className="flex items-center text-orange-500 hover:text-orange-600 font-medium"
+                  className="flex items-center text-orange-500 hover:text-orange-600 font-medium hover-scale transition-all duration-300"
                 >
                   <Plus className="h-4 w-4 mr-1" />
                   Add Link
@@ -561,11 +562,11 @@ export default function CreateProfilePage() {
               
               <div className="space-y-4">
                 {socialLinks.map((link) => (
-                  <div key={link.id} className="flex items-center space-x-2">
+                  <div key={link.id} className="flex items-center space-x-2 hover-lift transition-all duration-300">
                     <select
                       value={link.platform}
                       onChange={(e) => updateSocialLink(link.id, 'platform', e.target.value)}
-                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-medium-contrast bg-gray-800/50"
+                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white bg-gray-700 hover:border-orange-400 transition-all duration-300"
                     >
                       <option value="" className="text-subtle">Select platform</option>
                       {socialPlatforms.map((platform) => (
@@ -578,13 +579,13 @@ export default function CreateProfilePage() {
                       type="url"
                       value={link.url}
                       onChange={(e) => updateSocialLink(link.id, 'url', e.target.value)}
-                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-subtle text-high-contrast"
+                      className="flex-1 border border-gray-600 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder:text-gray-400 text-white bg-gray-700 hover:border-orange-400 transition-all duration-300"
                       placeholder="https://..."
                     />
                     <button
                       type="button"
                       onClick={() => removeSocialLink(link.id)}
-                      className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      className="text-red-500 hover:text-red-700 p-2 hover:bg-red-900/20 rounded-lg transition-all duration-300 hover-scale"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -601,7 +602,7 @@ export default function CreateProfilePage() {
 
             {/* Error Display */}
             {error && (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
+              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6 animate-fadeInUp">
                 <p className="text-red-400 text-sm">{error}</p>
               </div>
             )}
@@ -611,10 +612,10 @@ export default function CreateProfilePage() {
               <button
                 type="submit"
                 disabled={loading || handleAvailable === false || !handle}
-                className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
+                className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
                   loading || handleAvailable === false || !handle
                     ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
-                    : 'btn-primary-enhanced text-white '
+                    : 'btn-primary-enhanced text-white hover-lift hover-glow-orange'
                 }`}
               >
                 {loading 
