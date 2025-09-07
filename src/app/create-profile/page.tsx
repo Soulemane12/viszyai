@@ -360,28 +360,28 @@ export default function CreateProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         {/* Header */}
-        <div className="mb-8 animate-fadeInUp">
+        <div className="mb-6 sm:mb-8 animate-fadeInUp">
           <BackButton 
             fallbackPath={profile ? "/dashboard" : "/"}
             className="inline-flex items-center text-medium-contrast hover:text-orange-400 mb-4 font-medium transition-colors hover-scale"
           >
             {profile ? 'Back to Dashboard' : 'Back to Home'}
           </BackButton>
-          <h1 className="text-3xl font-bold text-high-contrast animate-slideInLeft">
+          <h1 className="text-2xl sm:text-3xl font-bold text-high-contrast animate-slideInLeft">
             {profile ? 'Edit Your Digital Business Card' : 'Create Your Digital Business Card'}
           </h1>
-          <p className="text-medium-contrast mt-2 animate-fadeInUp stagger-1">
+          <p className="text-medium-contrast mt-2 animate-fadeInUp stagger-1 text-sm sm:text-base">
             {profile ? 'Update your information and regenerate your QR code' : 'Fill in your information to generate your unique QR code'}
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-6 card-enhanced p-8 rounded-2xl hover-lift animate-fadeInUp">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 card-enhanced p-4 sm:p-6 lg:p-8 rounded-2xl hover-lift animate-fadeInUp">
             {/* Basic Information */}
-            <div className="bg-gray-800/50 rounded-2xl p-8 shadow-lg border border-gray-700 hover-lift hover-glow-orange animate-fadeInUp stagger-1 transition-all duration-300">
-              <h2 className="text-xl font-semibold mb-6 text-high-contrast">Basic Information</h2>
+            <div className="bg-gray-800/50 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-700 hover-lift hover-glow-orange animate-fadeInUp stagger-1 transition-all duration-300">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-high-contrast">Basic Information</h2>
               
               <div className="space-y-4">
                 <div>

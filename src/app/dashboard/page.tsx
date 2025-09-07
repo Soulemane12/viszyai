@@ -118,14 +118,14 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-2 sm:space-x-4">
               <BackButton 
                 fallbackPath="/"
-                className="text-slate-600 hover:text-indigo-600 transition-colors"
+                className="text-medium-contrast hover:text-orange-400 transition-colors"
               >
                 <span className="hidden sm:inline">Back</span>
               </BackButton>
               <Logo size="sm" />
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="hidden sm:flex items-center space-x-2">
+              <div className="hidden md:flex items-center space-x-2">
                 <span className="text-high-contrast">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
                 {user && !profile && (
                   <div className="flex items-center space-x-1 text-gray-400">
@@ -149,19 +149,19 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* Profile Card */}
           <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-1">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
               <div className="flex items-center space-x-2">
-                <h2 className="text-xl sm:text-2xl font-bold text-high-contrast">Your Profile</h2>
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-high-contrast">Your Profile</h2>
                 {profileLoading && (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
                 )}
               </div>
               <Link
                 href="/create-profile"
-                className="flex items-center space-x-1 sm:space-x-2 bg-orange-100 text-orange-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-orange-200 transition-colors"
+                className="flex items-center justify-center space-x-1 sm:space-x-2 bg-orange-100 text-orange-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-orange-200 transition-colors w-full sm:w-auto"
               >
                 <Edit size={16} />
                 <span className="text-sm sm:text-base">{profile ? 'Edit' : 'Create'}</span>
@@ -238,18 +238,18 @@ export default function DashboardPage() {
 
           {/* QR Code Card */}
           <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-high-contrast">Your QR Code</h2>
-              <QrCode className="text-orange-500" size={24} />
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-high-contrast">Your QR Code</h2>
+              <QrCode className="text-orange-500" size={20} />
             </div>
 
             {profile ? (
               <div className="text-center">
-                <div className="bg-gray-800 border-2 border-orange-200 rounded-lg p-3 sm:p-4 inline-block mb-4">
-                  <div className="w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center">
+                <div className="bg-gray-800 border-2 border-orange-200 rounded-lg p-2 sm:p-3 lg:p-4 inline-block mb-4">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 flex items-center justify-center">
                     <QRCode
                       value={`https://viszyai.vercel.app/profile/${profile.handle}`}
-                      size={isSmallScreen ? 128 : 192}
+                      size={isSmallScreen ? 96 : 128}
                       level="H"
                       className="max-w-full max-h-full"
                     />
@@ -257,20 +257,20 @@ export default function DashboardPage() {
                 </div>
                 
                 <div className="space-y-3">
-                  <p className="text-slate-600 text-sm sm:text-base">
+                  <p className="text-medium-contrast text-xs sm:text-sm lg:text-base">
                     Share this QR code to let people access your digital business card
                   </p>
                   
                   <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                     <Link
                       href={`/qr/${profile.handle}`}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-sm sm:text-base"
+                      className="flex-1 btn-primary-enhanced py-2 px-4 rounded-lg text-sm sm:text-base"
                     >
                       View QR Code
                     </Link>
                     <Link
                       href={`/profile/${profile.handle}`}
-                      className="flex-1 bg-slate-100 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors text-sm sm:text-base"
+                      className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base"
                     >
                       View Profile
                     </Link>
