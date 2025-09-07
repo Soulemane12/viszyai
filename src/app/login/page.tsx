@@ -64,26 +64,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <Logo size="lg" />
           </div>
-          <Link href="/" className="inline-flex items-center text-slate-600 hover:text-indigo-600 mb-4 font-medium transition-colors">
+          <Link href="/" className="inline-flex items-center text-medium-contrast hover:text-indigo-600 mb-4 font-medium transition-colors">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
           </Link>
-          <h1 className="text-3xl font-bold text-slate-800">Welcome Back</h1>
-          <p className="text-slate-600 mt-2">Sign in to access your digital business card</p>
+          <h1 className="text-3xl font-bold text-high-contrast">Welcome Back</h1>
+          <p className="text-medium-contrast mt-2">Sign in to access your digital business card</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-indigo-200/50">
+        <div className="card-enhanced rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
                           <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-medium-contrast mb-2">
                   Email Address
                 </label>
                 <div className="relative">
@@ -92,7 +92,7 @@ export default function LoginPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full pl-10 pr-3 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    className="w-full pl-10 pr-3 py-3 border-2 border-gray-600 rounded-lg bg-gray-700 text-high-contrast placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
                     placeholder="Enter your email"
                     required
                   />
@@ -100,7 +100,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-medium-contrast mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -109,7 +109,7 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full pl-10 pr-10 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                    className="w-full pl-10 pr-10 py-3 border-2 border-gray-600 rounded-lg bg-gray-700 text-high-contrast placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
                     placeholder="Enter your password"
                     required
                   />
@@ -129,9 +129,9 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-2 border-indigo-300 rounded accent-indigo-600"
+                  className="h-4 w-4 text-indigo-600 focus:ring-orange-500 border-2 border-indigo-300 rounded accent-indigo-600"
                 />
-                <span className="ml-2 text-sm text-slate-600">Remember me</span>
+                <span className="ml-2 text-sm text-medium-contrast">Remember me</span>
               </label>
               <Link href="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-700">
                 Forgot password?
@@ -148,10 +148,10 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl ${
+              className={`w-full py-3 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl ${
                 loading
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+                  : 'btn-primary-enhanced text-white '
               }`}
             >
               {loading ? 'Signing In...' : 'Sign In'}
@@ -159,7 +159,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-medium-contrast">
               Don&apos;t have an account?{' '}
               <Link href="/signup" className="text-indigo-600 hover:text-indigo-700 font-medium">
                 Sign up

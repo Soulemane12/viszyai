@@ -114,10 +114,10 @@ export default function SettingsPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-medium-contrast">Loading...</p>
         </div>
       </div>
     );
@@ -128,23 +128,23 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-blue-100">
+      <header className="bg-gray-800 shadow-sm border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <BackButton 
                 fallbackPath="/dashboard"
-                className="text-slate-600 hover:text-blue-600 transition-colors"
+                className="text-medium-contrast hover:text-blue-600 transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </BackButton>
               <Logo size="sm" />
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Settings</h1>
-                <p className="text-slate-600 text-sm sm:text-base">Manage your account</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-high-contrast">Settings</h1>
+                <p className="text-medium-contrast text-sm sm:text-base">Manage your account</p>
               </div>
             </div>
           </div>
@@ -165,10 +165,10 @@ export default function SettingsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Account Information */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center mb-6">
               <User className="h-6 w-6 text-blue-600 mr-3" />
-              <h2 className="text-xl font-semibold text-slate-800">Account Information</h2>
+              <h2 className="text-xl font-semibold text-high-contrast">Account Information</h2>
             </div>
 
             <div className="space-y-4">
@@ -212,10 +212,10 @@ export default function SettingsPage() {
           </div>
 
           {/* Security */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center mb-6">
               <Lock className="h-6 w-6 text-blue-600 mr-3" />
-              <h2 className="text-xl font-semibold text-slate-800">Security</h2>
+              <h2 className="text-xl font-semibold text-high-contrast">Security</h2>
             </div>
 
             <form onSubmit={handlePasswordUpdate} className="space-y-4">
@@ -270,8 +270,8 @@ export default function SettingsPage() {
         </div>
 
         {/* Danger Zone */}
-        <div className="mt-8 bg-white rounded-2xl shadow-lg p-6 border-l-4 border-red-500">
-          <h2 className="text-xl font-semibold text-slate-800 mb-6">Danger Zone</h2>
+        <div className="mt-8 bg-gray-800 rounded-2xl shadow-lg p-6 border-l-4 border-red-500">
+          <h2 className="text-xl font-semibold text-high-contrast mb-6">Danger Zone</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">

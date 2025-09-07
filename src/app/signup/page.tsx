@@ -99,19 +99,19 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100">
+      <header className="bg-gray-800 shadow-sm border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-slate-600 hover:text-indigo-600 transition-colors">
+              <Link href="/" className="text-medium-contrast hover:text-indigo-600 transition-colors">
                 <ArrowLeft className="h-5 w-5" />
               </Link>
               <Logo size="md" />
               <div>
-                <h1 className="text-2xl font-bold text-slate-800">Create Your Account</h1>
-                <p className="text-slate-600">Sign up to start creating your digital business cards</p>
+                <h1 className="text-2xl font-bold text-high-contrast">Create Your Account</h1>
+                <p className="text-medium-contrast">Sign up to start creating your digital business cards</p>
               </div>
             </div>
           </div>
@@ -120,19 +120,19 @@ export default function SignupPage() {
 
       {/* Main Content */}
       <main className="max-w-md mx-auto px-4 py-12">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-indigo-200/50">
+        <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-indigo-200/50">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <Logo size="lg" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-2">Join Viszy</h2>
-            <p className="text-slate-600">Create your account to get started</p>
+            <h2 className="text-2xl font-bold text-high-contrast mb-2">Join Viszy</h2>
+            <p className="text-medium-contrast">Create your account to get started</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-medium-contrast mb-2">
                 Full Name *
               </label>
               <div className="relative">
@@ -141,7 +141,7 @@ export default function SignupPage() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-indigo-200 rounded-lg bg-gray-800 text-high-contrast placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-indigo-500 transition-all duration-200"
                   placeholder="John Doe"
                   required
                 />
@@ -150,7 +150,7 @@ export default function SignupPage() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-medium-contrast mb-2">
                 Email Address *
               </label>
               <div className="relative">
@@ -159,7 +159,7 @@ export default function SignupPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-indigo-200 rounded-lg bg-gray-800 text-high-contrast placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-indigo-500 transition-all duration-200"
                   placeholder="john@example.com"
                   required
                 />
@@ -168,7 +168,7 @@ export default function SignupPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-medium-contrast mb-2">
                 Password *
               </label>
               <div className="relative">
@@ -177,14 +177,14 @@ export default function SignupPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full pl-10 pr-12 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                  className="w-full pl-10 pr-12 py-3 border-2 border-indigo-200 rounded-lg bg-gray-800 text-high-contrast placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-indigo-500 transition-all duration-200"
                   placeholder="Create a password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-medium-contrast"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -194,7 +194,7 @@ export default function SignupPage() {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-medium-contrast mb-2">
                 Confirm Password *
               </label>
               <div className="relative">
@@ -203,14 +203,14 @@ export default function SignupPage() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  className="w-full pl-10 pr-12 py-3 border-2 border-indigo-200 rounded-lg bg-white text-slate-800 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                  className="w-full pl-10 pr-12 py-3 border-2 border-indigo-200 rounded-lg bg-gray-800 text-high-contrast placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-indigo-500 transition-all duration-200"
                   placeholder="Confirm your password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-medium-contrast"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -231,7 +231,7 @@ export default function SignupPage() {
               className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-200 ${
                 loading
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
+                  : 'btn-primary-enhanced text-white  shadow-lg hover:shadow-xl'
               }`}
             >
               {loading ? 'Creating Account...' : 'Create Account'}
@@ -240,7 +240,7 @@ export default function SignupPage() {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-slate-600">
+            <p className="text-medium-contrast">
               Already have an account?{' '}
               <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
                 Sign in

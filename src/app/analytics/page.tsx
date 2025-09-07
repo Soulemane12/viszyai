@@ -88,10 +88,10 @@ export default function AnalyticsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-medium-contrast">
             {authLoading ? 'Loading...' : 'Loading analytics...'}
           </p>
         </div>
@@ -105,20 +105,20 @@ export default function AnalyticsPage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-50">
-        <header className="bg-white shadow-sm border-b border-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <header className="bg-gray-800 shadow-sm border-b border-gray-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center space-x-4">
                 <BackButton 
                   fallbackPath="/dashboard"
-                  className="text-slate-600 hover:text-indigo-600 transition-colors"
+                  className="text-medium-contrast hover:text-orange-600 transition-colors"
                 >
                   Back
                 </BackButton>
                 <div>
-                  <h1 className="text-2xl font-bold text-slate-800">Analytics</h1>
-                  <p className="text-slate-600">Track your profile performance</p>
+                  <h1 className="text-2xl font-bold text-high-contrast">Analytics</h1>
+                  <p className="text-medium-contrast">Track your profile performance</p>
                 </div>
               </div>
             </div>
@@ -127,12 +127,12 @@ export default function AnalyticsPage() {
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
-            <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
-              <BarChart3 className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-slate-800 mb-4">
+            <div className="bg-gray-800 rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+              <BarChart3 className="h-16 w-16 text-orange-600 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-high-contrast mb-4">
                 {profileLoading ? 'Loading Profile...' : 'No Profile Yet'}
               </h2>
-              <p className="text-slate-600 mb-6">
+              <p className="text-medium-contrast mb-6">
                 {profileLoading 
                   ? 'Please wait while we load your profile data...'
                   : 'Create your profile to start tracking analytics and see how people interact with your digital business card.'
@@ -141,7 +141,7 @@ export default function AnalyticsPage() {
               {!profileLoading && (
                 <Link
                   href="/create-profile"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                  className="bg-gradient-to-r btn-primary-enhanced text-white px-6 py-3 rounded-lg  transition-all duration-200"
                 >
                   Create Profile
                 </Link>
@@ -154,22 +154,22 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-indigo-100">
+      <header className="bg-gray-800 shadow-sm border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <BackButton 
                 fallbackPath="/dashboard"
-                className="text-slate-600 hover:text-indigo-600 transition-colors"
+                className="text-medium-contrast hover:text-orange-600 transition-colors"
               >
                 Back
               </BackButton>
               <Logo size="sm" />
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Analytics</h1>
-                <p className="text-slate-600 text-sm sm:text-base">Track your profile performance</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-high-contrast">Analytics</h1>
+                <p className="text-medium-contrast text-sm sm:text-base">Track your profile performance</p>
               </div>
             </div>
 
@@ -181,38 +181,38 @@ export default function AnalyticsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-xs sm:text-sm font-medium">Total Views</p>
-                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.totalViews.toLocaleString()}</p>
+                <p className="text-medium-contrast text-xs sm:text-sm font-medium">Total Views</p>
+                <p className="text-2xl sm:text-3xl font-bold text-high-contrast">{analytics?.totalViews.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-indigo-100 to-purple-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
-                <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
+              <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-xs sm:text-sm font-medium">QR Scans</p>
-                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.totalScans.toLocaleString()}</p>
+                <p className="text-medium-contrast text-xs sm:text-sm font-medium">QR Scans</p>
+                <p className="text-2xl sm:text-3xl font-bold text-high-contrast">{analytics?.totalScans.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
-                <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+              <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-xs sm:text-sm font-medium">Unique Visitors</p>
-                <p className="text-2xl sm:text-3xl font-bold text-slate-800">{analytics?.uniqueVisitors.toLocaleString()}</p>
+                <p className="text-medium-contrast text-xs sm:text-sm font-medium">Unique Visitors</p>
+                <p className="text-2xl sm:text-3xl font-bold text-high-contrast">{analytics?.uniqueVisitors.toLocaleString()}</p>
               </div>
-              <div className="bg-gradient-to-br from-pink-100 to-rose-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
-                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-pink-600" />
+              <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
               </div>
             </div>
           </div>
@@ -220,9 +220,9 @@ export default function AnalyticsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Monthly Views Chart */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h3 className="text-base sm:text-lg font-semibold text-slate-800">Monthly Views</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-high-contrast">Monthly Views</h3>
               <BarChart3 className="h-5 w-5 text-slate-400" />
             </div>
             
@@ -230,16 +230,16 @@ export default function AnalyticsPage() {
               {analytics?.monthlyViews && analytics.monthlyViews.length > 0 ? (
                 analytics.monthlyViews.map((item, index) => (
                   <div key={index} className="flex items-center">
-                    <span className="w-12 text-sm text-slate-600">{item.month}</span>
+                    <span className="w-12 text-sm text-medium-contrast">{item.month}</span>
                     <div className="flex-1 mx-4">
                       <div className="bg-slate-200 rounded-full h-2">
                         <div 
-                          className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
+                          className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full"
                           style={{ width: `${(item.views / Math.max(...analytics.monthlyViews.map(m => m.views))) * 100}%` }}
                         ></div>
                       </div>
                     </div>
-                    <span className="w-16 text-sm font-medium text-slate-800">{item.views}</span>
+                    <span className="w-16 text-sm font-medium text-high-contrast">{item.views}</span>
                   </div>
                 ))
               ) : (
@@ -253,9 +253,9 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Top Countries */}
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+          <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h3 className="text-base sm:text-lg font-semibold text-slate-800">Top Countries</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-high-contrast">Top Countries</h3>
               <Globe className="h-5 w-5 text-slate-400" />
             </div>
             
@@ -264,17 +264,17 @@ export default function AnalyticsPage() {
                 analytics.topCountries.map((country, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="w-6 text-sm font-medium text-slate-600">{index + 1}</span>
+                      <span className="w-6 text-sm font-medium text-medium-contrast">{index + 1}</span>
                       <span className="ml-3 text-slate-700">{country.country}</span>
                     </div>
                     <div className="flex items-center">
                       <div className="w-20 bg-slate-200 rounded-full h-2 mr-3">
                         <div 
-                          className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full"
+                          className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full"
                           style={{ width: `${(country.views / Math.max(...analytics.topCountries.map(c => c.views))) * 100}%` }}
                         ></div>
                       </div>
-                      <span className="text-sm font-medium text-slate-800">{country.views}</span>
+                      <span className="text-sm font-medium text-high-contrast">{country.views}</span>
                     </div>
                   </div>
                 ))
@@ -290,9 +290,9 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="mt-6 sm:mt-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
+        <div className="mt-6 sm:mt-8 bg-gray-800/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-indigo-200/50">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h3 className="text-base sm:text-lg font-semibold text-slate-800">Recent Activity</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-high-contrast">Recent Activity</h3>
             <Clock className="h-5 w-5 text-slate-400" />
           </div>
           
@@ -303,8 +303,8 @@ export default function AnalyticsPage() {
                   <div className="flex items-center">
                     <div className="w-2 h-2 bg-indigo-600 rounded-full mr-3"></div>
                     <div>
-                      <p className="text-slate-800 font-medium">{activity.action}</p>
-                      <div className="flex items-center text-sm text-slate-600">
+                      <p className="text-high-contrast font-medium">{activity.action}</p>
+                      <div className="flex items-center text-sm text-medium-contrast">
                         <MapPin className="h-4 w-4 mr-1" />
                         {activity.location}
                       </div>
