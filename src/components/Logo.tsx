@@ -31,7 +31,7 @@ export default function Logo({ size = 'md', showText = true, className = '' }: L
         priority
       />
       {showText && (
-        <span className={`font-bold text-slate-800 ${textSizes[size]}`}>
+        <span className={`font-bold text-white ${textSizes[size]}`}>
           Viszy
         </span>
       )}

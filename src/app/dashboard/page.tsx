@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
+import { Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import BackButton from '@/components/BackButton';
 import Logo from '@/components/Logo';
@@ -240,30 +240,35 @@ export default function DashboardPage() {
           <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-high-contrast">Your QR Code</h2>
-              <QrCode className="text-orange-500" size={20} />
+              <div className="flex items-center space-x-2">
+                <Logo size="sm" />
+                <span className="text-orange-500 font-bold text-sm sm:text-base">Viszy</span>
+              </div>
             </div>
 
             {profile ? (
               <div className="text-center">
-                <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-200 rounded-2xl p-3 sm:p-4 lg:p-6 inline-block mb-4 shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 hover:scale-105 animate-float qr-glow">
+                <div className="relative bg-gradient-to-br from-white to-gray-50 border-2 border-orange-200 rounded-3xl p-4 sm:p-6 lg:p-8 inline-block mb-4 shadow-2xl hover:shadow-orange-500/30 transition-all duration-500 hover:scale-105 animate-float qr-glow">
                   {/* Animated border glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-2xl opacity-20 blur-sm animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-3xl opacity-15 blur-sm animate-pulse"></div>
                   
                   {/* QR Code container with rounded corners */}
-                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 flex items-center justify-center bg-white rounded-xl p-2 shadow-inner qr-pulse">
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-52 lg:h-52 flex items-center justify-center bg-white rounded-2xl p-3 shadow-inner qr-pulse">
                     <QRCode
                       value={`https://viszyai.vercel.app/profile/${profile.handle}`}
-                      size={isSmallScreen ? 96 : 128}
+                      size={isSmallScreen ? 112 : 160}
                       level="H"
-                      className="max-w-full max-h-full rounded-lg"
+                      className="max-w-full max-h-full rounded-xl"
+                      fgColor="#f97316"
+                      bgColor="#ffffff"
                     />
                   </div>
                   
-                  {/* Corner decorations */}
-                  <div className="absolute -top-1 -left-1 w-3 h-3 bg-orange-400 rounded-full corner-bounce" style={{animationDelay: '0s'}}></div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full corner-bounce" style={{animationDelay: '0.2s'}}></div>
-                  <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-600 rounded-full corner-bounce" style={{animationDelay: '0.4s'}}></div>
-                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-orange-700 rounded-full corner-bounce" style={{animationDelay: '0.6s'}}></div>
+                  {/* Brand watermark */}
+                  <div className="absolute bottom-2 right-2 flex items-center space-x-1 opacity-60">
+                    <Logo size="sm" showText={false} />
+                    <span className="text-orange-600 font-bold text-xs">Viszy</span>
+                  </div>
                 </div>
                 
                 <div className="space-y-3">
