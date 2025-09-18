@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
+import { QrCode, Edit, Settings, LogOut, User, Mail, Phone, BarChart3 } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import BackButton from '@/components/BackButton';
 import Logo from '@/components/Logo';
@@ -76,10 +76,10 @@ export default function DashboardPage() {
   if (loading) {
     console.log('Rendering loading state');
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-          <p className="mt-4 text-readable">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading...</p>
         </div>
       </div>
     );
@@ -89,10 +89,10 @@ export default function DashboardPage() {
   if (!user) {
     console.log('Dashboard: No user, not rendering dashboard (redirect should happen)');
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-          <p className="mt-4 text-readable">Redirecting to login...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-slate-600">Redirecting to login...</p>
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ export default function DashboardPage() {
               <div className="hidden md:flex items-center space-x-2">
                 <span className="text-high-contrast">Welcome, {profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'User'}</span>
                 {user && !profile && (
-                  <div className="flex items-center space-x-1 text-subtle">
+                  <div className="flex items-center space-x-1 text-gray-400">
                     <div className="animate-spin rounded-full h-3 w-3 border-b border-orange-400"></div>
                     <span className="text-xs">Loading profile...</span>
                   </div>
@@ -170,14 +170,14 @@ export default function DashboardPage() {
 
             {profileLoading && !profile ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
-                <p className="text-readable">Loading profile...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                <p className="text-slate-600">Loading profile...</p>
               </div>
             ) : profile ? (
               <div className="space-y-4">
                 {/* Profile Photo and Name */}
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
                     {profile.photo_url ? (
                       <Image
                         src={profile.photo_url}
@@ -187,48 +187,48 @@ export default function DashboardPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <User className="text-orange-600" size={20} />
+                      <User className="text-indigo-600" size={20} />
                     )}
                   </div>
                   <div>
-                    <p className="font-semibold text-high-contrast">{profile.name}</p>
+                    <p className="font-semibold text-slate-800">{profile.name}</p>
                     {profile.title && (
-                      <p className="text-medium-contrast text-sm">{profile.title}</p>
+                      <p className="text-slate-600 text-sm">{profile.title}</p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <Mail className="text-orange-400" size={20} />
-                  <p className="text-medium-contrast">{profile.email}</p>
+                  <Mail className="text-slate-400" size={20} />
+                  <p className="text-slate-700">{profile.email}</p>
                 </div>
 
                 {profile.phone && (
                   <div className="flex items-center space-x-3">
-                    <Phone className="text-orange-400" size={20} />
-                    <p className="text-medium-contrast">{profile.phone}</p>
+                    <Phone className="text-slate-400" size={20} />
+                    <p className="text-slate-700">{profile.phone}</p>
                   </div>
                 )}
 
                 {profile.bio && (
-                  <div className="mt-4 p-4 bg-gray-700/50 rounded-lg">
-                    <p className="text-medium-contrast">{profile.bio}</p>
+                  <div className="mt-4 p-4 bg-slate-50 rounded-lg">
+                    <p className="text-slate-700">{profile.bio}</p>
                   </div>
                 )}
 
                 <div className="mt-6">
-                  <p className="text-sm text-subtle mb-2">Your profile URL:</p>
-                  <p className="font-mono text-orange-400 bg-orange-50 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
+                  <p className="text-sm text-slate-500 mb-2">Your profile URL:</p>
+                  <p className="font-mono text-blue-600 bg-blue-50 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
                     https://viszyai.vercel.app/profile/{profile.handle}
                   </p>
                 </div>
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-readable mb-4">No profile found</p>
+                <p className="text-slate-600 mb-4">No profile found</p>
                 <Link
                   href="/create-profile"
-                  className="btn-primary-enhanced px-6 py-2 rounded-lg transition-colors"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   Create Profile
                 </Link>
@@ -240,34 +240,19 @@ export default function DashboardPage() {
           <div className="card-enhanced rounded-2xl p-4 sm:p-6 hover-lift animate-fadeInUp stagger-2">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-high-contrast">Your QR Code</h2>
-              <div className="flex items-center space-x-2">
-                <Logo size="sm" />
-                <span className="text-orange-500 font-bold text-sm sm:text-base">Viszy</span>
-              </div>
+              <QrCode className="text-orange-500" size={20} />
             </div>
 
             {profile ? (
               <div className="text-center">
-                <div className="relative bg-gradient-to-br from-white to-gray-50 border-2 border-orange-200 rounded-3xl p-4 sm:p-6 lg:p-8 inline-block mb-4 shadow-2xl hover:shadow-orange-500/30 transition-all duration-500 hover:scale-105 animate-float qr-glow">
-                  {/* Animated border glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-3xl opacity-15 blur-sm animate-pulse"></div>
-                  
-                  {/* QR Code container with rounded corners */}
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-52 lg:h-52 flex items-center justify-center bg-white rounded-2xl p-3 shadow-inner qr-pulse">
+                <div className="bg-gray-800 border-2 border-orange-200 rounded-lg p-2 sm:p-3 lg:p-4 inline-block mb-4">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 flex items-center justify-center">
                     <QRCode
                       value={`https://viszyai.vercel.app/profile/${profile.handle}`}
-                      size={isSmallScreen ? 112 : 160}
+                      size={isSmallScreen ? 96 : 128}
                       level="H"
-                      className="max-w-full max-h-full rounded-xl"
-                      fgColor="#f97316"
-                      bgColor="#ffffff"
+                      className="max-w-full max-h-full"
                     />
-                  </div>
-                  
-                  {/* Brand watermark */}
-                  <div className="absolute bottom-2 right-2 flex items-center space-x-1 opacity-60">
-                    <Logo size="sm" showText={false} />
-                    <span className="text-orange-600 font-bold text-xs">Viszy</span>
                   </div>
                 </div>
                 
@@ -285,7 +270,7 @@ export default function DashboardPage() {
                     </Link>
                     <Link
                       href={`/profile/${profile.handle}`}
-                      className="flex-1 bg-gradient-to-r from-gray-700 to-gray-600 text-white py-2 px-4 rounded-lg hover:from-gray-600 hover:to-gray-500 transition-colors text-sm sm:text-base"
+                      className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base"
                     >
                       View Profile
                     </Link>
@@ -294,10 +279,10 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-readable mb-4">Create a profile to generate your QR code</p>
+                <p className="text-slate-600 mb-4">Create a profile to generate your QR code</p>
                 <Link
                   href="/create-profile"
-                  className="btn-primary-enhanced px-6 py-2 rounded-lg transition-colors"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   Get Started
                 </Link>

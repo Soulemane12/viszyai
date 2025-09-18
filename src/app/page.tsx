@@ -16,7 +16,7 @@ export default function Home() {
           <div className="flex items-center space-x-2 sm:space-x-4">
             {user ? (
               <>
-                <Link href="/dashboard" className="hidden sm:block text-readable hover:text-orange-400 font-medium transition-colors">
+                <Link href="/dashboard" className="hidden sm:block text-gray-300 hover:text-orange-400 font-medium transition-colors">
                   Dashboard
                 </Link>
 
@@ -30,7 +30,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                <Link href="/login" className="hidden sm:block text-readable hover:text-orange-400 font-medium transition-colors">
+                <Link href="/login" className="hidden sm:block text-gray-300 hover:text-orange-400 font-medium transition-colors">
                   Login
                 </Link>
                 <Link 
