@@ -23,7 +23,7 @@ export default function Logo({ size = 'md', showText = true, className = '' }: L
   return (
     <Link href="/" className={`flex items-center space-x-2 ${className}`}>
       <Image
-        src="/logo.png"
+        src="/logo.PNG"
         alt="Viszy Logo"
         width={48}
         height={48}
