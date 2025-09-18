@@ -98,6 +98,26 @@ html {
   }
 }
 
+@keyframes qrPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(251, 146, 60, 0);
+  }
+}
+
+@keyframes qrGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(251, 146, 60, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(251, 146, 60, 0.6));
+  }
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -271,3 +291,12 @@ html {
 .stagger-4 { animation-delay: 0.4s; opacity: 0; }
 .stagger-5 { animation-delay: 0.5s; opacity: 0; }
 .stagger-6 { animation-delay: 0.6s; opacity: 0; }
+
+/* QR Code Animations */
+.animate-qr-pulse {
+  animation: qrPulse 2s ease-in-out infinite;
+}
+
+.animate-qr-glow {
+  animation: qrGlow 3s ease-in-out infinite;
+}
