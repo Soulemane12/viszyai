@@ -8,6 +8,7 @@ import QRCode from 'react-qr-code';
 import { getProfileWithSocialLinks, trackQRScan } from '@/lib/auth';
 import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/BackButton';
+import Logo from '@/components/Logo';
 
 interface ProfileData {
   name: string;
@@ -204,21 +205,29 @@ export default function QRPage({ params }: { params: { handle: string } }) {
           </div>
 
           {/* QR Code */}
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 shadow-2xl border border-orange-300 mb-8 hover-glow-orange transition-all duration-300 animate-fadeInUp animate-qr-pulse">
-            <div className="flex justify-center mb-6">
-              <div className="bg-white rounded-2xl p-4 shadow-inner">
-                <QRCode
-                  value={profileUrl}
-                  size={256}
-                  level="H"
-                  className="mx-auto"
-                  style={{ 
-                    height: "auto", 
-                    maxWidth: "100%", 
-                    width: "100%",
-                    filter: "invert(0.2) sepia(1) saturate(2) hue-rotate(20deg) brightness(1.1)"
-                  }}
-                />
+          <div className="bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-700 mb-8">
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                {/* Animated border glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-3xl opacity-15 blur-sm animate-pulse"></div>
+                
+                {/* QR Code container with rounded corners */}
+                <div className="relative flex items-center justify-center bg-white rounded-2xl p-4 shadow-inner qr-pulse">
+                  <QRCode
+                    value={profileUrl}
+                    size={240}
+                    level="H"
+                    className="rounded-xl"
+                    fgColor="#f97316"
+                    bgColor="#ffffff"
+                  />
+                </div>
+                
+                {/* Brand watermark */}
+                <div className="absolute bottom-3 right-3 flex items-center space-x-1 opacity-70">
+                  <Logo size="sm" showText={false} />
+                  <span className="text-orange-600 font-bold text-sm">Viszy</span>
+                </div>
               </div>
             </div>
             <p className="text-sm text-medium-contrast">

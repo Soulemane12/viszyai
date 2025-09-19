@@ -245,20 +245,22 @@ export default function DashboardPage() {
 
             {profile ? (
               <div className="text-center">
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-300 rounded-3xl p-4 sm:p-6 lg:p-8 inline-block mb-4 shadow-2xl hover-scale animate-fadeInUp hover-glow-orange animate-qr-pulse transition-all duration-300">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 flex items-center justify-center bg-white rounded-2xl p-2 shadow-inner">
-                    <QRCode
-                      value={`https://viszyai.vercel.app/profile/${profile.handle}`}
-                      size={isSmallScreen ? 96 : 128}
-                      level="H"
-                      className="max-w-full max-h-full"
-                      style={{ 
-                        height: "auto", 
-                        maxWidth: "100%", 
-                        width: "100%",
-                        filter: "invert(0.2) sepia(1) saturate(2) hue-rotate(20deg) brightness(1.1)"
-                      }}
-                    />
+                <div className="bg-gray-800 border-2 border-orange-200 rounded-lg p-2 sm:p-3 lg:p-4 inline-block mb-4">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-48 lg:h-48 flex items-center justify-center relative">
+                    {/* Animated border glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-2xl opacity-15 blur-sm animate-pulse"></div>
+                    
+                    {/* QR Code container with rounded corners */}
+                    <div className="relative flex items-center justify-center bg-white rounded-xl p-1 shadow-inner qr-pulse">
+                      <QRCode
+                        value={`https://viszyai.vercel.app/profile/${profile.handle}`}
+                        size={isSmallScreen ? 96 : 128}
+                        level="H"
+                        className="max-w-full max-h-full rounded-lg"
+                        fgColor="#f97316"
+                        bgColor="#ffffff"
+                      />
+                    </div>
                   </div>
                 </div>
                 

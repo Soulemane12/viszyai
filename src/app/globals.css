@@ -300,3 +300,7 @@ html {
 .animate-qr-glow {
   animation: qrGlow 3s ease-in-out infinite;
 }
+
+.qr-pulse {
+  animation: qrPulse 2s ease-in-out infinite;
+}
