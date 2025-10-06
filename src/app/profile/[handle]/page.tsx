@@ -195,9 +195,9 @@ export default function ProfilePage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <BackButton 
+              <BackButton
                 fallbackPath="/"
-                className="text-medium-contrast hover:text-orange-600 transition-colors"
+                className="text-medium-contrast hover:text-orange-400 transition-colors"
               >
                 <span className="hidden sm:inline">Back</span>
               </BackButton>
@@ -226,7 +226,7 @@ export default function ProfilePage() {
             <div className="flex items-center space-x-2">
               <button
                 onClick={shareProfile}
-                className="p-2 text-medium-contrast hover:text-orange-600 hover:bg-orange-50 rounded-full transition-colors"
+                className="p-2 text-medium-contrast hover:text-orange-400 hover:bg-gray-700 rounded-full transition-colors"
               >
                 <Share2 className="h-5 w-5" />
               </button>
@@ -350,13 +350,13 @@ export default function ProfilePage() {
               {/* Fallback vCard Download */}
               <button
                 onClick={downloadVCard}
-                className="w-full flex items-center justify-center p-2 sm:p-3 border-2 border-purple-200 text-purple-700 rounded-xl hover:bg-purple-50 hover:border-purple-300 transition-all duration-200"
+                className="w-full flex items-center justify-center p-2 sm:p-3 border-2 border-purple-400 text-purple-300 rounded-xl hover:bg-gray-700 hover:border-purple-300 transition-all duration-200"
               >
                 <Download className="h-4 w-4 mr-2" />
                 <span className="text-sm">Download vCard</span>
               </button>
             </div>
-            <p className="text-sm text-slate-500 text-center mt-3 px-2 sm:px-0">
+            <p className="text-sm text-medium-contrast text-center mt-3 px-2 sm:px-0">
               Downloads a .vcf file you can import to your phone
             </p>
           </div>
