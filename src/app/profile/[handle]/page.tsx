@@ -167,10 +167,10 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-medium-contrast">Loading profile...</p>
         </div>
       </div>
     );
@@ -178,18 +178,18 @@ export default function ProfilePage() {
 
   if (!profileData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
           <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile Not Found</h1>
-          <p className="text-gray-600">This profile doesn&apos;t exist or has been removed.</p>
+          <h1 className="text-2xl font-bold text-high-contrast mb-2">Profile Not Found</h1>
+          <p className="text-medium-contrast">This profile doesn&apos;t exist or has been removed.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 animate-gradient">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black animate-gradient">
       {/* Header */}
       <header className="bg-gray-800 shadow-lg border-b border-gray-700 glass animate-slideInLeft">
         <div className="container mx-auto px-4 py-4">
@@ -274,26 +274,26 @@ export default function ProfilePage() {
               {profileData.email && (
                 <button
                   onClick={() => copyToClipboard(profileData.email)}
-                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-gray-700"
+                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-xl hover:from-gray-600 hover:to-gray-500 transition-all duration-200 border border-gray-600"
                 >
                   <div className="flex items-center min-w-0 flex-1">
-                    <Mail className="h-5 w-5 text-orange-600 mr-3 flex-shrink-0" />
+                    <Mail className="h-5 w-5 text-orange-400 mr-3 flex-shrink-0" />
                     <span className="text-high-contrast font-medium text-sm sm:text-base truncate">{profileData.email}</span>
                   </div>
-                  <span className="text-sm text-orange-600 font-medium ml-2 flex-shrink-0">Copy</span>
+                  <span className="text-sm text-orange-400 font-medium ml-2 flex-shrink-0">Copy</span>
                 </button>
               )}
 
               {profileData.phone && (
                 <a
                   href={`tel:${profileData.phone}`}
-                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl hover:from-purple-100 hover:to-pink-100 transition-all duration-200 border border-purple-100"
+                  className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-xl hover:from-gray-600 hover:to-gray-500 transition-all duration-200 border border-gray-600"
                 >
                   <div className="flex items-center min-w-0 flex-1">
-                    <Phone className="h-5 w-5 text-purple-600 mr-3 flex-shrink-0" />
+                    <Phone className="h-5 w-5 text-purple-400 mr-3 flex-shrink-0" />
                     <span className="text-high-contrast font-medium text-sm sm:text-base truncate">{profileData.phone}</span>
                   </div>
-                  <span className="text-sm text-purple-600 font-medium ml-2 flex-shrink-0">Call</span>
+                  <span className="text-sm text-purple-400 font-medium ml-2 flex-shrink-0">Call</span>
                 </a>
               )}
             </div>
@@ -324,9 +324,9 @@ export default function ProfilePage() {
                           }
                         }
                       }}
-                      className="flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl hover:from-indigo-100 hover:to-purple-100 transition-all duration-200 border border-gray-700"
+                      className="flex items-center justify-center p-3 sm:p-4 bg-gradient-to-r from-gray-700 to-gray-600 rounded-xl hover:from-gray-600 hover:to-gray-500 transition-all duration-200 border border-gray-600"
                     >
-                      <IconComponent className="h-5 w-5 text-orange-600 mr-2" />
+                      <IconComponent className="h-5 w-5 text-orange-400 mr-2" />
                       <span className="text-high-contrast font-medium">{link.platform}</span>
                     </a>
                   );
