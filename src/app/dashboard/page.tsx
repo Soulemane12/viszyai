@@ -191,41 +191,41 @@ export default function DashboardPage() {
                     )}
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-800">{profile.name}</p>
+                    <p className="font-semibold text-high-contrast">{profile.name}</p>
                     {profile.title && (
-                      <p className="text-slate-600 text-sm">{profile.title}</p>
+                      <p className="text-medium-contrast text-sm">{profile.title}</p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <Mail className="text-slate-400" size={20} />
-                  <p className="text-slate-700">{profile.email}</p>
+                  <Mail className="text-orange-400" size={20} />
+                  <p className="text-high-contrast">{profile.email}</p>
                 </div>
 
                 {profile.phone && (
                   <div className="flex items-center space-x-3">
-                    <Phone className="text-slate-400" size={20} />
-                    <p className="text-slate-700">{profile.phone}</p>
+                    <Phone className="text-purple-400" size={20} />
+                    <p className="text-high-contrast">{profile.phone}</p>
                   </div>
                 )}
 
                 {profile.bio && (
-                  <div className="mt-4 p-4 bg-slate-50 rounded-lg">
-                    <p className="text-slate-700">{profile.bio}</p>
+                  <div className="mt-4 p-4 bg-gray-700 rounded-lg">
+                    <p className="text-high-contrast">{profile.bio}</p>
                   </div>
                 )}
 
                 <div className="mt-6">
-                  <p className="text-sm text-slate-500 mb-2">Your profile URL:</p>
-                  <p className="font-mono text-blue-600 bg-blue-50 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
+                  <p className="text-sm text-medium-contrast mb-2">Your profile URL:</p>
+                  <p className="font-mono text-orange-400 bg-gray-700 px-3 py-1 rounded-lg inline-block text-xs sm:text-sm break-all">
                     https://viszyai.vercel.app/profile/{profile.handle}
                   </p>
                 </div>
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-slate-600 mb-4">No profile found</p>
+                <p className="text-medium-contrast mb-4">No profile found</p>
                 <Link
                   href="/create-profile"
                   className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
