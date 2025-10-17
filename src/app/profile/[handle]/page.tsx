@@ -191,7 +191,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black animate-gradient">
       {/* Header */}
-      <header className="bg-gray-800 shadow-lg border-b border-gray-700 glass animate-slideInLeft">
+      <header className="bg-gradient-to-r from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-sm shadow-lg border-b border-gray-700/50 animate-slideInLeft">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
