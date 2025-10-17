@@ -226,7 +226,6 @@ export default function QRPage({ params }: { params: { handle: string } }) {
                 {/* Brand watermark */}
                 <div className="absolute bottom-3 right-3 flex items-center space-x-1 opacity-70">
                   <Logo size="sm" showText={false} />
-                  <span className="text-orange-600 font-bold text-sm">Viszy</span>
                 </div>
               </div>
             </div>
